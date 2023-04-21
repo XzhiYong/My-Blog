@@ -1,0 +1,45 @@
+server:
+  port: 5689
+spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+  datasource:
+    druid:
+      filter: stat,wall
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+      use-global-data-source-stat: true
+      validation-query: select 'x'
+    name: xiazy
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.3.182:3306/my_blog_db?useUnicode=true&characterEncoding=UTF-8&serverTimeZone=UTC
+    username: root
+    password: root
+
+qiniu:
+  url: http://qny.xiazy.xyz
+  accessKey: gex8TrRK3pHvpUW2QBftP3WwDPQ6hFtAKDw-KVKO
+  accessSecretKey: g0VJR_z6jxVy5aka_rzg6fJZD9bNixS4zECLSvV0
+  
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+
+logging:
+  level: 
+    com:
+      site:
+        blog:
+          dao: debug
+
+  
+
+  
+
+
+
+
+
+
+
+

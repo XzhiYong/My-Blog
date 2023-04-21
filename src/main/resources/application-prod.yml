@@ -1,0 +1,39 @@
+server:
+  port: 9898
+spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+  datasource:
+    druid:
+      filter: stat,wall
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+      use-global-data-source-stat: true
+      validation-query: select 'x'
+    name: xiazy
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/my_blog_db?useUnicode=true&characterEncoding=UTF-8&serverTimeZone=UTC
+    username: xiazy_blog
+    password: TTzRKrm57PK5Z5WE
+
+#配置mybatis的sql语句输出到控制台
+
+logging:
+  level:
+    com:
+      site:
+        blog:
+          dao: debug
+
+  
+
+  
+
+
+
+
+
+
+
+

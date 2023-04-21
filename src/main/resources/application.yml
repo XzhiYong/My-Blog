@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    active: prod
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+
+qiniu:
+  url: http://qny.xiazy.xyz
+  accessKey: gex8TrRK3pHvpUW2QBftP3WwDPQ6hFtAKDw-KVKO
+  accessSecretKey: g0VJR_z6jxVy5aka_rzg6fJZD9bNixS4zECLSvV0
