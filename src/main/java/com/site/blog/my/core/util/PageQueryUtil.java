@@ -1,5 +1,7 @@
 package com.site.blog.my.core.util;
 
+import cn.hutool.core.map.MapUtil;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -21,8 +23,8 @@ public class PageQueryUtil extends LinkedHashMap<String, Object> {
         this.putAll(params);
 
         //分页参数
-        this.page = Integer.parseInt(params.get("page").toString());
-        this.limit = Integer.parseInt(params.get("limit").toString());
+        this.page = MapUtil.getInt(params, "page", 1);
+        this.limit = MapUtil.getInt(params, "limit", 10);
         this.put("start", (page - 1) * limit);
         this.put("page", page);
         this.put("limit", limit);
@@ -48,8 +50,8 @@ public class PageQueryUtil extends LinkedHashMap<String, Object> {
     @Override
     public String toString() {
         return "PageUtil{" +
-                "page=" + page +
-                ", limit=" + limit +
-                '}';
+            "page=" + page +
+            ", limit=" + limit +
+            '}';
     }
 }

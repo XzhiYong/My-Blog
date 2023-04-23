@@ -13,7 +13,7 @@ spring:
       validation-query: select 'x'
     name: xiazy
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/my_blog_db?useUnicode=true&characterEncoding=UTF-8&serverTimeZone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/xiazy_blog?useUnicode=true&characterEncoding=UTF-8&serverTimeZone=UTC
     username: xiazy_blog
     password: TTzRKrm57PK5Z5WE
 

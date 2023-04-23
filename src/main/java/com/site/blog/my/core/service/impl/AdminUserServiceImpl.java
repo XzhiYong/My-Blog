@@ -60,4 +60,9 @@ public class AdminUserServiceImpl implements AdminUserService {
         }
         return false;
     }
+
+    @Override
+    public AdminUser findByUsername(String username) {
+        return adminUserMapper.findByUsername(username);
+    }
 }

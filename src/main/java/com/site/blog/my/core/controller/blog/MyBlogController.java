@@ -16,12 +16,6 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author 13
- * @qq交流群 796794009
- * @email 2449207463@qq.com
- * @link http://13blog.site
- */
 @Controller
 public class MyBlogController {
 
@@ -107,9 +101,9 @@ public class MyBlogController {
      *
      * @return
      */
-    @GetMapping({"/tag/{tagName}"})
-    public String tag(HttpServletRequest request, @PathVariable("tagName") String tagName) {
-        return tag(request, tagName, 1);
+    @GetMapping({"/tag/{tagId}"})
+    public String tag(HttpServletRequest request, @PathVariable("tagId") Integer tagId) {
+        return tag(request, tagId, 1);
     }
 
     /**
@@ -117,13 +111,13 @@ public class MyBlogController {
      *
      * @return
      */
-    @GetMapping({"/tag/{tagName}/{page}"})
-    public String tag(HttpServletRequest request, @PathVariable("tagName") String tagName, @PathVariable("page") Integer page) {
-        PageResult blogPageResult = blogService.getBlogsPageByTag(tagName, page);
+    @GetMapping({"/tag/{tagId}/{page}"})
+    public String tag(HttpServletRequest request, @PathVariable("tagId") Integer tagId, @PathVariable("page") Integer page) {
+        PageResult blogPageResult = blogService.getBlogsPageByTag(tagId, page);
         request.setAttribute("blogPageResult", blogPageResult);
         request.setAttribute("pageName", "标签");
         request.setAttribute("pageUrl", "tag");
-        request.setAttribute("keyword", tagName);
+        request.setAttribute("keyword", tagId);
         request.setAttribute("newBlogs", blogService.getBlogListForIndexPage(1));
         request.setAttribute("hotBlogs", blogService.getBlogListForIndexPage(0));
         request.setAttribute("hotTags", tagService.getBlogTagCountForIndex());

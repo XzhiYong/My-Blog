@@ -3,6 +3,12 @@ package com.site.blog.my.core.controller.admin;
 import cn.hutool.captcha.ShearCaptcha;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.service.*;
+import com.site.blog.my.core.util.TokenUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +39,8 @@ public class AdminController {
     private TagService tagService;
     @Resource
     private CommentService commentService;
+    @Resource
+    private TokenUtil tokenUtil;
 
 
     @GetMapping({"/login"})
@@ -56,7 +64,7 @@ public class AdminController {
                         @RequestParam("password") String password,
                         @RequestParam("verifyCode") String verifyCode,
                         HttpSession session) {
-        
+
         if (!StringUtils.hasText(verifyCode)) {
             session.setAttribute("errorMsg", "验证码不能为空");
             return "admin/login";
@@ -70,15 +78,26 @@ public class AdminController {
             session.setAttribute("errorMsg", "验证码错误");
             return "admin/login";
         }
-        AdminUser adminUser = adminUserService.login(userName, password);
-        if (adminUser != null) {
-            session.setAttribute("loginUser", adminUser.getNickName());
+        //获取一个用户
+        Subject subject = SecurityUtils.getSubject();
+        // 封装用户的登录数据
+        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(userName, password);
+
+        try {
+            subject.login(usernamePasswordToken);
+            AdminUser adminUser = adminUserService.login(userName, password);
+            //登录成功，使用JWT生成token，返回token和redis中
+            if (session.getAttribute("loginUserName") != null) {
+                return "redirect:/admin/index";
+            }
             session.setAttribute("loginUserId", adminUser.getAdminUserId());
-            //session过期时间设置为7200秒 即两小时
-            //session.setMaxInactiveInterval(60 * 60 * 2);
+            session.setAttribute("loginUserName", adminUser.getLoginUserName());
             return "redirect:/admin/index";
-        } else {
-            session.setAttribute("errorMsg", "登陆失败");
+        } catch (UnknownAccountException e) {
+            session.setAttribute("msg", "用户名错误");
+            return "admin/login";
+        } catch (IncorrectCredentialsException e) {
+            session.setAttribute("msg", "密码错误");
             return "admin/login";
         }
     }
@@ -135,6 +154,7 @@ public class AdminController {
         request.getSession().removeAttribute("loginUserId");
         request.getSession().removeAttribute("loginUser");
         request.getSession().removeAttribute("errorMsg");
+        request.getSession().removeAttribute("token");
         return "admin/login";
     }
 }

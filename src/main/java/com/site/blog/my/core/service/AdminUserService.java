@@ -34,4 +34,5 @@ public interface AdminUserService {
      */
     Boolean updateName(Integer loginUserId, String loginUserName, String nickName);
 
+    AdminUser findByUsername(String username);
 }

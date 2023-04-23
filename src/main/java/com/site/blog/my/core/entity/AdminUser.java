@@ -1,6 +1,9 @@
 package com.site.blog.my.core.entity;
 
+import java.util.List;
+
 public class AdminUser {
+    
     private Integer adminUserId;
 
     private String loginUserName;
@@ -10,6 +13,16 @@ public class AdminUser {
     private String nickName;
 
     private Byte locked;
+
+    private List<SysRole> sysRole;
+
+    public List<SysRole> getAdminRole() {
+        return sysRole;
+    }
+
+    public void setAdminRole(List<SysRole> sysRole) {
+        this.sysRole = sysRole;
+    }
 
     public Integer getAdminUserId() {
         return adminUserId;

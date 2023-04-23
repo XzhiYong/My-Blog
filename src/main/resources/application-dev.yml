@@ -31,6 +31,8 @@ logging:
       site:
         blog:
           dao: debug
+    org:
+      springframework: info
 
   
 

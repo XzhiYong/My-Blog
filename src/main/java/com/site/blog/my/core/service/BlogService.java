@@ -50,6 +50,7 @@ public interface BlogService {
      * @return
      */
     List<SimpleBlogListVO> getBlogListForIndexPage(int type);
+
     /**
      * 文章详情
      *
@@ -61,11 +62,11 @@ public interface BlogService {
     /**
      * 根据标签获取文章列表
      *
-     * @param tagName
+     * @param tagId
      * @param page
      * @return
      */
-    PageResult getBlogsPageByTag(String tagName, int page);
+    PageResult getBlogsPageByTag(Integer tagId, int page);
 
     /**
      * 根据分类获取文章列表

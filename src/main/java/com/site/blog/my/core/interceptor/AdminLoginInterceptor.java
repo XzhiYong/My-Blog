@@ -1,6 +1,5 @@
 package com.site.blog.my.core.interceptor;
 
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -15,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
  * @email 2449207463@qq.com
  * @link http://13blog.site
  */
-@Component
+//@Component
 public class AdminLoginInterceptor implements HandlerInterceptor {
 
     @Override
