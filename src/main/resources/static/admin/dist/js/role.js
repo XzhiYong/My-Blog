@@ -3,9 +3,9 @@ $(function () {
         url: '/admin/roles/list',
         datatype: "json",
         colModel: [
-            {label: 'id', name: 'roleId', index: 'roleId', width: 50, key: true, hidden: true},
-            {label: '角色名称', name: 'roleName', index: 'roleName', width: 240},
-            {label: '添加时间', name: 'createTime', index: 'createTime', width: 120}
+            {label: 'id', name: 'id', index: 'id', width: 50, key: true, hidden: true},
+            {label: '标签名称', name: 'name', index: 'name', width: 240},
+            {label: '添加时间', name: 'createTime', index: 'createTime', width: 120,}
         ],
         height: 560,
         rowNum: 10,
@@ -19,9 +19,9 @@ $(function () {
         pager: "#jqGridPager",
         jsonReader: {
             root: "data.list",
-            page: "data.currPage",
-            total: "data.totalPage",
-            records: "data.totalCount"
+            page: "data.pageNum",
+            total: "data.pageSize",
+            records: "data.total"
         },
         prmNames: {
             page: "page",
@@ -48,43 +48,36 @@ function reload() {
     }).trigger("reloadGrid");
 }
 
-function tagAdd() {
-    var tagName = $("#tagName").val();
-    if (!validCN_ENString2_18(tagName)) {
-        swal("标签名称不规范", {
-            icon: "error",
-        });
-    } else {
-        var url = '/admin/tags/save?tagName=' + tagName;
-        $.ajax({
-            type: 'POST',//方法类型
-            url: url,
-            success: function (result) {
-                if (result.resultCode == 200) {
-                    $("#tagName").val('')
-                    swal("保存成功", {
-                        icon: "success",
-                    });
-                    reload();
-                }
-                else {
-                    $("#tagName").val('')
-                    swal(result.message, {
-                        icon: "error",
-                    });
-                }
-                ;
-            },
-            error: function () {
-                swal("操作失败", {
+function roleAdd() {
+    var name = $("#roleName").val();
+    var url = '/admin/roles/save?roleName=' + name;
+    $.ajax({
+        type: 'POST',//方法类型
+        url: url,
+        success: function (result) {
+            if (result.resultCode === 200) {
+                $("#tagName").val('')
+                swal("保存成功", {
+                    icon: "success",
+                });
+                reload();
+            } else {
+                $("#tagName").val('')
+                swal(result.message, {
                     icon: "error",
                 });
             }
-        });
-    }
+            ;
+        },
+        error: function () {
+            swal("操作失败", {
+                icon: "error",
+            });
+        }
+    });
 }
 
-function deleteTag() {
+function roleDelete() {
     var ids = getSelectedRows();
     if (ids == null) {
         return;
@@ -99,11 +92,11 @@ function deleteTag() {
             if (flag) {
                 $.ajax({
                     type: "POST",
-                    url: "/admin/tags/delete",
+                    url: "/admin/roles/delete",
                     contentType: "application/json",
                     data: JSON.stringify(ids),
                     success: function (r) {
-                        if (r.resultCode == 200) {
+                        if (r.resultCode === 200) {
                             swal("删除成功", {
                                 icon: "success",
                             });
@@ -119,3 +112,5 @@ function deleteTag() {
         }
     );
 }
+
+

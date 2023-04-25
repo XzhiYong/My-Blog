@@ -24,23 +24,81 @@
               <div class="card-body">
                 <div class="grid-btn">
                   <input
-                      type="text" class="form-control col-1" id="roleId" name="roleName"
+                      type="text" class="form-control col-1" id="roleName" name="roleName"
                       placeholder="角色名称" required="true"
                   >&nbsp;&nbsp;&nbsp;
-                  <button class="btn btn-info" onclick="tagAdd()">
+                  <button class="btn btn-info" onclick="roleAdd()">
                     <i
                         class="fa fa-plus"
                     ></i>&nbsp;新增
                   </button>
-                  <button class="btn btn-danger" onclick="deleteTag()">
+
+                  <!-- 按钮触发模态框 -->
+                  <button class="btn btn-info" data-toggle="modal" data-target="#myModal">
+                    <i
+                        class="fa fa-trash-o"
+                    ></i>&nbsp;设置权限
+                  </button>
+                  <button class="btn btn-danger" onclick="roleDelete()">
                     <i
                         class="fa fa-trash-o"
                     ></i>&nbsp;删除
                   </button>
+
+                </div>
+
+                <!-- 模态框（Modal） -->
+                <div
+                    class="modal fade"
+                    id="myModal"
+                    tabindex="-1"
+                    role="dialog"
+                    aria-labelledby="myModalLabel"
+                    aria-hidden="true"
+                >
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                          &times;
+                        </button>
+                        <h6 class="modal-title" id="myModalLabel">
+                          设置权限
+                        </h6>
+                      </div>
+                      <div class="modal-body">
+                        <li class="layui-nav-item layui-this" th:each="menu,menuStart:${menus}">
+                          <a href="javascript:;" th:text="${menu.name}">系统管理</a>
+                          <ul class="layui-nav-child" style="background: #2b2e37;">
+                            <li th:each="child:${menu.permissions}">
+                              <a
+                                  th:if="${#lists.isEmpty(child.permissions)}"
+                                  th:text="${child.name}"
+                                  href="javascript:;"
+                                  style="margin-left: 20px;"
+                              >用户管理
+                              </a>
+                            </li>
+                          </ul>
+                        </li>
+
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                        </button>
+                        <button type="button" class="btn btn-primary">
+                          提交更改
+                        </button>
+                      </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal -->
                 </div>
                 <table id="jqGrid" class="table table-bordered">
                 </table>
-                <div id="jqGridPager"></div>
+
+                <div id="jqGridPager">
+
+                </div>
               </div><!-- /.card-body -->
             </div>
           </div><!-- /.container-fluid -->
@@ -66,5 +124,6 @@
     <script th:src="@{/admin/plugins/sweetalert/sweetalert.min.js}"></script>
     <script th:src="@{/admin/dist/js/public.js}"></script>
     <script th:src="@{/admin/dist/js/role.js}"></script>
+
   </body>
 </html>
