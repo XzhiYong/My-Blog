@@ -1,6 +1,7 @@
 package com.site.blog.my.core.service.impl;
 
 import cn.hutool.core.map.MapUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -25,5 +26,13 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, SysRole> implements
         PageHelper.startPage(MapUtil.getInt(params, "page", 1), MapUtil.getInt(params, "limit", 10));
         List<SysRole> list = list();
         return new PageInfo<>(list);
+    }
+
+    @Override
+    public Map<String, Object> getUserRole(Integer id) {
+        //查询 已经有的角色
+        List<SysRole> list = list(new LambdaQueryWrapper<SysRole>());
+
+
     }
 }

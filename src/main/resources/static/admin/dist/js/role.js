@@ -5,7 +5,8 @@ $(function () {
         colModel: [
             {label: 'id', name: 'id', index: 'id', width: 50, key: true, hidden: true},
             {label: '标签名称', name: 'name', index: 'name', width: 240},
-            {label: '添加时间', name: 'createTime', index: 'createTime', width: 120,}
+            {label: '添加时间', name: 'createTime', index: 'createTime', width: 120,},
+
         ],
         height: 560,
         rowNum: 10,
@@ -111,6 +112,12 @@ function roleDelete() {
             }
         }
     );
+}
+
+
+//事件
+function DelFile(id) {
+    alert(id)
 }
 
 

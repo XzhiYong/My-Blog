@@ -33,8 +33,9 @@ public class RoleController {
     @GetMapping
     public String index(HttpServletRequest request) {
         request.setAttribute("path", "roles");
-        request.setAttribute("roles", roleService.list());
-        request.setAttribute("menus", permissionService.getTerrList());
+        List<SysRole> list = roleService.list();
+
+        request.setAttribute("roles", list);
         return "admin/role";
     }
 

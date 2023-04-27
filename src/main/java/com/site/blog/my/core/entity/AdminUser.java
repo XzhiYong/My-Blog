@@ -1,19 +1,46 @@
 package com.site.blog.my.core.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import lombok.Data;
+
+import java.util.Date;
 import java.util.List;
 
+@TableName("tb_admin_user")
+@Data
 public class AdminUser {
-    
+
+    @JsonSerialize(using = ToStringSerializer.class)
+    @TableId(type = IdType.AUTO)
     private Integer adminUserId;
-
+    
+    @TableField("login_user_name")
     private String loginUserName;
-
+    
+    @TableField("login_password")
     private String loginPassword;
-
+    
+    @TableField("nick_name")
     private String nickName;
-
+    
+    @TableField("locked")
     private Byte locked;
+    
+    @TableField("login_count")
+    private int loginCount;
+    
+    @TableField("last_login_time")
+    private Date lastLoginTime;
+    
+    @TableField("create_time")
+    private Date createTime;
 
+    @TableField(exist = false)
     private List<SysRole> sysRole;
 
     public List<SysRole> getAdminRole() {
@@ -24,13 +51,6 @@ public class AdminUser {
         this.sysRole = sysRole;
     }
 
-    public Integer getAdminUserId() {
-        return adminUserId;
-    }
-
-    public void setAdminUserId(Integer adminUserId) {
-        this.adminUserId = adminUserId;
-    }
 
     public String getLoginUserName() {
         return loginUserName;

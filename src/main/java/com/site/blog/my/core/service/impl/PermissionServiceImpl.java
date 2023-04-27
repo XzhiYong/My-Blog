@@ -1,17 +1,19 @@
 package com.site.blog.my.core.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.lang.tree.Tree;
-import cn.hutool.core.lang.tree.TreeNodeConfig;
-import cn.hutool.core.lang.tree.TreeUtil;
+import cn.hutool.core.lang.TypeReference;
+import cn.hutool.core.map.MapUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.site.blog.my.core.dao.PermissionMapper;
+import com.site.blog.my.core.dao.RolePermissionMapper;
 import com.site.blog.my.core.entity.Permission;
+import com.site.blog.my.core.entity.RolePermission;
 import com.site.blog.my.core.service.PermissionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 /**
  * @author 夏志勇
@@ -19,28 +21,32 @@ import java.util.stream.Collectors;
  */
 @Service
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission> implements PermissionService {
+
+    @Autowired
+    private RolePermissionMapper rolePermissionMapper;
+
     @Override
     public List<Permission> getTerrList() {
-        List<Permission> list = list();
-        TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
-        List<Tree<Integer>> build = TreeUtil.build(list, null, treeNodeConfig, (treeNode, tree) -> {
-            tree.setId(treeNode.getId());
-            tree.setParentId(treeNode.getParentId());
-            tree.setName(treeNode.getName());
-        });
-        return copy(build);
+        return list();
     }
 
-    private List<Permission> copy(List<Tree<Integer>> build) {
-        return build.stream().map(item -> {
-            Permission sysPermission = new Permission();
-            sysPermission.setId(item.getId());
-            sysPermission.setName(item.getName().toString());
-            if (CollUtil.isNotEmpty(item.getChildren())) {
-                sysPermission.setPermissions(copy(item.getChildren()));
+    @Override
+    public boolean setPermission(Map<String, Object> params) {
+        List<Integer> roleIds = MapUtil.get(params, "ids", new TypeReference<List<Integer>>() {});
+        List<Integer> permissionIds = MapUtil.get(params, "permissionIds", new TypeReference<List<Integer>>() {});
+
+        for (Integer roleId : roleIds) {
+            rolePermissionMapper.delete(new LambdaQueryWrapper<RolePermission>().eq(RolePermission::getRoleId, roleId));
+            for (Integer permissionId : permissionIds) {
+                RolePermission rolePermission = new RolePermission();
+                rolePermission.setPermissionId(permissionId);
+                rolePermission.setRoleId(roleId);
+                rolePermissionMapper.insert(rolePermission);
             }
-            return sysPermission;
-        }).collect(Collectors.toList());
+        }
 
+
+        return false;
     }
+
 }

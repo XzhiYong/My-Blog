@@ -1,5 +1,9 @@
 package com.site.blog.my.core.service.impl;
 
+import cn.hutool.core.map.MapUtil;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.site.blog.my.core.dao.AdminUserMapper;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.service.AdminUserService;
@@ -7,9 +11,11 @@ import com.site.blog.my.core.util.MD5Util;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 @Service
-public class AdminUserServiceImpl implements AdminUserService {
+public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser> implements AdminUserService {
 
     @Resource
     private AdminUserMapper adminUserMapper;
@@ -64,5 +70,12 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Override
     public AdminUser findByUsername(String username) {
         return adminUserMapper.findByUsername(username);
+    }
+
+    @Override
+    public PageInfo<AdminUser> pageList(Map<String, Object> params) {
+        PageHelper.startPage(MapUtil.getInt(params, "page", 1), MapUtil.getInt(params, "limit", 10));
+        List<AdminUser> list = list();
+        return new PageInfo<>(list);
     }
 }

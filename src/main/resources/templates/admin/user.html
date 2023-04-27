@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <header th:replace="admin/header::header-fragment">
+
+  </header>
+  <body class="hold-transition sidebar-mini">
+
+    <div class="wrapper">
+      <!-- 引入页面头header-fragment -->
+      <div th:replace="admin/header::header-nav"></div>
+      <!-- 引入工具栏sidebar-fragment -->
+      <div th:replace="admin/sidebar::sidebar-fragment(${path})"></div>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+          </div><!-- /.container-fluid -->
+        </div>
+        <!-- Main content -->
+        <div class="content">
+          <div class="container-fluid">
+            <div class="card card-primary card-outline">
+              <div class="card-header">
+                <h3 class="card-title">角色管理</h3>
+              </div> <!-- /.card-body -->
+              <div class="card-body">
+                <div class="grid-btn">
+
+                  <button class="btn btn-info" data-toggle="modal" data-target="#myModal">
+                    <i class="fa fa-plus"></i>&nbsp;新增
+                  </button>
+                  <!-- 模态框（Modal） -->
+                  <div
+                      class="modal fade"
+                      id="myModal"
+                      tabindex="-1"
+                      role="dialog"
+                      aria-labelledby="myModalLabel"
+                      aria-hidden="true"
+                  >
+
+                    <div class="modal-dialog" >
+                      <div class="modal-content" >
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                          </button>
+                          <h6 class="modal-title" id="myModalLabel">
+                            添加用户
+                          </h6>
+                        </div>
+                        <div class="modal-body">
+                          <form id="userFome">
+                            <div class="form-group">
+                              <div class="alert alert-danger" id="edit-error-msg" style="display: none;">
+                                错误信息展示栏。
+                              </div>
+                            </div>
+                            <input type="hidden" class="form-control" id="adminUserId" name="adminUserId">
+                            <div class="form-group">
+                              <label for="adminUserName" class="control-label">账号</label>
+                              <input
+                                  type="text" class="form-control" id="adminUserName" name="adminUserName"
+                                  placeholder="请输入登录账号" required="true"
+                              >
+                            </div>
+                            <div class="form-group">
+                              <label for="nickName" class="control-label">昵称</label>
+                              <input
+                                  type="text" class="form-control" id="nickName" name="nickName"
+                                  placeholder="请输入昵称" required="true"
+                              >
+                            </div>
+                            <div class="form-group">
+                              <label for="locked" class="control-label">状态</label>
+                              <select class="form-control" id="locked" name="locked">
+                                <option selected="selected" value="1">锁定</option>
+                                <option value="0">正常</option>
+                              </select>
+                            </div>
+                            <div class="form-group">
+                              <label for="loginPassword" class="control-label">密码</label>
+                              <input
+                                  type="url" class="form-control" id="loginPassword" name="loginPassword"
+                                  placeholder="请输入密码" required="true"
+                              >
+                            </div>
+
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                          </button>
+                          <button
+                              type="button"
+                              id="saveButton"
+                              class="btn btn-primary"
+                              onclick="addUser()"
+                              data-dissmiss="modal"
+                          >
+                            添加
+                          </button>
+                        </div>
+                      </div><!-- /.modal-content -->
+                    </div><!-- /.modal -->
+                  </div>
+
+                </div>               <!-- 模态框（Modal） -->
+                <div
+                    class="modal fade"
+                    id="roleModel"
+                    tabindex="-1"
+                    role="dialog"
+                    aria-labelledby="myModalLabel"
+                    aria-hidden="true"
+                >
+
+                  <div class="modal-dialog">
+                    <div class="modal-content " style="width:600px; height: 500px" >
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                          &times;
+                        </button>
+                        <h6 class="modal-title" id="myRoleModel">
+                          添加用户
+                        </h6>
+                      </div>
+                      <div class="modal-body" >
+                        
+                        <div id="shuttleBox" class="shuttleBox" style="width:498px;overflow:auto; "></div>
+
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                        </button>
+                        <button
+                            type="button"
+                            id="roleSave"
+                            class="btn btn-primary"
+                            onclick="addRole()"
+                            data-dissmiss="modal"
+                        >
+                          添加
+                        </button>
+                      </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal -->
+                </div>
+
+              </div>
+
+              <table id="jqGrid" class="table table-bordered">
+              </table>
+
+              <div id="jqGridPager">
+
+              </div>
+            </div><!-- /.card-body -->
+          </div>
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- 引入页脚footer-fragment -->
+    <div th:replace="admin/footer::footer-fragment"></div>
+    </div>
+    <!-- jQuery -->
+    <script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
+    <script th:src="@{/admin/plugins/jquery/jquery.ztree.core.js}"></script>
+    <script th:src="@{/admin/plugins/jquery/jquery.ztree.excheck.js}"></script>
+    <script th:src="@{/admin/plugins/jquery/jquery.ztree.exedit.js}"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script th:src="@{/admin/plugins/jQueryUI/jquery-ui.min.js}"></script>
+    <!-- Bootstrap 4 -->
+    <script th:src="@{/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <!-- AdminLTE App -->
+    <script th:src="@{/admin/dist/js/adminlte.min.js}"></script>
+    <!-- jqgrid -->
+    <script th:src="@{/admin/plugins/jqgrid-5.7.0/jquery.jqGrid.min.js}"></script>
+    <script th:src="@{/admin/plugins/jqgrid-5.7.0/grid.locale-cn.js}"></script>
+    <!-- sweetalert -->
+    <script th:src="@{/admin/plugins/sweetalert/sweetalert.min.js}"></script>
+    <script th:src="@{/admin/dist/js/public.js}"></script>
+    <script th:src="@{/admin/dist/js/user.js}"></script>
+    <script th:src="@{/admin/dist/js/shuttleFrame.js}"></script>
+
+    <script type="text/javascript" th:inline="javascript">
+        $("#shuttleBox").transferItem({
+            'leftName':'左侧列表',
+            'rightName':'右侧列表',
+            data:{
+                leftArr:[{id:'0',name:'1'},{id:'1',name:'哈哈哈哈'},{id:'3',name:'说没说过'},{id:'4',name:'我们沙发上'}],
+                rightArr:[{id:'5',name:'沙发上的1'},{id:'6',name:'哈哈哈省道哈'},{id:'7',name:'说没方法说过'},{id:'8',name:'我们沙大幅度发上'}]
+            }
+        });
+        
+    </script>
+  </body>
+</html>

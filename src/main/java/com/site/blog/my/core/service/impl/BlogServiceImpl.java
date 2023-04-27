@@ -4,12 +4,10 @@ import com.site.blog.my.core.controller.vo.BlogDetailVO;
 import com.site.blog.my.core.controller.vo.BlogListVO;
 import com.site.blog.my.core.controller.vo.SimpleBlogListVO;
 import com.site.blog.my.core.dao.*;
-import com.site.blog.my.core.entity.Blog;
-import com.site.blog.my.core.entity.BlogCategory;
-import com.site.blog.my.core.entity.BlogTag;
-import com.site.blog.my.core.entity.BlogTagRelation;
+import com.site.blog.my.core.entity.*;
 import com.site.blog.my.core.service.BlogService;
 import com.site.blog.my.core.util.*;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -97,6 +95,8 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public PageResult getBlogsPage(PageQueryUtil pageUtil) {
+        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
+        pageUtil.put("userId", user.getAdminUserId());
         List<Blog> blogList = blogMapper.findBlogList(pageUtil);
         int total = blogMapper.getTotalBlogs(pageUtil);
         PageResult pageResult = new PageResult(blogList, total, pageUtil.getLimit(), pageUtil.getPage());

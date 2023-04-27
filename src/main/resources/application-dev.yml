@@ -30,7 +30,9 @@ logging:
     com:
       site:
         blog:
-          dao: debug
+          my:
+            core:
+              dao: debug
     org:
       springframework: info
 

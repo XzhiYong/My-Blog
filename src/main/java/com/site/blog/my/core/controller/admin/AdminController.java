@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 
 /**
  * @author 13
@@ -86,7 +87,18 @@ public class AdminController {
         try {
             subject.login(usernamePasswordToken);
             AdminUser adminUser = adminUserService.login(userName, password);
+            if (adminUser == null) {
+                session.setAttribute("errorMsg", "账号不存在!");
+                return "admin/login";
+            }
+            if (adminUser.getLocked() == 1) {
+                session.setAttribute("errorMsg", "账号已被锁定，请联系管理员!");
+                return "admin/login";
+            }
             //登录成功，使用JWT生成token，返回token和redis中
+            adminUser.setLoginCount(adminUser.getLoginCount() + 1);
+            adminUser.setLastLoginTime(new Date());
+            adminUserService.updateById(adminUser);
             if (session.getAttribute("loginUserName") != null) {
                 return "redirect:/admin/index";
             }

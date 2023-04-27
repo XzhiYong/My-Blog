@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <header th:replace="admin/header::header-fragment"></header>
+  <header th:replace="admin/header::header-fragment">
+  </header>
   <body class="hold-transition sidebar-mini">
     <div class="wrapper">
       <!-- 引入页面头header-fragment -->
@@ -34,7 +35,7 @@
                   </button>
 
                   <!-- 按钮触发模态框 -->
-                  <button class="btn btn-info" data-toggle="modal" data-target="#myModal">
+                  <button class="btn btn-info" data-toggle="modal" data-target="#myModal" onclick="f()">
                     <i
                         class="fa fa-trash-o"
                     ></i>&nbsp;设置权限
@@ -44,6 +45,10 @@
                         class="fa fa-trash-o"
                     ></i>&nbsp;删除
                   </button>
+
+                </div>
+
+                <div>
 
                 </div>
 
@@ -67,26 +72,12 @@
                         </h6>
                       </div>
                       <div class="modal-body">
-                        <li class="layui-nav-item layui-this" th:each="menu,menuStart:${menus}">
-                          <a href="javascript:;" th:text="${menu.name}">系统管理</a>
-                          <ul class="layui-nav-child" style="background: #2b2e37;">
-                            <li th:each="child:${menu.permissions}">
-                              <a
-                                  th:if="${#lists.isEmpty(child.permissions)}"
-                                  th:text="${child.name}"
-                                  href="javascript:;"
-                                  style="margin-left: 20px;"
-                              >用户管理
-                              </a>
-                            </li>
-                          </ul>
-                        </li>
-
+                        <ul id="treeDemo" class="ztree"></ul>
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭
                         </button>
-                        <button type="button" class="btn btn-primary">
+                        <button type="button"  class="btn btn-primary" onclick="updatePermission()" data-dissmiss="modal">
                           提交更改
                         </button>
                       </div>
@@ -111,6 +102,9 @@
     </div>
     <!-- jQuery -->
     <script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
+    <script th:src="@{/admin/plugins/jquery/jquery.ztree.core.js}"></script>
+    <script th:src="@{/admin/plugins/jquery/jquery.ztree.excheck.js}"></script>
+    <script th:src="@{/admin/plugins/jquery/jquery.ztree.exedit.js}"></script>
     <!-- jQuery UI 1.11.4 -->
     <script th:src="@{/admin/plugins/jQueryUI/jquery-ui.min.js}"></script>
     <!-- Bootstrap 4 -->
@@ -125,5 +119,97 @@
     <script th:src="@{/admin/dist/js/public.js}"></script>
     <script th:src="@{/admin/dist/js/role.js}"></script>
 
+    <script type="text/javascript" th:inline="javascript">
+        var setting = {
+            check: {
+                enable: true,
+                nocheckInherit: true
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            }
+        };
+
+        function f() {
+
+            var ids = getSelectedRows();
+
+            $.ajax({
+                type: "get",
+                url: "/admin/permission/" + ids[0],
+                contentType: "application/json",
+                success: function (r) {
+                    $.fn.zTree.init($("#treeDemo"), setting, r);
+                    setCheck();
+                    $("#py").bind("change", setCheck);
+                    $("#sy").bind("change", setCheck);
+                    $("#pn").bind("change", setCheck);
+                    $("#sn").bind("change", setCheck);
+                }
+            });
+            var code;
+
+            function setCheck() {
+                var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+                    type = {"Y": "ps", "N": "ps"};
+                zTree.setting.check.chkboxType = type;
+                showCode('setting.check.chkboxType = { "Y" : "' + type.Y + '", "N" : "' + type.N + '" };');
+            }
+
+            function showCode(str) {
+                if (!code) code = $("#code");
+                code.empty();
+                code.append("<li>" + str + "</li>");
+            }
+
+
+        };
+
+
+        var permissionIds = [];
+
+        function updatePermission() {
+            var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+            var nodes = treeObj.getNodes();
+            for (let i = 0; i < nodes.length; i++) {
+                if (nodes[i].checked) {
+                    var children = nodes[i].children;
+                    for (let j = 0; j < children.length; j++) {
+                        if (children[j].checked) {
+                            permissionIds.push(children[j].id);
+                        }
+                    }
+                    permissionIds.push(nodes[i].id);
+                }
+            }
+            var ids = getSelectedRows();
+            
+            var params = {"ids": ids, "permissionIds": permissionIds}
+            console.log(params)
+            $.ajax({
+                type: "POST",
+                url: "/admin/permission/setPermission",
+                contentType: "application/json",
+                data: JSON.stringify(params),
+                success: function (r) {
+                    if (r.resultCode === 200) {
+                        swal("设置成功", {
+                            icon: "success",
+                        });
+                        $("#mymodal").modal('hide');
+                    } else {
+                        swal(r.message, {
+                            icon: "error",
+                        });
+                    }
+                }
+            });
+           
+        }
+
+        //-->
+    </script>
   </body>
 </html>

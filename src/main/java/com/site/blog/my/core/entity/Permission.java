@@ -16,9 +16,10 @@ public class Permission {
 
     private Integer id;
 
+    @TableField("p_id")
+    private Integer pId;
+    
     private String name;
-
-    private Integer parentId;
 
     @TableField(exist = false)
     private List<Permission> permissions;

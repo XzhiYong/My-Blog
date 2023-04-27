@@ -1,8 +1,12 @@
 package com.site.blog.my.core.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.github.pagehelper.PageInfo;
 import com.site.blog.my.core.entity.AdminUser;
 
-public interface AdminUserService {
+import java.util.Map;
+
+public interface AdminUserService extends IService<AdminUser> {
 
     AdminUser login(String userName, String password);
 
@@ -35,4 +39,7 @@ public interface AdminUserService {
     Boolean updateName(Integer loginUserId, String loginUserName, String nickName);
 
     AdminUser findByUsername(String username);
+
+    PageInfo<AdminUser> pageList(Map<String, Object> params);
+    
 }

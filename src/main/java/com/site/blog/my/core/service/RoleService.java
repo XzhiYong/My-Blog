@@ -13,4 +13,6 @@ import java.util.Map;
 public interface RoleService extends IService<SysRole> {
     
     PageInfo<SysRole> pageList(Map<String, Object> params);
+    
+    Map<String,Object> getUserRole(Integer id);
 }
