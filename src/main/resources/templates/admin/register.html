@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>personal blog | register</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" th:href="@{/admin/dist/img/favicon.png}"/>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/admin/dist/css/font-awesome.min.css}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" th:href="@{/admin/dist/css/ionicons.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/admin/dist/css/adminlte.min.css}">
+    <style>
+        canvas {
+            display: block;
+            vertical-align: bottom;
+        }
+
+        #particles {
+            background-color: #F7FAFC;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+    </style>
+  </head>
+  <body class="hold-transition login-page">
+    <div id="particles">
+    </div>
+    <div class="login-box">
+      <div class="login-logo" style="color: #007bff;">
+        <h1>注册页面</h1>
+      </div>
+      <!-- /.login-logo -->
+      <div class="card">
+        <div class="card-body login-card-body">
+          <form th:action="@{/admin/register}" method="post">
+            <div th:if="${not #strings.isEmpty(session.errorMsg)}" class="form-group">
+              <div class="alert alert-danger" th:text="${session.errorMsg}"></div>
+            </div>
+            <div class="form-group has-feedback">
+              <span class="fa fa-user form-control-feedback"></span>
+              <input
+                  type="text" id="userName" name="userName" class="form-control" placeholder="请输入账号"
+                  required="true"
+              >
+            </div>
+            <div class="form-group has-feedback">
+              <span class="fa fa-navicon form-control-feedback"></span>
+              <input
+                  type="text" id="nickName" name="nickName" class="form-control" placeholder="请输入昵称"
+                  required="true"
+              >
+            </div>
+
+            <div class="form-group has-feedback">
+              <span class="fa fa-lock form-control-feedback"></span>
+              <input
+                  type="password" id="password" name="password" class="form-control" placeholder="请输入密码"
+                  required="true"
+              >
+            </div>
+            <div class="form-group">
+              <span class="fa fa-mobile form-control-feedback"></span>
+              <input name="phone" type="text" class="form-control" id="phone_input" placeholder="请输入手机号">
+              <span id="phone_info" class="res-error"></span>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <input
+                    type="text"
+                    class="form-control"
+                    name="smscode"
+                    id="smscode"
+                    placeholder="请输入验证码"
+                    required="true"
+                >
+              </div>
+              <div class="col-6">
+                <input type="button" value="发送验证码" id="sendsms" disabled>
+              </div>
+              <span id="smscode_info" class="res-error"></span>
+            </div>
+            <div class="form-group has-feedback">
+
+            </div>
+            <div class="row">
+              <div class="col-8">
+                  <span>
+                        <a href="./register.html">已有账号?去登录</a>
+                  </span>
+              </div>
+
+              <div class="col-4">
+                <button type="submit" class="btn btn-primary btn-block btn-flat">注册
+                </button>
+              </div>
+            </div>
+          </form>
+
+        </div>
+        <!-- /.login-card-body -->
+      </div>
+    </div>
+    <!-- /.login-box -->
+
+    <!-- jQuery -->
+    <script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
+    <!-- Bootstrap 4 -->
+    <script th:src="@{/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/admin/dist/js/plugins/particles.js}"></script>
+    <script th:src="@{/admin/dist/js/plugins/login-bg-particles.js}"></script>
+    <script>
+        $(function () {
+            $('#phone_input').keyup(function () {
+                if ($(this).val().trim() != '') {
+                    $('#sendsms').prop('disabled', false)
+                }
+            });
+            $('#sendsms').click(function () {
+                var mobile = $('#phone_input').val().trim();
+                var re = /^1[3-9]\d{9}$/;
+                if (!re.test(mobile)) {
+                    $('#phone_info').html('手机号格式错误').css('color', 'red');
+                    return
+                }
+                $('#phone_info').html('');
+
+                var num = 59
+                $('#sendsms').val(num + '秒');
+                var t = setInterval(() => {
+
+
+                    $(this).prop('disabled', true);
+
+                    num -= 1;
+                    $('#sendsms').val(num + '秒');
+
+                    if (num === 0) {
+
+                        clearInterval(t);
+                        $('#sendsms').val('发送验证码');
+                        $(this).prop('disabled', false);
+                    }
+
+                }, 1000);
+
+                $.ajax({
+                    url: '/admin/register/verificationCode?mobile=' + mobile,
+                    type: 'GET',
+                    success: function (res) {
+                        if (res) {
+                            console.log(res)
+                            $('#smscode_info').html('发送验证码成功').css('color', 'green')
+                        }else {
+                            $('#smscode_info').html('验证码发送失败').css('color', 'red')
+                        }
+                    }
+                })
+
+            })
+
+        })
+    </script>
+  </body>
+</html>

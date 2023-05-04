@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;
 import com.site.blog.my.core.entity.SysRole;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,8 +12,12 @@ import java.util.Map;
  * @since 2023年04月23日 18:06
  */
 public interface RoleService extends IService<SysRole> {
-    
+
     PageInfo<SysRole> pageList(Map<String, Object> params);
-    
-    Map<String,Object> getUserRole(Integer id);
+
+    Map<String, List<SysRole>> getUserRole(Integer id);
+
+    List<SysRole> getUserIdByRole(Integer id);
+
+    boolean saveUserRole(Map<String, Object> params);
 }

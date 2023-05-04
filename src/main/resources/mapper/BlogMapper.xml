@@ -15,13 +15,15 @@
         <result column="is_deleted" jdbcType="TINYINT" property="isDeleted"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <association property="adminUser" column="user_id" javaType="com.site.blog.my.core.entity.AdminUser"
+                     select="com.site.blog.my.core.dao.AdminUserMapper.selectByPrimaryKey" autoMapping="true"/>
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.site.blog.my.core.entity.Blog">
         <result column="blog_content" jdbcType="LONGVARCHAR" property="blogContent"/>
     </resultMap>
     <sql id="Base_Column_List">
         blog_id, blog_title, blog_sub_url, blog_cover_image, blog_category_id, blog_category_name, 
-    blog_tags, blog_status, blog_views, enable_comment, is_deleted, create_time, update_time
+    blog_tags, blog_status, blog_views, enable_comment, is_deleted, create_time, update_time,user_id
     </sql>
     <sql id="Blob_Column_List">
         blog_content
@@ -38,7 +40,7 @@
         select
         <include refid="Base_Column_List"/>
         from tb_blog
-        where is_deleted=0 and user_id =#{userId}
+        where is_deleted=0 
         <if test="keyword!=null">
             AND (blog_title like CONCAT('%',#{keyword},'%' ) or blog_category_name like CONCAT('%',#{keyword},'%' ))
         </if>
@@ -63,6 +65,9 @@
         <if test="blogStatus!=null">
             AND blog_status = #{blogStatus}
         </if>
+        <if test="userId!=null">
+            AND user_id = #{userId}
+        </if>
         <if test="blogCategoryId!=null">
             AND blog_category_id = #{blogCategoryId}
         </if>
@@ -71,7 +76,7 @@
         select
         <include refid="Base_Column_List"/>
         from tb_blog
-        where is_deleted=0 AND blog_status = 1<!-- 发布状态的文章 -->
+        where is_deleted=0 AND blog_status = 2<!-- 发布状态的文章 -->
         <if test="type!=null and type==0">
             order by blog_views desc
         </if>
@@ -182,6 +187,9 @@
             <if test="blogContent != null">
                 blog_content,
             </if>
+            <if test="adminUserId != null">
+                user_id,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="blogId != null">
@@ -225,6 +233,9 @@
             </if>
             <if test="blogContent != null">
                 #{blogContent,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="adminUserId != null">
+                #{userId,jdbcType=INT},
             </if>
         </trim>
     </insert>
@@ -318,5 +329,14 @@
             #{id}
         </foreach>
         and is_deleted =0
+    </update>
+    <update id="updateByStatusIds">
+        update tb_blog
+        set blog_status=#{status},
+        update_time = now()
+        where blog_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
     </update>
 </mapper>

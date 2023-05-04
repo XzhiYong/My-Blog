@@ -1,5 +1,6 @@
 package com.site.blog.my.core.auth;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -46,6 +47,7 @@ public class ShiroConfig {
         filterMap.put("/tag/**", "anon");
         filterMap.put("/upload/file/**", "anon");
         filterMap.put("/admin/login", "anon");
+        filterMap.put("/admin/register/**", "anon");
         filterMap.put("/admin/index", "anon");
         filterMap.put("/admin/roles/**", "anon");
         filterMap.put("/common/kaptcha", "anon");
@@ -70,5 +72,10 @@ public class ShiroConfig {
         AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
         advisor.setSecurityManager(securityManager);
         return advisor;
+    }
+
+    @Bean
+    public ShiroDialect shiroDialect() {
+        return new ShiroDialect();
     }
 }

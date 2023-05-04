@@ -84,12 +84,12 @@
 			<div class="clearboth">
 			</div>
 		</div>`
+                $('#ued-transfer-1').remove();
                 this.el.append(domStr)
             },
 
             //穿梭框赋值
             setValue: function (data) {
-                $('#ued-transfer-1 li').remove();
                 var strLeft = '';
                 var strRight = '';
                 data.leftArr.forEach(function (item, index) {
@@ -103,7 +103,7 @@
                     strRight +=
                         '<li><div class="ty-tree-div"><label class="tyue-checkbox-wrapper"> <span class="tyue-checkbox">' +
                         ' <input type="checkbox" class="tyue-checkbox-input" id="tyue-checkbox-blue"> <span class="tyue-checkbox-circle">' +
-                        ' </span>  </span> <span id="' + item.id + '" class="tyue-checkbox-txt" title="' + item.name +
+                        ' </span>  </span> <span id="' + item.id + '" class="tyue-checkbox-txt1" title="' + item.name +
                         '">' + item.name +
                         '</span></label></div></li>'
                 })
@@ -479,6 +479,11 @@ a:active {
 	margin-right: 8px;
 }
 
+.tyue-checkbox-txt1 {
+	margin-left: 6px;
+	margin-right: 8px;
+}
+
 /*过滤*/
 .ty-transfer-list {
 
@@ -543,7 +548,7 @@ a:active {
 
 .ty-transfer-list-body {
 	border-top: 1px solid #d9d9d9;
-	height: 130px;
+	height: 230px;
 	overflow-y: auto;
 	box-sizing: border-box;
 	transition: height 0.3s linear;

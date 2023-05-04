@@ -11,12 +11,12 @@
                                 <div class="pull-left">
                                     <div class="blog-flex-center">
                                         <div class="blog-flex0">
-                                            <img th:src="@{${configurations.get('yourAvatar')}}" alt=""
+                                            <img th:src="${blog.adminUser.headPortrait}" alt=""
                                                  class="link avatar avatar-image">
                                         </div>
                                         <div class="author-lockup blog-flex1">
                                             <a class="link" href="javascript:;"
-                                               th:text="${configurations.get('yourName')}">13</a>
+                                               th:text="${blog.adminUser.nickName}">13</a>
                                             <span class="in">in</span>
                                             <span class="category-name">
                                 <a class="category-name" rel="tag" th:href="@{'/category/' + ${blog.blogCategoryName}}"

@@ -3,7 +3,9 @@ package com.site.blog.my.core.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.site.blog.my.core.entity.AdminUser;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface AdminUserMapper extends BaseMapper<AdminUser> {
     int insert(AdminUser record);
 

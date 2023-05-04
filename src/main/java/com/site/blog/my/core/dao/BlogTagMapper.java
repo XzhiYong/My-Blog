@@ -3,8 +3,10 @@ package com.site.blog.my.core.dao;
 import com.site.blog.my.core.entity.BlogTag;
 import com.site.blog.my.core.entity.BlogTagCount;
 import com.site.blog.my.core.util.PageQueryUtil;
-import java.util.List;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
+@Repository
 public interface BlogTagMapper {
     int deleteByPrimaryKey(Integer tagId);
 

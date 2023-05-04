@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.site.blog.my.core.dao.RoleMapper">
+
+    <select id="getByIds" resultType="com.site.blog.my.core.entity.SysRole">
+        select * from tb_sys_role where 1=1
+        <if test="ids !=null and ids.size>0">
+            and id in
+            <foreach collection="ids" open="(" close=")" separator="," item="id">
+                #{id}
+            </foreach>
+        </if>
+
+    </select>
+
+    <select id="getByNotIds" resultType="com.site.blog.my.core.entity.SysRole">
+        select * from tb_sys_role where 1=1
+        <if test="ids !=null and ids.size>0">
+           and id  not in
+            <foreach collection="ids" open="(" close=")" separator="," item="id">
+                ${id}
+            </foreach>
+        </if>
+
+    </select>
+</mapper>

@@ -35,12 +35,28 @@
                                                name="loginUserName"
                                                placeholder="请输入登陆名称" required="true" th:value="${loginUserName}">
                                     </div>
+                                    <!-- text input -->
                                     <div class="form-group">
                                         <label>昵称</label>
-                                        <input type="text" class="form-control" id="nickName"
-                                               name="nickName"
-                                               placeholder="请输入昵称" required="true" th:value="${nickName}">
+                                        <input type="text" class="form-control" id="loginUserName"
+                                               name="loginUserName"
+                                               placeholder="请输入登陆名称" required="true" th:value="${nickName}">
                                     </div>
+                                    <!-- text input -->
+                                    <div class="form-group">
+                                        <label>邮箱</label>
+                                        <input type="text" class="form-control" id="email"
+                                               name="loginUserName"
+                                               placeholder="请输入登陆名称" required="true" th:value="${email}">
+                                    </div>
+                                    <!-- text input -->
+                                    <div class="form-group">
+                                        <label>头像</label>
+                                        <input type="text" class="form-control" id="headPortrait"
+                                               name="loginUserName"
+                                               placeholder="请输入登陆名称" required="true" th:value="${headPortrait}">
+                                    </div>
+                           
                                     <div class="card-footer">
                                         <button type="button" id="updateUserNameButton" onsubmit="return false;"
                                                 class="btn btn-danger float-right">确认修改

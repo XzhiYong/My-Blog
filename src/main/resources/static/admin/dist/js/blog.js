@@ -3,13 +3,28 @@ $(function () {
         url: '/admin/blogs/list',
         datatype: "json",
         colModel: [
-            {label: 'id', name: 'blogId', index: 'blogId', width: 50, key: true, hidden: true},
-            {label: '标题', name: 'blogTitle', index: 'blogTitle', width: 140},
-            {label: '预览图', name: 'blogCoverImage', index: 'blogCoverImage', width: 120, formatter: coverImageFormatter},
-            {label: '浏览量', name: 'blogViews', index: 'blogViews', width: 60},
-            {label: '状态', name: 'blogStatus', index: 'blogStatus', width: 60, formatter: statusFormatter},
-            {label: '博客分类', name: 'blogCategoryName', index: 'blogCategoryName', width: 60},
-            {label: '添加时间', name: 'createTime', index: 'createTime', width: 90}
+            {label: 'id', name: 'blogId', index: 'blogId', width: 50, key: true, align: "center", hidden: true},
+            {label: '标题', name: 'blogTitle', index: 'blogTitle', width: 140, align: "center"},
+            {
+                label: '预览图',
+                name: 'blogCoverImage',
+                index: 'blogCoverImage',
+                width: 120,
+                formatter: coverImageFormatter,
+                align: "center"
+            },
+            {label: '浏览量', name: 'blogViews', index: 'blogViews', width: 60, align: "center",},
+            {
+                label: '状态',
+                name: 'blogStatus',
+                index: 'blogStatus',
+                width: 60,
+                formatter: statusFormatter,
+                align: "center"
+            },
+            {label: '作者', name: 'adminUser.loginUserName', index: 'loginUserName', width: 60, align: "center"},
+            {label: '博客分类', name: 'blogCategoryName', index: 'blogCategoryName', width: 60, align: "center"},
+            {label: '添加时间', name: 'createTime', index: 'createTime', width: 90, align: "center"}
         ],
         height: 700,
         rowNum: 10,
@@ -47,11 +62,17 @@ $(function () {
     }
 
     function statusFormatter(cellvalue) {
-        if (cellvalue == 0) {
+        //0-草稿 1-待审核 2-审核通过 3-已拒绝 4-已下架
+        if (cellvalue === 0) {
             return "<button type=\"button\" class=\"btn btn-block btn-secondary btn-sm\" style=\"width: 50%;\">草稿</button>";
-        }
-        else if (cellvalue == 1) {
-            return "<button type=\"button\" class=\"btn btn-block btn-success btn-sm\" style=\"width: 50%;\">发布</button>";
+        } else if (cellvalue === 1) {
+            return "<button type=\"button\" class=\"btn btn-block btn-success btn-sm\" style=\"width: 50%; background: #0C9A9A\">待审核</button>";
+        } else if (cellvalue === 2) {
+            return "<button type=\"button\" class=\"btn btn-block btn-success btn-sm\" style=\"width: 50%;\">审核通过</button>";
+        } else if (cellvalue === 3) {
+            return "<button type=\"button\" class=\"btn btn-block btn-success btn-sm\" style=\"width: 50%; background: #9d1e15\">已拒绝</button>";
+        } else if (cellvalue === 4) {
+            return "<button type=\"button\" class=\"btn btn-block btn-success btn-sm\" style=\"width: 50%; background: #9d1e15\">已下架</button>";
         }
     }
 
@@ -83,6 +104,7 @@ function search() {
  * jqGrid重新加载
  */
 function reload() {
+    console.log(111)
     var page = $("#jqGrid").jqGrid('getGridParam', 'page');
     $("#jqGrid").jqGrid('setGridParam', {
         page: page
@@ -135,4 +157,32 @@ function deleteBlog() {
             }
         }
     );
+}
+
+function updateStatus() {
+
+    const options = $("#locked option:selected");
+    var status = options.val();
+    var ids = getSelectedRows();
+    var data = {"ids": ids, "status": status}
+    $.ajax({
+        type: "POST",
+        url: "/admin/blogs/updateStatus",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function (r) {
+            if (r.resultCode === 200) {
+                swal("修改成功", {
+                    icon: "success",
+                });
+                $('#updateStatusModel').modal('hide');
+                reload();
+            } else {
+                swal(r.message, {
+                    icon: "error",
+                });
+            }
+        }
+    });
+
 }

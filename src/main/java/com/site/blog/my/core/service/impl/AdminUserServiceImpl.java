@@ -6,7 +6,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.site.blog.my.core.dao.AdminUserMapper;
 import com.site.blog.my.core.entity.AdminUser;
+import com.site.blog.my.core.entity.SysRole;
 import com.site.blog.my.core.service.AdminUserService;
+import com.site.blog.my.core.service.RoleService;
 import com.site.blog.my.core.util.MD5Util;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
 
     @Resource
     private AdminUserMapper adminUserMapper;
+    @Resource
+    private RoleService roleService;
 
     @Override
     public AdminUser login(String userName, String password) {
@@ -69,7 +73,10 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
 
     @Override
     public AdminUser findByUsername(String username) {
-        return adminUserMapper.findByUsername(username);
+        AdminUser byUsername = adminUserMapper.findByUsername(username);
+        List<SysRole> userIdByRole = roleService.getUserIdByRole(byUsername.getAdminUserId());
+        byUsername.setSysRole(userIdByRole);
+        return byUsername;
     }
 
     @Override

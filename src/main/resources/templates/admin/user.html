@@ -40,8 +40,8 @@
                       aria-hidden="true"
                   >
 
-                    <div class="modal-dialog" >
-                      <div class="modal-content" >
+                    <div class="modal-dialog">
+                      <div class="modal-content">
                         <div class="modal-header">
                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                             &times;
@@ -102,7 +102,7 @@
                             添加
                           </button>
                         </div>
-                      </div><!-- /.modal-content -->
+                      </div>
                     </div><!-- /.modal -->
                   </div>
 
@@ -117,7 +117,7 @@
                 >
 
                   <div class="modal-dialog">
-                    <div class="modal-content " style="width:600px; height: 500px" >
+                    <div class="modal-content " style="width:600px; height: 500px">
                       <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                           &times;
@@ -126,13 +126,13 @@
                           添加用户
                         </h6>
                       </div>
-                      <div class="modal-body" >
-                        
+                      <div class="modal-body">
+
                         <div id="shuttleBox" class="shuttleBox" style="width:498px;overflow:auto; "></div>
 
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                        <button type="button" class="btn btn-default" data-dismiss="modal" >关闭
                         </button>
                         <button
                             type="button"
@@ -186,16 +186,5 @@
     <script th:src="@{/admin/dist/js/user.js}"></script>
     <script th:src="@{/admin/dist/js/shuttleFrame.js}"></script>
 
-    <script type="text/javascript" th:inline="javascript">
-        $("#shuttleBox").transferItem({
-            'leftName':'左侧列表',
-            'rightName':'右侧列表',
-            data:{
-                leftArr:[{id:'0',name:'1'},{id:'1',name:'哈哈哈哈'},{id:'3',name:'说没说过'},{id:'4',name:'我们沙发上'}],
-                rightArr:[{id:'5',name:'沙发上的1'},{id:'6',name:'哈哈哈省道哈'},{id:'7',name:'说没方法说过'},{id:'8',name:'我们沙大幅度发上'}]
-            }
-        });
-        
-    </script>
   </body>
 </html>

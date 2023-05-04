@@ -205,6 +205,86 @@ function update(id) {
 function selectRole(id) {
     $('#roleModel').modal('show');
 
+    $.ajax({
+        type: 'GET',//方法类型
+        url: "/admin/roles/userRoleList/" + id,
+        success: function (result) {
+            console.log(result)
+            if (result.resultCode === 200 && result.data) {
+                var rightArr = result.data.roles
+                var leftArr = result.data.notRoles
+                $("#shuttleBox").transferItem({
+
+                    'leftName': '未授权',
+                    'rightName': '已授权',
+
+                    data: {
+                        leftArr,
+                        rightArr
+                    }
+                });
+            } else {
+                swal("删除失败", {
+                    icon: "error",
+                });
+            }
+            ;
+        },
+        error: function () {
+            swal("操作失败", {
+                icon: "error",
+            });
+        }
+    });
+
+    return id;
+
+}
+
+function addRole() {
+    var ids = getSelectedRows();
+    var userId = ids[0];
+    var roleIds = [];
+
+    var elementsByClassName = document.getElementsByClassName("fl ty-transfer-list transfer-list-right");
+    var elementsByClassNameElement = elementsByClassName[0];
+    var elementsByClassName1 = elementsByClassNameElement.getElementsByClassName("tyue-checkbox-txt");
+    for (let i = 0; i < elementsByClassName1.length; i++) {
+        
+        roleIds.push(elementsByClassName1[i].id)
+    }
+    const data = {
+        "userId": userId,
+        "roleIds": roleIds
+    };
+    $.ajax({
+        type: 'POST',//方法类型
+        url: "/admin/roles/saveUserRole",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function (result) {
+            if (result.resultCode === 200 && result.data) {
+                $('#roleModel').modal('hide');
+
+                swal("保存成功", {
+                    icon: "success",
+                });
+
+            } else {
+                swal("保存失败", {
+                    icon: "error",
+                });
+            }
+            ;
+        },
+        error: function () {
+            swal("操作失败", {
+                icon: "error",
+            });
+        }
+    })
+    ;
+
 }
 
 

@@ -2,7 +2,6 @@ package com.site.blog.my.core.controller.admin;
 
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.SysRole;
-import com.site.blog.my.core.service.PermissionService;
 import com.site.blog.my.core.service.RoleService;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
@@ -25,9 +24,6 @@ public class RoleController {
 
     @Resource
     private RoleService roleService;
-
-    @Resource
-    private PermissionService permissionService;
 
 
     @GetMapping
@@ -63,6 +59,18 @@ public class RoleController {
     public Result delete(@RequestBody List<String> ids) {
 
         return ResultGenerator.genSuccessResult(roleService.removeBatchByIds(ids));
+    }
+
+    @ResponseBody
+    @GetMapping("/userRoleList/{id}")
+    public Result delete(@PathVariable Integer id) {
+        return ResultGenerator.genSuccessResult(roleService.getUserRole(id));
+    }
+
+    @ResponseBody
+    @PostMapping("/saveUserRole")
+    public Result saveUserRole(@RequestBody Map<String,Object> params) {
+        return ResultGenerator.genSuccessResult(roleService.saveUserRole(params));
     }
 
 

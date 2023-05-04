@@ -3,9 +3,12 @@ package com.site.blog.my.core.dao;
 import com.site.blog.my.core.entity.Blog;
 import com.site.blog.my.core.util.PageQueryUtil;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
+@Repository
 public interface BlogMapper {
     int deleteByPrimaryKey(Long blogId);
 
@@ -37,4 +40,5 @@ public interface BlogMapper {
 
     int updateBlogCategorys(@Param("categoryName") String categoryName, @Param("categoryId") Integer categoryId, @Param("ids")Integer[] ids);
 
+    boolean updateByStatusIds(Map<String, Object> params);
 }

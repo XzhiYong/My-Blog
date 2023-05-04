@@ -39,18 +39,12 @@ public class AdminUser {
     
     @TableField("create_time")
     private Date createTime;
+    
+    @TableField("head_portrait")
+    private String headPortrait;
 
     @TableField(exist = false)
     private List<SysRole> sysRole;
-
-    public List<SysRole> getAdminRole() {
-        return sysRole;
-    }
-
-    public void setAdminRole(List<SysRole> sysRole) {
-        this.sysRole = sysRole;
-    }
-
 
     public String getLoginUserName() {
         return loginUserName;

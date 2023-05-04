@@ -7,9 +7,9 @@ import com.site.blog.my.core.dao.*;
 import com.site.blog.my.core.entity.*;
 import com.site.blog.my.core.service.BlogService;
 import com.site.blog.my.core.util.*;
+import lombok.AllArgsConstructor;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -20,20 +20,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class BlogServiceImpl implements BlogService {
 
-    @Autowired
-    private BlogMapper blogMapper;
-    @Autowired
-    private BlogCategoryMapper categoryMapper;
-    @Autowired
-    private BlogTagMapper tagMapper;
-    @Autowired
-    private BlogTagRelationMapper blogTagRelationMapper;
-    @Autowired
-    private BlogCommentMapper blogCommentMapper;
-    @Autowired
-    private QiniuUtils qiniuUtils;
+    private final BlogMapper blogMapper;
+    private final BlogCategoryMapper categoryMapper;
+    private final BlogTagMapper tagMapper;
+    private final BlogTagRelationMapper blogTagRelationMapper;
+    private final BlogCommentMapper blogCommentMapper;
+    private final QiniuUtils qiniuUtils;
 
     @Override
     @Transactional
@@ -53,6 +48,8 @@ public class BlogServiceImpl implements BlogService {
         if (tags.length > 6) {
             return "标签数量限制为6";
         }
+        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
+        blog.setAdminUserId(user.getAdminUserId());
         //保存文章
         if (blogMapper.insertSelective(blog) > 0) {
             //新增的tag对象
@@ -95,12 +92,15 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public PageResult getBlogsPage(PageQueryUtil pageUtil) {
-        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
-        pageUtil.put("userId", user.getAdminUserId());
+        //判断当前用户是否为系统管理员
+        AdminUser adminUser = (AdminUser) SecurityUtils.getSubject().getPrincipal();
+        boolean userRole = UserRoleUtil.getUserRole(adminUser);
+        if (!userRole) {
+            pageUtil.put("userId", adminUser.getAdminUserId());
+        }
         List<Blog> blogList = blogMapper.findBlogList(pageUtil);
         int total = blogMapper.getTotalBlogs(pageUtil);
-        PageResult pageResult = new PageResult(blogList, total, pageUtil.getLimit(), pageUtil.getPage());
-        return pageResult;
+        return new PageResult(blogList, total, pageUtil.getLimit(), pageUtil.getPage());
     }
 
     @Override
@@ -190,16 +190,15 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public PageResult getBlogsForIndexPage(int page) {
-        Map params = new HashMap();
+        PageQueryUtil params = new PageQueryUtil(new HashMap<>());
         params.put("page", page);
         //每页8条
         params.put("limit", 8);
-        params.put("blogStatus", 1);//过滤发布状态下的数据
-        PageQueryUtil pageUtil = new PageQueryUtil(params);
-        List<Blog> blogList = blogMapper.findBlogList(pageUtil);
+        params.put("blogStatus", 2);//过滤发布状态下的数据
+        List<Blog> blogList = blogMapper.findBlogList(params);
         List<BlogListVO> blogListVOS = getBlogListVOsByBlogs(blogList);
-        int total = blogMapper.getTotalBlogs(pageUtil);
-        PageResult pageResult = new PageResult(blogListVOS, total, pageUtil.getLimit(), pageUtil.getPage());
+        int total = blogMapper.getTotalBlogs(params);
+        PageResult pageResult = new PageResult(blogListVOS, total, params.getLimit(), params.getPage());
         return pageResult;
     }
 
@@ -305,6 +304,11 @@ public class BlogServiceImpl implements BlogService {
         return qiniuUtils.upload(file, "blog");
     }
 
+    @Override
+    public boolean updateStatus(Map<String, Object> params) {
+        return blogMapper.updateByStatusIds(params);
+    }
+
     /**
      * 方法抽取
      *
@@ -312,7 +316,7 @@ public class BlogServiceImpl implements BlogService {
      * @return
      */
     private BlogDetailVO getBlogDetailVO(Blog blog) {
-        if (blog != null && blog.getBlogStatus() == 1) {
+        if (blog != null) {
             //增加浏览量
             blog.setBlogViews(blog.getBlogViews() + 1);
             blogMapper.updateByPrimaryKey(blog);

@@ -8,6 +8,7 @@ import com.site.blog.my.core.util.PageResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BlogService {
     String saveBlog(Blog blog);
@@ -89,4 +90,6 @@ public interface BlogService {
     BlogDetailVO getBlogDetailBySubUrl(String subUrl);
 
     String uploadFile(MultipartFile file);
+
+    boolean updateStatus(Map<String, Object> params);
 }

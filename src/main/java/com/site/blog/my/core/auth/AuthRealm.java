@@ -1,7 +1,7 @@
 package com.site.blog.my.core.auth;
 
 import com.site.blog.my.core.entity.AdminUser;
-import com.site.blog.my.core.entity.SysPermission;
+import com.site.blog.my.core.entity.Permission;
 import com.site.blog.my.core.entity.SysRole;
 import com.site.blog.my.core.service.AdminUserService;
 import org.apache.shiro.authc.*;
@@ -25,7 +25,7 @@ public class AuthRealm extends AuthorizingRealm {
 
     @Override
     /**
-     * 授权 获取用户的角色和权限
+     * 权限认证校验权限的时候会掉用此方法 获取用户的角色和权限
      *@param  [principals]
      *@return org.apache.shiro.authz.AuthorizationInfo
      */
@@ -35,10 +35,10 @@ public class AuthRealm extends AuthorizingRealm {
         //Integer userId = user.getUserId();
         //2.添加角色和权限
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        for (SysRole role : user.getAdminRole()) {
+        for (SysRole role : user.getSysRole()) {
             //2.1添加角色
             simpleAuthorizationInfo.addRole(role.getName());
-            for (SysPermission permission : role.getPermissions()) {
+            for (Permission permission : role.getPermissions()) {
                 //2.1.1添加权限
                 simpleAuthorizationInfo.addStringPermission(permission.getName());
             }

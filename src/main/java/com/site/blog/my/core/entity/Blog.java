@@ -1,9 +1,10 @@
 package com.site.blog.my.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
 import java.util.Date;
-
+@Data
 public class Blog {
     private Long blogId;
 
@@ -33,6 +34,10 @@ public class Blog {
     private Date updateTime;
 
     private String blogContent;
+
+    private AdminUser adminUser;
+
+    private Integer adminUserId;
 
     public Long getBlogId() {
         return blogId;

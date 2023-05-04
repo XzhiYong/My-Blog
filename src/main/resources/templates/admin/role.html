@@ -77,7 +77,12 @@
                       <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭
                         </button>
-                        <button type="button"  class="btn btn-primary" onclick="updatePermission()" data-dissmiss="modal">
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            onclick="updatePermission()"
+                            data-dissmiss="modal"
+                        >
                           提交更改
                         </button>
                       </div>
@@ -173,21 +178,10 @@
         function updatePermission() {
             var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
             var nodes = treeObj.getNodes();
-            for (let i = 0; i < nodes.length; i++) {
-                if (nodes[i].checked) {
-                    var children = nodes[i].children;
-                    for (let j = 0; j < children.length; j++) {
-                        if (children[j].checked) {
-                            permissionIds.push(children[j].id);
-                        }
-                    }
-                    permissionIds.push(nodes[i].id);
-                }
-            }
+
+            extracted(nodes);
             var ids = getSelectedRows();
-            
             var params = {"ids": ids, "permissionIds": permissionIds}
-            console.log(params)
             $.ajax({
                 type: "POST",
                 url: "/admin/permission/setPermission",
@@ -198,7 +192,8 @@
                         swal("设置成功", {
                             icon: "success",
                         });
-                        $("#mymodal").modal('hide');
+                        $("#myModal").modal('hide');
+                        reload()
                     } else {
                         swal(r.message, {
                             icon: "error",
@@ -206,7 +201,21 @@
                     }
                 }
             });
-           
+
+        }
+
+        function extracted(nodes) {
+            if (nodes == null || nodes.length < 0) {
+                return;
+            }
+            for (let i = 0; i < nodes.length; i++) {
+                if (nodes[i].checked) {
+                    permissionIds.push(nodes[i].id);
+                    var children = nodes[i].children;
+                    extracted(children)
+
+                }
+            }
         }
 
         //-->

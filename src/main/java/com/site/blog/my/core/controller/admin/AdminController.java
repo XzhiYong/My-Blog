@@ -2,8 +2,8 @@ package com.site.blog.my.core.controller.admin;
 
 import cn.hutool.captcha.ShearCaptcha;
 import com.site.blog.my.core.entity.AdminUser;
+import com.site.blog.my.core.entity.SysRole;
 import com.site.blog.my.core.service.*;
-import com.site.blog.my.core.util.TokenUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -17,6 +17,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author 13
@@ -41,22 +42,33 @@ public class AdminController {
     @Resource
     private CommentService commentService;
     @Resource
-    private TokenUtil tokenUtil;
+    private RoleService roleService;
 
 
     @GetMapping({"/login"})
     public String login() {
-        return "admin/login";
+        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
+        if(user==null){
+            return "admin/login";
+        }
+        return "admin/index";
     }
 
     @GetMapping({"", "/", "/index", "/index.html"})
     public String index(HttpServletRequest request) {
+        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
+        if(user==null){
+            return "admin/login";
+        }
         request.setAttribute("path", "index");
         request.setAttribute("categoryCount", categoryService.getTotalCategories());
         request.setAttribute("blogCount", blogService.getTotalBlogs());
         request.setAttribute("linkCount", linkService.getTotalLinks());
         request.setAttribute("tagCount", tagService.getTotalTags());
         request.setAttribute("commentCount", commentService.getTotalComments());
+        List<SysRole> userIdByRole = roleService.getUserIdByRole(user.getAdminUserId());
+        request.setAttribute("role", userIdByRole);
+        request.setAttribute("user", user);
         return "admin/index";
     }
 
@@ -164,9 +176,12 @@ public class AdminController {
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) {
         request.getSession().removeAttribute("loginUserId");
-        request.getSession().removeAttribute("loginUser");
+        request.getSession().removeAttribute("loginUserName");
         request.getSession().removeAttribute("errorMsg");
         request.getSession().removeAttribute("token");
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+
         return "admin/login";
     }
 }

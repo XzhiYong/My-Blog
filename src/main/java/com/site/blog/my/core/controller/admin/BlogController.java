@@ -116,7 +116,7 @@ public class BlogController {
         blog.setEnableComment(enableComment);
         String saveBlogResult = blogService.saveBlog(blog);
         if ("success".equals(saveBlogResult)) {
-            return ResultGenerator.genSuccessResult("添加成功",null);
+            return ResultGenerator.genSuccessResult("添加成功", null);
         } else {
             return ResultGenerator.genFailResult(saveBlogResult);
         }
@@ -169,7 +169,7 @@ public class BlogController {
         blog.setEnableComment(enableComment);
         String updateBlogResult = blogService.updateBlog(blog);
         if ("success".equals(updateBlogResult)) {
-            return ResultGenerator.genSuccessResult("修改成功",null);
+            return ResultGenerator.genSuccessResult("修改成功", null);
         } else {
             return ResultGenerator.genFailResult(updateBlogResult);
         }
@@ -207,4 +207,10 @@ public class BlogController {
         }
     }
 
+    @PostMapping("/blogs/updateStatus")
+    @ResponseBody
+    public Result updateStatus(@RequestBody Map<String, Object> params) {
+        return ResultGenerator.genSuccessResult(blogService.updateStatus(params));
+
+    }
 }

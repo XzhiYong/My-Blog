@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.site.blog.my.core.dao.RolePermissionMapper">
+
+    <select id="getRoleIdListByPermission" resultType="com.site.blog.my.core.entity.Permission">
+
+        select permission.*
+        from tb_sys_role_permission rolePermission
+                 left join tb_sys_permission permission on rolePermission.permission_id = permission.id
+        where rolePermission.role_id = #{id}
+
+
+    </select>
+</mapper>

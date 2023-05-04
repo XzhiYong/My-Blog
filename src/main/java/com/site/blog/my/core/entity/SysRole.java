@@ -37,5 +37,5 @@ public class SysRole {
     private String updateBy;
 
     @TableField(exist = false)
-    private List<SysPermission> permissions;
+    private List<Permission> permissions;
 }
