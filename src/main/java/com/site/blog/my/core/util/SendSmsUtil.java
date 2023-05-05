@@ -11,6 +11,7 @@ import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +25,13 @@ import java.util.Map;
 @Component
 public class SendSmsUtil {
 
+    @Value("aliyun.sms.accessKey")
+    private String accessKey;
+
+    @Value("aliyun.sms.accessSecretKey")
+    private String accessSecretKey;
+
+
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
@@ -34,12 +42,9 @@ public class SendSmsUtil {
         //初始化ascClient需要的几个参数
         final String product = "Dysmsapi";//短信API产品名称（短信产品名固定，无需修改）
         final String domain = "dysmsapi.aliyuncs.com";//短信API产品域名（接口地址固定，无需修改）
-        //替换成你的AK
-        final String accessKeyId = "LTAI5tCkjPMSUdJ8LteP1M1Z";//你的accessKeyId,参考本文档步骤2
-        final String accessKeySecret = "El6F1AeWmPNPQBv8WJ1XtPD6w9lfcG";//你的accessKeySecret，参考本文档步骤2
         //初始化ascClient,暂时不支持多region（请勿修改）
-        IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId,
-            accessKeySecret);
+        IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", DesUtil.decrypt(accessKey),
+            DesUtil.decrypt(accessSecretKey));
         try {
             DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
         } catch (ClientException e) {
