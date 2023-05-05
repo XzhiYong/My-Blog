@@ -231,7 +231,7 @@ public class BlogServiceImpl implements BlogService {
     public PageResult getBlogsPageByTag(Integer tagId, int page) {
         BlogTag tag = tagMapper.selectByPrimaryKey(tagId);
         if (tag != null && page > 0) {
-            Map param = new HashMap();
+            Map<String,Object> param = new HashMap();
             param.put("page", page);
             param.put("limit", 9);
             param.put("tagId", tag.getTagId());

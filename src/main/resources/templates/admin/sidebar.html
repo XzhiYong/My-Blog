@@ -14,7 +14,8 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img th:src="@{/admin/dist/img/avatar5.png}" class="img-circle elevation-2" alt="User Image">
+          <img th:src="${user.headPortrait}" class="img-circle elevation-2" alt="User Image">&nbsp&nbsp&nbsp
+          <a th:href="@{/admin/profile}"><span th:text="${user.loginUserName}" style="color: whitesmoke">1111</span></a>
         </div>
         <div class="info">
           <a href="#" class="d-block" th:text="${session.loginUser}"></a>
@@ -137,7 +138,7 @@
                 </a>
               </li>
             </shiro:hasPermission>
-            <shiro:hasPermission name="修改密码">　　
+            <shiro:hasPermission name="个人信息">　　
 
               <li class="nav-item">
                 <a
@@ -145,7 +146,7 @@
                     th:class="${path}=='profile'?'nav-link active':'nav-link'"
                 >
                   <i class="fa fa-user-secret nav-icon"></i>
-                  <p>修改密码</p>
+                  <p>个人信息</p>
                 </a>
               </li>
             </shiro:hasPermission>

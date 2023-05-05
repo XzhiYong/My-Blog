@@ -16,19 +16,9 @@ spring:
     url: jdbc:mysql://192.168.3.182:3306/my_blog_db?useUnicode=true&characterEncoding=UTF-8&serverTimeZone=UTC
     username: root
     password: root
-
-qiniu:
-  url: http://qny.xiazy.xyz
-  accessKey: gex8TrRK3pHvpUW2QBftP3WwDPQ6hFtAKDw-KVKO
-  accessSecretKey: g0VJR_z6jxVy5aka_rzg6fJZD9bNixS4zECLSvV0
-
-aliyun:
-  sms:
-    accessKey: IhmzEcOB9T+uhwLS59p6Hd/7WicVyQn6D9TG88dOADs=
-    accessSecretKey: P7zzgFnTqqtI4PpLBJwm3HXSTOBpVuMTKgFjCOSLmMA=
-  
-mybatis:
-  mapper-locations: classpath:mapper/*Mapper.xml
+  redis:
+    host: 127.0.0.1
+    port: 6379
 
 logging:
   level: 

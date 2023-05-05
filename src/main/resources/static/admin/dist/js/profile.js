@@ -1,32 +1,34 @@
 $(function () {
     //修改个人信息
     $('#updateUserNameButton').click(function () {
-        $("#updateUserNameButton").attr("disabled",true);
+        $("#updateUserNameButton").attr("disabled", true);
+        var img = document.getElementById('picture').src;
         var userName = $('#loginUserName').val();
         var nickName = $('#nickName').val();
-        if (validUserNameForUpdate(userName, nickName)) {
-            //ajax提交数据
-            var params = $("#userNameForm").serialize();
-            $.ajax({
-                type: "POST",
-                url: "/admin/profile/name",
-                data: params,
-                success: function (r) {
-                    if (r == 'success') {
-                        alert('修改成功');
-                    } else {
-                        alert('修改失败');
-                        $("#updateUserNameButton").prop("disabled",false);
-                    }
+        console.log(nickName)
+        var email = $('#email').val();
+
+        //ajax提交数据
+        var params = {"loginUserName": userName, "nickName": nickName, "email": email, headPortrait: img}
+        $.ajax({
+            type: "POST",
+            url: "/admin/profile/name",
+            contentType: "application/json",
+            data: JSON.stringify(params),
+            success: function (r) {
+                if (r == 'success') {
+                    alert('修改成功');
+                } else {
+                    alert('修改失败');
+                    $("#updateUserNameButton").prop("disabled", false);
                 }
-            });
-        } else {
-            $("#updateUserNameButton").prop("disabled",false);
-        }
+            }
+        });
+      
     });
     //修改密码
     $('#updatePasswordButton').click(function () {
-        $("#updatePasswordButton").attr("disabled",true);
+        $("#updatePasswordButton").attr("disabled", true);
         var originalPassword = $('#originalPassword').val();
         var newPassword = $('#newPassword').val();
         if (validPasswordForUpdate(originalPassword, newPassword)) {
@@ -37,17 +39,17 @@ $(function () {
                 data: params,
                 success: function (r) {
                     console.log(r);
-                    if (r == 'success') {
+                    if (r === 'success') {
                         alert('修改成功');
                         window.location.href = '/admin/login';
                     } else {
                         alert('修改失败');
-                        $("#updatePasswordButton").attr("disabled",false);
+                        $("#updatePasswordButton").attr("disabled", false);
                     }
                 }
             });
         } else {
-            $("#updatePasswordButton").attr("disabled",false);
+            $("#updatePasswordButton").attr("disabled", false);
         }
     });
 })

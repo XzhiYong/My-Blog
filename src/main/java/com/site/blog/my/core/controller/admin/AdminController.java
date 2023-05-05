@@ -48,7 +48,7 @@ public class AdminController {
     @GetMapping({"/login"})
     public String login() {
         AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
-        if(user==null){
+        if (user == null) {
             return "admin/login";
         }
         return "admin/index";
@@ -57,7 +57,7 @@ public class AdminController {
     @GetMapping({"", "/", "/index", "/index.html"})
     public String index(HttpServletRequest request) {
         AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
-        if(user==null){
+        if (user == null) {
             return "admin/login";
         }
         request.setAttribute("path", "index");
@@ -116,6 +116,7 @@ public class AdminController {
             }
             session.setAttribute("loginUserId", adminUser.getAdminUserId());
             session.setAttribute("loginUserName", adminUser.getLoginUserName());
+            session.setAttribute("user", adminUser);
             return "redirect:/admin/index";
         } catch (UnknownAccountException e) {
             session.setAttribute("msg", "用户名错误");
@@ -128,14 +129,12 @@ public class AdminController {
 
     @GetMapping("/profile")
     public String profile(HttpServletRequest request) {
-        Integer loginUserId = (int) request.getSession().getAttribute("loginUserId");
-        AdminUser adminUser = adminUserService.getUserDetailById(loginUserId);
-        if (adminUser == null) {
+        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
+        if (user == null) {
             return "admin/login";
         }
         request.setAttribute("path", "profile");
-        request.setAttribute("loginUserName", adminUser.getLoginUserName());
-        request.setAttribute("nickName", adminUser.getNickName());
+        request.setAttribute("user", user);
         return "admin/profile";
     }
 
@@ -160,13 +159,11 @@ public class AdminController {
 
     @PostMapping("/profile/name")
     @ResponseBody
-    public String nameUpdate(HttpServletRequest request, @RequestParam("loginUserName") String loginUserName,
-                             @RequestParam("nickName") String nickName) {
-        if (!StringUtils.hasText(loginUserName) || !StringUtils.hasText(nickName)) {
-            return "参数不能为空";
-        }
+    public String nameUpdate(HttpServletRequest request, @RequestBody AdminUser adminUser) {
+
         Integer loginUserId = (int) request.getSession().getAttribute("loginUserId");
-        if (adminUserService.updateName(loginUserId, loginUserName, nickName)) {
+        adminUser.setAdminUserId(loginUserId);
+        if (adminUserService.updateById(adminUser)) {
             return "success";
         } else {
             return "修改失败";
@@ -179,6 +176,7 @@ public class AdminController {
         request.getSession().removeAttribute("loginUserName");
         request.getSession().removeAttribute("errorMsg");
         request.getSession().removeAttribute("token");
+        request.getSession().removeAttribute("user");
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
 

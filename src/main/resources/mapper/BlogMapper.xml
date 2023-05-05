@@ -91,7 +91,7 @@
         <include refid="Base_Column_List"/>
         from tb_blog
         where blog_id IN (SELECT blog_id FROM tb_blog_tag_relation WHERE tag_id = #{tagId})
-        AND blog_status =1 AND is_deleted=0
+        AND blog_status =2 AND is_deleted=0
         order by blog_id desc
         <if test="start!=null and limit!=null">
             limit #{start},#{limit}

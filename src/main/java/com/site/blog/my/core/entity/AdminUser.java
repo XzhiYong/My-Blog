@@ -42,6 +42,9 @@ public class AdminUser {
     
     @TableField("head_portrait")
     private String headPortrait;
+    
+    @TableField("email")
+    private String email;
 
     @TableField(exist = false)
     private List<SysRole> sysRole;
