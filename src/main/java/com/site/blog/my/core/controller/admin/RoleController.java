@@ -30,8 +30,9 @@ public class RoleController {
     public String index(HttpServletRequest request) {
         request.setAttribute("path", "roles");
         List<SysRole> list = roleService.list();
-
+        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
         request.setAttribute("roles", list);
+        request.setAttribute("user", user);
         return "admin/role";
     }
 

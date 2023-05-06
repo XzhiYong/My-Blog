@@ -6,6 +6,7 @@ import com.site.blog.my.core.service.RoleService;
 import com.site.blog.my.core.util.MD5Util;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,8 @@ public class AdminUserController {
 
     @GetMapping
     public String index(HttpServletRequest request) {
+        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
+        request.setAttribute("user", user);
         request.setAttribute("path", "users");
         request.setAttribute("users", adminUserService.list());
         request.setAttribute("roles", roleService.list());

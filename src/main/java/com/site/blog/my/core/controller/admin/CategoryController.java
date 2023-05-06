@@ -1,9 +1,11 @@
 package com.site.blog.my.core.controller.admin;
 
+import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.service.CategoryService;
 import com.site.blog.my.core.util.PageQueryUtil;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -29,6 +31,9 @@ public class CategoryController {
     @GetMapping("/categories")
     public String categoryPage(HttpServletRequest request) {
         request.setAttribute("path", "categories");
+
+        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
+        request.setAttribute("user", user);
         return "admin/category";
     }
 
