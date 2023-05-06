@@ -28,6 +28,10 @@
     <select id="findByUsername" resultType="com.site.blog.my.core.entity.AdminUser">
         select * from tb_admin_user where login_user_name =#{username}
     </select>
+    <select id="findByMobile" resultType="com.site.blog.my.core.entity.AdminUser">
+
+        select * from tb_admin_user where mobile =#{mobile}
+    </select>
 
     <insert id="insert" parameterType="com.site.blog.my.core.entity.AdminUser">
     insert into tb_admin_user (admin_user_id, login_user_name, login_password, 

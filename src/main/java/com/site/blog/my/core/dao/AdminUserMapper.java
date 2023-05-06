@@ -27,4 +27,6 @@ public interface AdminUserMapper extends BaseMapper<AdminUser> {
     int updateByPrimaryKey(AdminUser record);
 
     AdminUser findByUsername(String username);
+
+    AdminUser findByMobile(String mobile);
 }
