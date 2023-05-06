@@ -47,6 +47,9 @@
         <if test="blogStatus!=null">
             AND blog_status = #{blogStatus}
         </if>
+        <if test="userId!=null">
+            AND user_id = #{userId}
+        </if>
         <if test="blogCategoryId!=null">
             AND blog_category_id = #{blogCategoryId}
         </if>
@@ -235,7 +238,7 @@
                 #{blogContent,jdbcType=LONGVARCHAR},
             </if>
             <if test="adminUserId != null">
-                #{userId,jdbcType=INT},
+                #{adminUserId},
             </if>
         </trim>
     </insert>

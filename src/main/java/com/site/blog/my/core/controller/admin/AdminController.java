@@ -46,11 +46,12 @@ public class AdminController {
 
 
     @GetMapping({"/login"})
-    public String login() {
+    public String login(HttpServletRequest request) {
         AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
         if (user == null) {
             return "admin/login";
         }
+        request.setAttribute("user", user);
         return "admin/index";
     }
 
