@@ -14,6 +14,7 @@ import com.site.blog.my.core.dao.SmsMsgMapper;
 import com.site.blog.my.core.entity.SmsMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -85,7 +86,8 @@ public class SendSmsUtil {
         }
         SmsMsg smsMsg = new SmsMsg();
         if (sendSmsResponse.getCode() != null && sendSmsResponse.getCode().equals("OK")) {
-            redisTemplate.opsForValue().set(mobile, stringBuilder.toString(),120, TimeUnit.SECONDS);
+            BoundValueOperations boundValueOperations = redisTemplate.boundValueOps(mobile);
+            boundValueOperations.set(stringBuilder.toString(), 120, TimeUnit.SECONDS);
             smsMsg.setResult("OK");
             //请求成功
             return true;

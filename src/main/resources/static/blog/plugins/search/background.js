@@ -1,6 +1,6 @@
 var stop, staticx
 var img = new Image()
-img.src = 'http://rsdrmckce.bkt.clouddn.com/%E4%B8%8B%E8%BD%BD.png'
+img.src = 'http://qny.xiazy.xyz/%E4%B8%8B%E8%BD%BD.png'
 function Sakura(x, y, s, r, fn) {
     this.x = x
     this.y = y

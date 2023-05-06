@@ -39,10 +39,7 @@
       <!-- /.login-logo -->
       <div class="card">
         <div class="card-body login-card-body">
-          <form th:action="@{/admin/register}" method="post">
-            <div th:if="${not #strings.isEmpty(session.errorMsg)}" class="form-group">
-              <div class="alert alert-danger" th:text="${session.errorMsg}"></div>
-            </div>
+          <form>
             <div class="form-group has-feedback">
               <span class="fa fa-user form-control-feedback"></span>
               <input
@@ -54,14 +51,14 @@
               <span class="fa fa-navicon form-control-feedback"></span>
               <input
                   type="text" id="nickName" name="nickName" required="true" class="form-control" placeholder="请输入昵称"
-                  
+
               >
             </div>
 
             <div class="form-group has-feedback">
               <span class="fa fa-lock form-control-feedback"></span>
               <input
-                  type="password" id="password"  name="password" class="form-control" placeholder="请输入密码"
+                  type="password" id="password" name="password" class="form-control" placeholder="请输入密码"
                   required="true"
               >
             </div>
@@ -89,7 +86,7 @@
                 >
               </div>
               <div class="col-6">
-                <input type="button" value="发送验证码" id="sendsms" disabled>
+                <input type="button" value="发送验证码" id="sendsms" required="true"  disabled>
               </div>
               <span id="smscode_info" class="res-error"></span>
             </div>
@@ -104,8 +101,8 @@
               </div>
 
               <div class="col-4">
-                <button type="submit" class="btn btn-primary btn-block btn-flat" onclick="register()">注册
-                </button>
+                <input class="btn btn-primary btn-block btn-flat" onclick="register()" value="注册">
+
               </div>
             </div>
           </form>
@@ -122,6 +119,7 @@
     <script th:src="@{/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
     <script th:src="@{/admin/dist/js/plugins/particles.js}"></script>
     <script th:src="@{/admin/dist/js/plugins/login-bg-particles.js}"></script>
+    <script th:src="@{/admin/plugins/sweetalert/sweetalert.min.js}"></script>
     <script>
         $(function () {
             $('#phone_input').keyup(function () {
@@ -182,7 +180,6 @@
                 "mobile": phone_input,
                 "verificationCode": smscode
             };
-            console.log(JSON.stringify(data))
             $.ajax({
                 url: '/admin/register',
                 type: 'POST',
@@ -190,18 +187,17 @@
                 contentType: 'application/json',
                 success: function (res) {
                     console.log(res)
-                    if (res.code === 200) {
+                    if (res.resultCode === 200) {
                         swal("注册成功", {
                             icon: "success",
                         });
-                        reload();
                     } else {
-                        swal(r.message, {
+                        swal(res.message, {
                             icon: "error",
                         });
                     }
                 }
-            })
+            });
         }
     </script>
   </body>

@@ -12,6 +12,7 @@ import com.site.blog.my.core.service.RoleService;
 import com.site.blog.my.core.util.MD5Util;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
+import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -96,10 +97,12 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
         if (adminUserMapper.findByUsername(loginUserName) != null) {
             return ResultGenerator.genFailResult("账号已被注册");
         }
-        String code = (String) redisTemplate.opsForValue().get(adminUser.getMobile());
-//        if (!Objects.equals(code, adminUser.getVerificationCode())) {
-//            return ResultGenerator.genFailResult("验证码不正确");
-//        }
+
+        BoundValueOperations boundValueOperations = redisTemplate.boundValueOps(adminUser.getMobile());
+        Object o = boundValueOperations.get();
+        if (!Objects.equals(o, adminUser.getVerificationCode())) {
+            return ResultGenerator.genFailResult("验证码不正确");
+        }
         adminUser.setLoginPassword(MD5Util.MD5Encode(adminUser.getLoginPassword(), "UTF-8"));
         adminUser.setLocked(0);
         save(adminUser);
