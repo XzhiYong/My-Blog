@@ -18,33 +18,39 @@ public class AdminUser {
     @JsonSerialize(using = ToStringSerializer.class)
     @TableId(type = IdType.AUTO)
     private Integer adminUserId;
-    
+
     @TableField("login_user_name")
     private String loginUserName;
-    
+
     @TableField("login_password")
     private String loginPassword;
-    
+
     @TableField("nick_name")
     private String nickName;
-    
+
     @TableField("locked")
-    private Byte locked;
-    
+    private Integer locked;
+
     @TableField("login_count")
     private int loginCount;
-    
+
     @TableField("last_login_time")
     private Date lastLoginTime;
-    
+
     @TableField("create_time")
     private Date createTime;
-    
+
     @TableField("head_portrait")
     private String headPortrait;
-    
+
     @TableField("email")
     private String email;
+
+    @TableField("mobile")
+    private String mobile;
+
+    @TableField(exist = false)
+    private String verificationCode;
 
     @TableField(exist = false)
     private List<SysRole> sysRole;
@@ -71,14 +77,6 @@ public class AdminUser {
 
     public void setNickName(String nickName) {
         this.nickName = nickName == null ? null : nickName.trim();
-    }
-
-    public Byte getLocked() {
-        return locked;
-    }
-
-    public void setLocked(Byte locked) {
-        this.locked = locked;
     }
 
     @Override

@@ -10,6 +10,8 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
+import com.site.blog.my.core.dao.SmsMsgMapper;
+import com.site.blog.my.core.entity.SmsMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 夏志勇
@@ -25,15 +28,18 @@ import java.util.Map;
 @Component
 public class SendSmsUtil {
 
-    @Value("aliyun.sms.accessKey")
+    @Value("${aliyun.sms.accessKey}")
     private String accessKey;
 
-    @Value("aliyun.sms.accessSecretKey")
+    @Value("${aliyun.sms.accessSecretKey}")
     private String accessSecretKey;
+
+    @Autowired
+    private SmsMsgMapper smsMsgMapper;
 
 
     @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+    private RedisTemplate redisTemplate;
 
     public Boolean verificationCode(String mobile) {
         //设置超时时间-可自行调整
@@ -60,7 +66,7 @@ public class SendSmsUtil {
         //必填:短信签名-可在短信控制台中找到
         request.setSignName("夏志勇的博客");
         //必填:短信模板-可在短信控制台中找到，发送国际/港澳台消息时，请使用国际/港澳台短信模版
-        request.setTemplateCode("SMS_460665387");
+        request.setTemplateCode("SMS_460650484");
         int[] ints = NumberUtil.generateRandomNumber(0, 9, 4);
         StringBuilder stringBuilder = new StringBuilder();
         for (int anInt : ints) {
@@ -77,11 +83,17 @@ public class SendSmsUtil {
         } catch (ClientException e) {
             e.printStackTrace();
         }
+        SmsMsg smsMsg = new SmsMsg();
         if (sendSmsResponse.getCode() != null && sendSmsResponse.getCode().equals("OK")) {
-            redisTemplate.opsForValue().set(mobile, stringBuilder.toString());
+            redisTemplate.opsForValue().set(mobile, stringBuilder.toString(),120, TimeUnit.SECONDS);
+            smsMsg.setResult("OK");
             //请求成功
             return true;
         }
+        smsMsg.setResult("ON");
+        smsMsg.setMsg(sendSmsResponse.getMessage());
+        smsMsg.setMobile(mobile);
+        smsMsgMapper.insert(smsMsg);
         return false;
     }
 }

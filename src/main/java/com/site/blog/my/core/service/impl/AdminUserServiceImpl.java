@@ -10,11 +10,13 @@ import com.site.blog.my.core.entity.SysRole;
 import com.site.blog.my.core.service.AdminUserService;
 import com.site.blog.my.core.service.RoleService;
 import com.site.blog.my.core.util.MD5Util;
+import com.site.blog.my.core.util.Result;
+import com.site.blog.my.core.util.ResultGenerator;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser> implements AdminUserService {
@@ -23,6 +25,8 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
     private AdminUserMapper adminUserMapper;
     @Resource
     private RoleService roleService;
+    @Resource
+    private RedisTemplate redisTemplate;
 
     @Override
     public AdminUser login(String userName, String password) {
@@ -84,5 +88,28 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
         PageHelper.startPage(MapUtil.getInt(params, "page", 1), MapUtil.getInt(params, "limit", 10));
         List<AdminUser> list = list();
         return new PageInfo<>(list);
+    }
+
+    @Override
+    public Result register(AdminUser adminUser) {
+        String loginUserName = adminUser.getLoginUserName();
+        if (adminUserMapper.findByUsername(loginUserName) != null) {
+            return ResultGenerator.genFailResult("账号已被注册");
+        }
+        String code = (String) redisTemplate.opsForValue().get(adminUser.getMobile());
+//        if (!Objects.equals(code, adminUser.getVerificationCode())) {
+//            return ResultGenerator.genFailResult("验证码不正确");
+//        }
+        adminUser.setLoginPassword(MD5Util.MD5Encode(adminUser.getLoginPassword(), "UTF-8"));
+        adminUser.setLocked(0);
+        save(adminUser);
+        AdminUser username = adminUserMapper.findByUsername(loginUserName);
+        //注册新用户 给予普通用户权限
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", username.getAdminUserId());
+        List<String> roles = new ArrayList<>();
+        roles.add("2");
+        params.put("roleIds", roles);
+        return ResultGenerator.genSuccessResult(roleService.saveUserRole(params));
     }
 }

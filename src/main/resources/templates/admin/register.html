@@ -53,21 +53,28 @@
             <div class="form-group has-feedback">
               <span class="fa fa-navicon form-control-feedback"></span>
               <input
-                  type="text" id="nickName" name="nickName" class="form-control" placeholder="请输入昵称"
-                  required="true"
+                  type="text" id="nickName" name="nickName" required="true" class="form-control" placeholder="请输入昵称"
+                  
               >
             </div>
 
             <div class="form-group has-feedback">
               <span class="fa fa-lock form-control-feedback"></span>
               <input
-                  type="password" id="password" name="password" class="form-control" placeholder="请输入密码"
+                  type="password" id="password"  name="password" class="form-control" placeholder="请输入密码"
                   required="true"
               >
             </div>
             <div class="form-group">
               <span class="fa fa-mobile form-control-feedback"></span>
-              <input name="phone" type="text" class="form-control" id="phone_input" placeholder="请输入手机号">
+              <input
+                  name="phone"
+                  type="text"
+                  class="form-control"
+                  required="true"
+                  id="phone_input"
+                  placeholder="请输入手机号"
+              >
               <span id="phone_info" class="res-error"></span>
             </div>
             <div class="row">
@@ -97,7 +104,7 @@
               </div>
 
               <div class="col-4">
-                <button type="submit" class="btn btn-primary btn-block btn-flat">注册
+                <button type="submit" class="btn btn-primary btn-block btn-flat" onclick="register()">注册
                 </button>
               </div>
             </div>
@@ -130,14 +137,10 @@
                     return
                 }
                 $('#phone_info').html('');
-
                 var num = 59
                 $('#sendsms').val(num + '秒');
                 var t = setInterval(() => {
-
-
                     $(this).prop('disabled', true);
-
                     num -= 1;
                     $('#sendsms').val(num + '秒');
 
@@ -147,9 +150,7 @@
                         $('#sendsms').val('发送验证码');
                         $(this).prop('disabled', false);
                     }
-
                 }, 1000);
-
                 $.ajax({
                     url: '/admin/register/verificationCode?mobile=' + mobile,
                     type: 'GET',
@@ -157,7 +158,7 @@
                         if (res) {
                             console.log(res)
                             $('#smscode_info').html('发送验证码成功').css('color', 'green')
-                        }else {
+                        } else {
                             $('#smscode_info').html('验证码发送失败').css('color', 'red')
                         }
                     }
@@ -166,6 +167,42 @@
             })
 
         })
+
+        function register() {
+            var username = $("#userName").val();
+            var nickName = $("#nickName").val();
+            var password = $("#password").val();
+            var phone_input = $("#phone_input").val();
+            var smscode = $("#smscode").val();
+
+            var data = {
+                "loginUserName": username,
+                "nickName": nickName,
+                "loginPassword": password,
+                "mobile": phone_input,
+                "verificationCode": smscode
+            };
+            console.log(JSON.stringify(data))
+            $.ajax({
+                url: '/admin/register',
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function (res) {
+                    console.log(res)
+                    if (res.code === 200) {
+                        swal("注册成功", {
+                            icon: "success",
+                        });
+                        reload();
+                    } else {
+                        swal(r.message, {
+                            icon: "error",
+                        });
+                    }
+                }
+            })
+        }
     </script>
   </body>
 </html>
