@@ -12,6 +12,7 @@ import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import com.site.blog.my.core.dao.SmsMsgMapper;
 import com.site.blog.my.core.entity.SmsMsg;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.BoundValueOperations;
@@ -26,6 +27,7 @@ import java.util.concurrent.TimeUnit;
  * @author 夏志勇
  * @since 2023年05月04日 14:27
  */
+@Slf4j
 @Component
 public class SendSmsUtil {
 
@@ -95,6 +97,7 @@ public class SendSmsUtil {
         smsMsg.setResult("ON");
         smsMsg.setMsg(sendSmsResponse.getMessage());
         smsMsg.setMobile(mobile);
+        log.info(sendSmsResponse.getMessage());
         smsMsgMapper.insert(smsMsg);
         return false;
     }
