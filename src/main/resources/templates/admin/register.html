@@ -96,7 +96,7 @@
             <div class="row">
               <div class="col-8">
                   <span>
-                        <a href="./register.html">已有账号?去登录</a>
+                        <a th:href="@{/admin/login}">已有账号?去登录</a>
                   </span>
               </div>
 
@@ -191,6 +191,7 @@
                         swal("注册成功", {
                             icon: "success",
                         });
+                        window.location="/admin/login"
                     } else {
                         swal(res.message, {
                             icon: "error",

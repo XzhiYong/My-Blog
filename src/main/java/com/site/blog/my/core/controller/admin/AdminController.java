@@ -76,7 +76,8 @@ public class AdminController {
     @PostMapping(value = "/login")
     public String login(@RequestParam("userName") String userName,
                         @RequestParam("password") String password,
-                        @RequestParam("verifyCode") String verifyCode,
+                        @RequestParam(value = "verifyCode",required = false) String verifyCode,
+                        @RequestParam(value = "isVerifyCode", defaultValue = "true") boolean isVerifyCode,
                         HttpSession session) {
 
         if (!StringUtils.hasText(verifyCode)) {
@@ -87,10 +88,12 @@ public class AdminController {
             session.setAttribute("errorMsg", "用户名或密码不能为空");
             return "admin/login";
         }
-        ShearCaptcha shearCaptcha = (ShearCaptcha) session.getAttribute("verifyCode");
-        if (shearCaptcha == null || !shearCaptcha.verify(verifyCode)) {
-            session.setAttribute("errorMsg", "验证码错误");
-            return "admin/login";
+        if (isVerifyCode) {
+            ShearCaptcha shearCaptcha = (ShearCaptcha) session.getAttribute("verifyCode");
+            if (shearCaptcha == null || !shearCaptcha.verify(verifyCode)) {
+                session.setAttribute("errorMsg", "验证码错误");
+                return "admin/login";
+            }
         }
         //获取一个用户
         Subject subject = SecurityUtils.getSubject();

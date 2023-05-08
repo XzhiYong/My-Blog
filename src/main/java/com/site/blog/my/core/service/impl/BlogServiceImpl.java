@@ -277,7 +277,7 @@ public class BlogServiceImpl implements BlogService {
             param.put("page", page);
             param.put("limit", 9);
             param.put("keyword", keyword);
-            param.put("blogStatus", 1);//过滤发布状态下的数据
+            param.put("blogStatus", 2);//过滤发布状态下的数据
             PageQueryUtil pageUtil = new PageQueryUtil(param);
             List<Blog> blogList = blogMapper.findBlogList(pageUtil);
             List<BlogListVO> blogListVOS = getBlogListVOsByBlogs(blogList);

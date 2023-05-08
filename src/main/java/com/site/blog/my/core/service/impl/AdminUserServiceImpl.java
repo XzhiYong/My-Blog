@@ -12,11 +12,16 @@ import com.site.blog.my.core.service.RoleService;
 import com.site.blog.my.core.util.MD5Util;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Service
@@ -92,7 +97,8 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
     }
 
     @Override
-    public Result register(AdminUser adminUser) {
+    @Transactional(rollbackFor = Exception.class)
+    public Result register(AdminUser adminUser, HttpSession session) {
         String loginUserName = adminUser.getLoginUserName();
         if (adminUserMapper.findByUsername(loginUserName) != null) {
             return ResultGenerator.genFailResult("账号已被注册");
@@ -103,6 +109,7 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
         if (!Objects.equals(o, adminUser.getVerificationCode())) {
             return ResultGenerator.genFailResult("验证码不正确");
         }
+        String oldPas = adminUser.getLoginPassword();
         adminUser.setLoginPassword(MD5Util.MD5Encode(adminUser.getLoginPassword(), "UTF-8"));
         adminUser.setLocked(0);
         save(adminUser);
@@ -113,6 +120,15 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
         List<String> roles = new ArrayList<>();
         roles.add("2");
         params.put("roleIds", roles);
-        return ResultGenerator.genSuccessResult(roleService.saveUserRole(params));
+        if (roleService.saveUserRole(params)) {
+            //登陆成功后自动登录
+            Subject subject = SecurityUtils.getSubject();
+            UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(adminUser.getLoginUserName(), oldPas);
+            subject.login(usernamePasswordToken);
+            session.setAttribute("loginUserId", adminUser.getAdminUserId());
+            session.setAttribute("loginUserName", adminUser.getLoginUserName());
+            session.setAttribute("user", adminUser);
+        }
+        return ResultGenerator.genSuccessResult();
     }
 }

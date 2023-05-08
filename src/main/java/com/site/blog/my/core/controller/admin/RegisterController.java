@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author 夏志勇
@@ -36,8 +37,9 @@ public class RegisterController {
 
     @ResponseBody
     @PostMapping
-    public Result register(@RequestBody AdminUser adminUser) {
-        return adminUserService.register(adminUser);
+    public Result register(@RequestBody AdminUser adminUser,
+                           HttpSession session) {
+       return adminUserService.register(adminUser,session);
     }
 
 }
