@@ -62,6 +62,6 @@ public class AuthRealm extends AuthorizingRealm {
             throw new UnknownAccountException("用户不存在!");
         }
         //5. 根据用户的情况, 来构建 AuthenticationInfo 对象并返回. 通常使用的实现类为: SimpleAuthenticationInfo
-        return new SimpleAuthenticationInfo(user, username, this.getName());
+        return new SimpleAuthenticationInfo(user, user.getLoginUserName(), this.getName());
     }
 }

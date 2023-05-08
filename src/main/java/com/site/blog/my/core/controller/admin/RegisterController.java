@@ -32,14 +32,14 @@ public class RegisterController {
     @ResponseBody
     @GetMapping("/verificationCode")
     public Boolean verificationCode(@RequestParam String mobile) {
-        return sendSmsUtil.verificationCode(mobile);
+        return sendSmsUtil.verificationCode(mobile, "register");
     }
 
     @ResponseBody
     @PostMapping
     public Result register(@RequestBody AdminUser adminUser,
                            HttpSession session) {
-       return adminUserService.register(adminUser,session);
+        return adminUserService.register(adminUser, session);
     }
 
 }

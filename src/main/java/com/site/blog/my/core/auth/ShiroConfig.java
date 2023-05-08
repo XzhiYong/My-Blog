@@ -47,6 +47,7 @@ public class ShiroConfig {
         filterMap.put("/tag/**", "anon");
         filterMap.put("/search/**", "anon");
         filterMap.put("/upload/file/**", "anon");
+        filterMap.put("/admin/user/password", "anon");
         filterMap.put("/admin/login", "anon");
         filterMap.put("/admin/register/**", "anon");
         filterMap.put("/admin/index", "anon");

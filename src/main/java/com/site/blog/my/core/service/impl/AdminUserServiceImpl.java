@@ -100,11 +100,14 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
     @Transactional(rollbackFor = Exception.class)
     public Result register(AdminUser adminUser, HttpSession session) {
         String loginUserName = adminUser.getLoginUserName();
-        if (adminUserMapper.findByUsername(loginUserName) != null) {
-            return ResultGenerator.genFailResult("账号已被注册");
+        String mobile = adminUser.getMobile();
+        if (adminUserMapper.findByUsername(loginUserName) != null ||
+            adminUserMapper.findByUsername(mobile) != null
+        ) {
+            ResultGenerator.genFailResult("账号或手机号已注册");
         }
 
-        BoundValueOperations boundValueOperations = redisTemplate.boundValueOps(adminUser.getMobile());
+        BoundValueOperations boundValueOperations = redisTemplate.boundValueOps("register:" + mobile);
         Object o = boundValueOperations.get();
         if (!Objects.equals(o, adminUser.getVerificationCode())) {
             return ResultGenerator.genFailResult("验证码不正确");
@@ -130,5 +133,21 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
             session.setAttribute("user", adminUser);
         }
         return ResultGenerator.genSuccessResult();
+    }
+
+    @Override
+    public Result updateMobilePassword(AdminUser adminUser) {
+        AdminUser user = adminUserMapper.findByUsername(adminUser.getMobile());
+        if (user == null) {
+            return ResultGenerator.genFailResult("未找到手机号");
+        }
+        BoundValueOperations boundValueOperations = redisTemplate.boundValueOps("password:" + adminUser.getMobile());
+        Object o = boundValueOperations.get();
+        if (!Objects.equals(o, adminUser.getVerificationCode())) {
+            return ResultGenerator.genFailResult("验证码不正确");
+        }
+        user.setLoginPassword(MD5Util.MD5Encode(adminUser.getLoginPassword(), "UTF-8"));
+        updateById(user);
+        return ResultGenerator.genSuccessResult(updateById(user));
     }
 }

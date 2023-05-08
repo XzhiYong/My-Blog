@@ -45,4 +45,6 @@ public interface AdminUserService extends IService<AdminUser> {
     PageInfo<AdminUser> pageList(Map<String, Object> params);
 
     Result register(AdminUser adminUser, HttpSession session);
+
+    Result updateMobilePassword(AdminUser adminUser);
 }

@@ -2,16 +2,15 @@ package com.site.blog.my.core.util;
 
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.json.JSONUtil;
-import com.aliyuncs.DefaultAcsClient;
-import com.aliyuncs.IAcsClient;
-import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
-import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
-import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.http.MethodType;
-import com.aliyuncs.profile.DefaultProfile;
-import com.aliyuncs.profile.IClientProfile;
 import com.site.blog.my.core.dao.SmsMsgMapper;
 import com.site.blog.my.core.entity.SmsMsg;
+import com.tencentcloudapi.common.Credential;
+import com.tencentcloudapi.common.profile.ClientProfile;
+import com.tencentcloudapi.common.profile.HttpProfile;
+import com.tencentcloudapi.sms.v20190711.SmsClient;
+import com.tencentcloudapi.sms.v20190711.models.SendSmsRequest;
+import com.tencentcloudapi.sms.v20190711.models.SendSmsResponse;
+import com.tencentcloudapi.sms.v20190711.models.SendStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,8 +18,6 @@ import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -31,10 +28,10 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class SendSmsUtil {
 
-    @Value("${aliyun.sms.accessKey}")
+    @Value("${tengxunyun.sms.accessKey}")
     private String accessKey;
 
-    @Value("${aliyun.sms.accessSecretKey}")
+    @Value("${tengxunyun.sms.accessSecretKey}")
     private String accessSecretKey;
 
     @Autowired
@@ -44,61 +41,70 @@ public class SendSmsUtil {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    public Boolean verificationCode(String mobile) {
-        //设置超时时间-可自行调整
-        System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
-        System.setProperty("sun.net.client.defaultReadTimeout", "10000");
-        //初始化ascClient需要的几个参数
-        final String product = "Dysmsapi";//短信API产品名称（短信产品名固定，无需修改）
-        final String domain = "dysmsapi.aliyuncs.com";//短信API产品域名（接口地址固定，无需修改）
-        //初始化ascClient,暂时不支持多region（请勿修改）
-        IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", DesUtil.decrypt(accessKey),
-            DesUtil.decrypt(accessSecretKey));
-        try {
-            DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
-        } catch (ClientException e) {
-            e.printStackTrace();
-        }
-        IAcsClient acsClient = new DefaultAcsClient(profile);
-        //组装请求对象
-        SendSmsRequest request = new SendSmsRequest();
-        //使用post提交
-        request.setMethod(MethodType.POST);
-        //必填:待发送手机号。支持以逗号分隔的形式进行批量调用，批量上限为1000个手机号码,批量调用相对于单条调用及时性稍有延迟,验证码类型的短信推荐使用单条调用的方式；发送国际/港澳台消息时，接收号码格式为国际区号+号码，如“85200000000”
-        request.setPhoneNumbers(mobile);
-        //必填:短信签名-可在短信控制台中找到
-        request.setSignName("夏志勇的博客");
-        //必填:短信模板-可在短信控制台中找到，发送国际/港澳台消息时，请使用国际/港澳台短信模版
-        request.setTemplateCode("SMS_460650484");
-        int[] ints = NumberUtil.generateRandomNumber(0, 9, 4);
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int anInt : ints) {
-            stringBuilder.append(anInt);
-        }
-        Map<String, String> map = new HashMap<>();
-        map.put("code", stringBuilder.toString());
-
-        request.setTemplateParam(JSONUtil.toJsonStr(map));
-        //请求失败这里会抛ClientException异常
-        SendSmsResponse sendSmsResponse = null;
-        try {
-            sendSmsResponse = acsClient.getAcsResponse(request);
-        } catch (ClientException e) {
-            e.printStackTrace();
-        }
+    public Boolean verificationCode(String mobile, String key) {
         SmsMsg smsMsg = new SmsMsg();
-        if (sendSmsResponse.getCode() != null && sendSmsResponse.getCode().equals("OK")) {
-            BoundValueOperations boundValueOperations = redisTemplate.boundValueOps(mobile);
-            boundValueOperations.set(stringBuilder.toString(), 120, TimeUnit.SECONDS);
-            smsMsg.setResult("OK");
-            //请求成功
-            return true;
+
+        try {
+            Credential cred = new Credential(DesUtil.decrypt(accessKey), DesUtil.decrypt(accessSecretKey));
+            HttpProfile httpProfile = new HttpProfile();
+            httpProfile.setReqMethod("POST");
+            httpProfile.setConnTimeout(60);
+            httpProfile.setEndpoint("sms.tencentcloudapi.com");
+            ClientProfile clientProfile = new ClientProfile();
+            clientProfile.setSignMethod("HmacSHA256");
+            clientProfile.setHttpProfile(httpProfile);
+            /* 实例化要请求产品(以sms为例)的client对象
+             * 第二个参数是地域信息，可以直接填写字符串ap-guangzhou，支持的地域列表参考 https://cloud.tencent.com/document/api/382/52071#.E5.9C.B0.E5.9F.9F.E5.88.97.E8.A1.A8 */
+            SmsClient client = new SmsClient(cred, "ap-guangzhou", clientProfile);
+            /* 实例化一个请求对象，根据调用的接口和实际情况，可以进一步设置请求参数
+             * 你可以直接查询SDK源码确定接口有哪些属性可以设置
+             * 属性可能是基本类型，也可能引用了另一个数据结构
+             * 推荐使用IDE进行开发，可以方便的跳转查阅各个接口和数据结构的文档说明 */
+            SendSmsRequest req = new SendSmsRequest();
+            req.setSmsSdkAppid("1400818996");
+            req.setSign("xiazyBlog");
+            req.setTemplateID("1788644");
+
+            int[] ints = NumberUtil.generateRandomNumber(0, 9, 4);
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int anInt : ints) {
+                stringBuilder.append(anInt);
+            }
+            String[] templateParamSet = {stringBuilder.toString()};
+            req.setTemplateParamSet(templateParamSet);
+            String[] phoneNumberSet = {"+86" + mobile};
+            req.setPhoneNumberSet(phoneNumberSet);
+
+            /* 用户的 session 内容（无需要可忽略）: 可以携带用户侧 ID 等上下文信息，server 会原样返回 */
+            String sessionContext = "";
+            req.setSessionContext(sessionContext);
+
+            /* 短信码号扩展号（无需要可忽略）: 默认未开通，如需开通请联系 [腾讯云短信小助手] */
+            String extendCode = "";
+            req.setExtendCode(extendCode);
+
+            /* 国内短信无需填写该项；国际/港澳台短信已申请独立 SenderId 需要填写该字段，默认使用公共 SenderId，无需填写该字段。注：月度使用量达到指定量级可申请独立 SenderId 使用，详情请联系 [腾讯云短信小助手](https://cloud.tencent.com/document/product/382/3773#.E6.8A.80.E6.9C.AF.E4.BA.A4.E6.B5.81)。*/
+            String senderid = "";
+            req.setSenderId(senderid);
+            SendSmsResponse res = client.SendSms(req);
+            SendStatus[] sendStatusSet = res.getSendStatusSet();
+            if (sendStatusSet != null && sendStatusSet[0].getCode().equals("Ok")) {
+                BoundValueOperations boundValueOperations = redisTemplate.boundValueOps(key + ":" + mobile);
+                boundValueOperations.set(stringBuilder.toString(), 2, TimeUnit.MINUTES);
+                smsMsg.setResult("ok");
+
+            } else {
+                smsMsg.setResult("on");
+            }
+            smsMsg.setMsg(JSONUtil.toJsonStr(res));
+        } catch (Exception e) {
+            smsMsg.setMsg(e.getMessage());
+            smsMsg.setResult("on");
         }
-        smsMsg.setResult("ON");
-        smsMsg.setMsg(sendSmsResponse.getMessage());
         smsMsg.setMobile(mobile);
-        log.info(sendSmsResponse.getMessage());
         smsMsgMapper.insert(smsMsg);
-        return false;
+        return "ok".equals(smsMsg.getResult());
+
     }
+
 }

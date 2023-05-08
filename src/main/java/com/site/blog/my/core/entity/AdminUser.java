@@ -34,18 +34,18 @@ public class AdminUser {
     @TableField("last_login_time")
     private Date lastLoginTime;
 
-    @TableField(value = "create_time",fill = FieldFill.INSERT)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private Date createTime;
 
     @TableField("head_portrait")
     private String headPortrait;
-
-    @TableField("email")
-    private String email;
-
+    
     @TableField("mobile")
     private String mobile;
-
+    
+    @TableField("email")
+    private String email;
+    
     @TableField(exist = false)
     private String verificationCode;
 

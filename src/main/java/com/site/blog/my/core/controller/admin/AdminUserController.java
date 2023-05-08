@@ -1,6 +1,9 @@
 package com.site.blog.my.core.controller.admin;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.site.blog.my.core.dao.SysUserRoleMapper;
 import com.site.blog.my.core.entity.AdminUser;
+import com.site.blog.my.core.entity.SysUserRole;
 import com.site.blog.my.core.service.AdminUserService;
 import com.site.blog.my.core.service.RoleService;
 import com.site.blog.my.core.util.MD5Util;
@@ -26,6 +29,8 @@ public class AdminUserController {
     private AdminUserService adminUserService;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private SysUserRoleMapper sysUserRoleMapper;
 
     @GetMapping
     public String index(HttpServletRequest request) {
@@ -36,6 +41,17 @@ public class AdminUserController {
         request.setAttribute("roles", roleService.list());
         return "admin/user";
 
+    }
+
+    @GetMapping("password")
+    public String password() {
+        return "admin/password";
+    }
+
+    @ResponseBody
+    @GetMapping("password/update")
+    public Result updatePassword(@RequestBody AdminUser adminUser) {
+        return adminUserService.updateMobilePassword(adminUser);
     }
 
     @ResponseBody
@@ -50,9 +66,15 @@ public class AdminUserController {
     public Result saveOrUpdate(@RequestBody AdminUser adminUser) {
 
         if (adminUser.getAdminUserId() == null) {
+            if (adminUserService.findByUsername(adminUser.getLoginUserName()) != null ||
+                adminUserService.findByUsername(adminUser.getMobile()) != null
+            ) {
+                ResultGenerator.genFailResult("账号或手机号已注册");
+            }
+            adminUserService.findByUsername(adminUser.getMobile());
             adminUser.setCreateTime(new Date());
             adminUser.setLoginPassword(MD5Util.MD5Encode(adminUser.getLoginPassword(), "UTF-8"));
-        }else {
+        } else {
             adminUser.setLoginPassword(null);
         }
         return ResultGenerator.genSuccessResult(adminUserService.saveOrUpdate(adminUser));
@@ -62,6 +84,7 @@ public class AdminUserController {
     @ResponseBody
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable String id) {
+        sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId, id));
         return ResultGenerator.genSuccessResult(adminUserService.removeById(id));
 
     }
@@ -75,6 +98,6 @@ public class AdminUserController {
 
     public static void main(String[] args) {
         System.out.println(MD5Util.MD5Encode("admin", "UTF-8"));
-        
+
     }
 }

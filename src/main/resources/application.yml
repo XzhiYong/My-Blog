@@ -15,7 +15,7 @@ qiniu:
   accessKey: gex8TrRK3pHvpUW2QBftP3WwDPQ6hFtAKDw-KVKO
   accessSecretKey: g0VJR_z6jxVy5aka_rzg6fJZD9bNixS4zECLSvV0
   
-aliyun:
+tengxunyun:
   sms:
-    accessKey: IhmzEcOB9T+uhwLS59p6Hd/7WicVyQn6D9TG88dOADs=
-    accessSecretKey: P7zzgFnTqqtI4PpLBJwm3HXSTOBpVuMTKgFjCOSLmMA=
+    accessKey: JTaNI+PzbuR3GpN1+qRkEoqswh3rXLUpA3AF/BsH4MZK1D26BS/Bqg==
+    accessSecretKey: +ROMGnqGnCipwEz8AoEnUEmTgEgYZTZfgJ+ZirkapxwP1Mbzx04AOw==
