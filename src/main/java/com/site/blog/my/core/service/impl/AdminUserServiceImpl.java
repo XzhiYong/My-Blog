@@ -4,6 +4,7 @@ import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.site.blog.my.core.auth.AuthToken;
 import com.site.blog.my.core.dao.AdminUserMapper;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.SysRole;
@@ -13,7 +14,6 @@ import com.site.blog.my.core.util.MD5Util;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -36,6 +36,11 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
 
     @Override
     public AdminUser login(String userName, String password) {
+        //获取一个用户
+        Subject subject = SecurityUtils.getSubject();
+        // 封装用户的登录数据
+        AuthToken usernamePasswordToken = new AuthToken(userName);
+        subject.login(usernamePasswordToken);
         String passwordMd5 = MD5Util.MD5Encode(password, "UTF-8");
         return adminUserMapper.login(userName, passwordMd5);
     }
@@ -84,6 +89,9 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
     @Override
     public AdminUser findByUsername(String username) {
         AdminUser byUsername = adminUserMapper.findByUsername(username);
+        if (byUsername == null) {
+            return null;
+        }
         List<SysRole> userIdByRole = roleService.getUserIdByRole(byUsername.getAdminUserId());
         byUsername.setSysRole(userIdByRole);
         return byUsername;
@@ -101,10 +109,9 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
     public Result register(AdminUser adminUser, HttpSession session) {
         String loginUserName = adminUser.getLoginUserName();
         String mobile = adminUser.getMobile();
-        if (adminUserMapper.findByUsername(loginUserName) != null ||
-            adminUserMapper.findByUsername(mobile) != null
+        if (adminUserMapper.findByUsername(loginUserName) != null || adminUserMapper.findByUsername(mobile) != null
         ) {
-            ResultGenerator.genFailResult("账号或手机号已注册");
+            return ResultGenerator.genFailResult("账号或手机号已注册");
         }
 
         BoundValueOperations boundValueOperations = redisTemplate.boundValueOps("register:" + mobile);
@@ -123,16 +130,8 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
         List<String> roles = new ArrayList<>();
         roles.add("2");
         params.put("roleIds", roles);
-        if (roleService.saveUserRole(params)) {
-            //登陆成功后自动登录
-            Subject subject = SecurityUtils.getSubject();
-            UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(adminUser.getLoginUserName(), oldPas);
-            subject.login(usernamePasswordToken);
-            session.setAttribute("loginUserId", adminUser.getAdminUserId());
-            session.setAttribute("loginUserName", adminUser.getLoginUserName());
-            session.setAttribute("user", adminUser);
-        }
-        return ResultGenerator.genSuccessResult();
+        roleService.saveUserRole(params);
+        return ResultGenerator.genSuccessResult(oldPas);
     }
 
     @Override

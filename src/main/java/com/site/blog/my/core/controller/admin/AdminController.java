@@ -7,7 +7,6 @@ import com.site.blog.my.core.service.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -76,7 +75,7 @@ public class AdminController {
     @PostMapping(value = "/login")
     public String login(@RequestParam("userName") String userName,
                         @RequestParam("password") String password,
-                        @RequestParam(value = "verifyCode",required = false) String verifyCode,
+                        @RequestParam(value = "verifyCode", required = false) String verifyCode,
                         @RequestParam(value = "isVerifyCode", defaultValue = "true") boolean isVerifyCode,
                         HttpSession session) {
 
@@ -95,13 +94,8 @@ public class AdminController {
                 return "admin/login";
             }
         }
-        //获取一个用户
-        Subject subject = SecurityUtils.getSubject();
-        // 封装用户的登录数据
-        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(userName, password);
 
         try {
-            subject.login(usernamePasswordToken);
             AdminUser adminUser = adminUserService.login(userName, password);
             if (adminUser == null) {
                 session.setAttribute("errorMsg", "账号不存在!");
@@ -149,8 +143,11 @@ public class AdminController {
         if (!StringUtils.hasText(originalPassword) || !StringUtils.hasText(newPassword)) {
             return "参数不能为空";
         }
-        Integer loginUserId = (int) request.getSession().getAttribute("loginUserId");
-        if (adminUserService.updatePassword(loginUserId, originalPassword, newPassword)) {
+        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
+        if (user == null) {
+            return "admin/login";
+        }
+        if (adminUserService.updatePassword(user.getAdminUserId(), originalPassword, newPassword)) {
             //修改成功后清空session中的数据，前端控制跳转至登录页
             request.getSession().removeAttribute("loginUserId");
             request.getSession().removeAttribute("loginUser");
@@ -165,8 +162,11 @@ public class AdminController {
     @ResponseBody
     public String nameUpdate(HttpServletRequest request, @RequestBody AdminUser adminUser) {
 
-        Integer loginUserId = (int) request.getSession().getAttribute("loginUserId");
-        adminUser.setAdminUserId(loginUserId);
+        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
+        if (user == null) {
+            return "admin/login";
+        }
+        adminUser.setAdminUserId(user.getAdminUserId());
         if (adminUserService.updateById(adminUser)) {
             return "success";
         } else {

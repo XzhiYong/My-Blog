@@ -6,6 +6,7 @@ $(function () {
             {label: 'id', name: 'adminUserId', index: 'adminUserId', width: 50, key: true, hidden: true},
             {label: '账号', name: 'loginUserName', index: 'loginUserName', width: 200, align: "center"},
             {label: '昵称', name: 'nickName', index: 'nickName', width: 120, align: "center"},
+            {label: '手机号', name: 'mobile', index: 'mobile', width: 120, align: "center"},
             {
                 label: '状态',
                 name: 'locked',

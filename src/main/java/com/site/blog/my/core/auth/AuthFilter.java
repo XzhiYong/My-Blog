@@ -1,8 +1,9 @@
 package com.site.blog.my.core.auth;
 
-import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.site.blog.my.core.entity.AdminUser;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
@@ -41,9 +42,10 @@ public class AuthFilter extends AuthenticatingFilter {
     @Override
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception {
         //获取请求token
-        String token = (String) ((HttpServletRequest) request).getSession().getAttribute("loginUserName");
-        return new AuthToken(token);
+        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
+        return new AuthToken(user.getLoginUserName());
     }
+    
 
     /**
      * 步骤1.所有请求全部拒绝访问
@@ -72,9 +74,9 @@ public class AuthFilter extends AuthenticatingFilter {
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         //获取请求token，如果token不存在，直接返回
-        String token = (String) ((HttpServletRequest) request).getSession().getAttribute("loginUserName");
+        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
         String origin = ((HttpServletRequest) request).getHeader("Origin");
-        if (StrUtil.isBlank(token)) {
+        if (user==null) {
             HttpServletResponse httpResponse = (HttpServletResponse) response;
             httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
             httpResponse.setHeader("Access-Control-Allow-Origin", origin);

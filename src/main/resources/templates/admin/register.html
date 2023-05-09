@@ -86,7 +86,7 @@
                 >
               </div>
               <div class="col-6">
-                <input type="button" value="发送验证码" id="sendsms" required="true"  disabled>
+                <input type="button" value="发送验证码" id="sendsms" required="true" disabled>
               </div>
               <span id="smscode_info" class="res-error"></span>
             </div>
@@ -101,8 +101,7 @@
               </div>
 
               <div class="col-4">
-                <input class="btn btn-primary btn-block btn-flat" onclick="register()" value="注册">
-
+                <span class="btn btn-primary btn-block btn-flat" onclick="register()">注册</span>
               </div>
             </div>
           </form>
@@ -180,14 +179,14 @@
                 "mobile": phone_input,
                 "verificationCode": smscode
             };
+            
             $.ajax({
                 url: '/admin/register',
                 type: 'POST',
                 data: JSON.stringify(data),
                 contentType: 'application/json',
                 success: function (res) {
-                    console.log(res)
-                    if (res.resultCode === 200) {
+                    if (res.resultCode===200) {
                         swal("注册成功", {
                             icon: "success",
                         });

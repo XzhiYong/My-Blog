@@ -24,11 +24,15 @@ public class AuthRealm extends AuthorizingRealm {
     private AdminUserService adminUserService;
 
     @Override
+    public boolean supports(AuthenticationToken token) {
+        return token instanceof AuthToken;
+    }
+
     /**
      * 权限认证校验权限的时候会掉用此方法 获取用户的角色和权限
-     *@param  [principals]
      *@return org.apache.shiro.authz.AuthorizationInfo
      */
+    @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         //1. 从 PrincipalCollection 中来获取登录用户的信息
         AdminUser user = (AdminUser) principals.getPrimaryPrincipal();

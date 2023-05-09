@@ -23,6 +23,7 @@ public class QiniuUtils {
 
     @Value("${qiniu.accessKey}")
     private String accessKey;
+    
     @Value("${qiniu.accessSecretKey}")
     private String accessSecretKey;
 
