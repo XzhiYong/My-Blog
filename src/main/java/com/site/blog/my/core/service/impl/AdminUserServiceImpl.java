@@ -14,6 +14,7 @@ import com.site.blog.my.core.util.MD5Util;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.subject.Subject;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -42,7 +43,12 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
         AuthToken usernamePasswordToken = new AuthToken(userName);
         subject.login(usernamePasswordToken);
         String passwordMd5 = MD5Util.MD5Encode(password, "UTF-8");
-        return adminUserMapper.login(userName, passwordMd5);
+
+        AdminUser user = adminUserMapper.login(userName);
+        if (!user.getLoginPassword().equals(passwordMd5)) {
+            throw new IncorrectCredentialsException();
+        }
+        return user;
     }
 
     @Override

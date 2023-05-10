@@ -18,7 +18,7 @@ public interface AdminUserMapper extends BaseMapper<AdminUser> {
      * @param password
      * @return
      */
-    AdminUser login(@Param("userName") String userName, @Param("password") String password);
+    AdminUser login(@Param("userName") String userName);
 
     AdminUser selectByPrimaryKey(Integer adminUserId);
 

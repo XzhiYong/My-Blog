@@ -7,6 +7,7 @@ $(function () {
             {label: '账号', name: 'loginUserName', index: 'loginUserName', width: 200, align: "center"},
             {label: '昵称', name: 'nickName', index: 'nickName', width: 120, align: "center"},
             {label: '手机号', name: 'mobile', index: 'mobile', width: 120, align: "center"},
+            {label: '邮箱', name: 'email', index: 'email', width: 120, align: "center"},
             {
                 label: '状态',
                 name: 'locked',
@@ -95,6 +96,8 @@ $('#saveButton').click(function () {
     var nickName = $("#nickName").val();
     var locked = $("#locked").val();
     var password = $("#loginPassword").val();
+    var mobile = $("#mobile").val();
+    var email = $("#email").val();
     var $edit = $('#edit-error-msg');
     if (isNull(userName)) {
 
@@ -118,7 +121,9 @@ $('#saveButton').click(function () {
         "loginUserName": userName,
         "nickName": nickName,
         "locked": locked,
-        "loginPassword": password
+        "loginPassword": password,
+        "mobile": mobile,
+        "email": email
     }
     var url = '/admin/user';
     $.ajax({
@@ -188,6 +193,8 @@ function update(id) {
             $("#nickName").val(r.data.nickName);
             $("#locked").val(r.data.locked);
             $("#adminUserId").val(r.data.adminUserId);
+            $("#mobile").val(r.data.mobile);
+            $("#email").val(r.data.email);
             //根据原linkType值设置select选择器为选中状态
             if (r.data.locked !== 0) {
                 $("#locked option:eq(0)").prop("selected", 'selected');
@@ -251,7 +258,7 @@ function addRole() {
     var elementsByClassNameElement = elementsByClassName[0];
     var elementsByClassName1 = elementsByClassNameElement.getElementsByClassName("tyue-checkbox-txt");
     for (let i = 0; i < elementsByClassName1.length; i++) {
-        
+
         roleIds.push(elementsByClassName1[i].id)
     }
     const data = {

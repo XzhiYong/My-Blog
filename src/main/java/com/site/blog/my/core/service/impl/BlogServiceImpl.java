@@ -84,6 +84,10 @@ public class BlogServiceImpl implements BlogService {
                 blogTagRelations.add(blogTagRelation);
             }
             if (blogTagRelationMapper.batchInsert(blogTagRelations) > 0) {
+                //多线程发送短信
+//                CompletableFuture.runAsync(() -> {
+//
+//                });
                 return "success";
             }
         }
@@ -231,7 +235,7 @@ public class BlogServiceImpl implements BlogService {
     public PageResult getBlogsPageByTag(Integer tagId, int page) {
         BlogTag tag = tagMapper.selectByPrimaryKey(tagId);
         if (tag != null && page > 0) {
-            Map<String,Object> param = new HashMap();
+            Map<String, Object> param = new HashMap();
             param.put("page", page);
             param.put("limit", 9);
             param.put("tagId", tag.getTagId());

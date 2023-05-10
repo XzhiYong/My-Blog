@@ -5,8 +5,7 @@ import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.SysRole;
 import com.site.blog.my.core.service.*;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -94,33 +93,26 @@ public class AdminController {
                 return "admin/login";
             }
         }
-
         try {
             AdminUser adminUser = adminUserService.login(userName, password);
-            if (adminUser == null) {
-                session.setAttribute("errorMsg", "账号不存在!");
-                return "admin/login";
-            }
-            if (adminUser.getLocked() == 1) {
-                session.setAttribute("errorMsg", "账号已被锁定，请联系管理员!");
-                return "admin/login";
-            }
-            //登录成功，使用JWT生成token，返回token和redis中
-            adminUser.setLoginCount(adminUser.getLoginCount() + 1);
+            adminUser.setLoginCount((adminUser.getLoginCount() == null ? 0 : adminUser.getLoginCount()) + 1);
             adminUser.setLastLoginTime(new Date());
             adminUserService.updateById(adminUser);
-            if (session.getAttribute("loginUserName") != null) {
-                return "redirect:/admin/index";
-            }
             session.setAttribute("loginUserId", adminUser.getAdminUserId());
             session.setAttribute("loginUserName", adminUser.getLoginUserName());
             session.setAttribute("user", adminUser);
             return "redirect:/admin/index";
-        } catch (UnknownAccountException e) {
-            session.setAttribute("msg", "用户名错误");
+        } catch (UnknownAccountException uae) {
+            session.setAttribute("errorMsg", "账号不存在!");
             return "admin/login";
-        } catch (IncorrectCredentialsException e) {
-            session.setAttribute("msg", "密码错误");
+        } catch (IncorrectCredentialsException ice) {
+            session.setAttribute("errorMsg", "密码不正确!");
+            return "admin/login";
+        } catch (LockedAccountException lae) {
+            session.setAttribute("errorMsg", "账号被锁定!");
+            return "admin/login";
+        } catch (AuthenticationException ae) {
+            session.setAttribute("errorMsg", "用户名或密码不正确!");
             return "admin/login";
         }
     }

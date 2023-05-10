@@ -29,7 +29,7 @@ public class AdminUser {
     private Integer locked;
 
     @TableField("login_count")
-    private int loginCount;
+    private Integer loginCount;
 
     @TableField("last_login_time")
     private Date lastLoginTime;

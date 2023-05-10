@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * @Author 大誌
+ * @Author xiazy
  * @Date 2019/3/30 21:38
  * @Version 1.0
  */
@@ -23,6 +23,7 @@ public class AuthRealm extends AuthorizingRealm {
     @Autowired
     private AdminUserService adminUserService;
 
+    //自定义token
     @Override
     public boolean supports(AuthenticationToken token) {
         return token instanceof AuthToken;
@@ -30,7 +31,8 @@ public class AuthRealm extends AuthorizingRealm {
 
     /**
      * 权限认证校验权限的时候会掉用此方法 获取用户的角色和权限
-     *@return org.apache.shiro.authz.AuthorizationInfo
+     *
+     * @return org.apache.shiro.authz.AuthorizationInfo
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
@@ -57,13 +59,16 @@ public class AuthRealm extends AuthorizingRealm {
      @return org.apache.shiro.authc.AuthenticationInfo
      */
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        //获取token，既前端传入的token
+
         String username = (String) authenticationToken.getPrincipal();
 
         AdminUser user = adminUserService.findByUsername(username);
         //4. 若用户不存在, 则可以抛出 UnknownAccountException 异常
         if (user == null) {
-            throw new UnknownAccountException("用户不存在!");
+            throw new UnknownAccountException();
+        }
+        if (user.getLocked() == 1) {
+            throw new LockedAccountException();
         }
         //5. 根据用户的情况, 来构建 AuthenticationInfo 对象并返回. 通常使用的实现类为: SimpleAuthenticationInfo
         return new SimpleAuthenticationInfo(user, user.getLoginUserName(), this.getName());
