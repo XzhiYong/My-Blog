@@ -92,4 +92,6 @@ public interface BlogService {
     String uploadFile(MultipartFile file);
 
     boolean updateStatus(Map<String, Object> params);
+
+    List<Long> getUserIdByBlog(Integer adminUserId);
 }

@@ -69,13 +69,6 @@
 			var _this       = this;
 			var cm          = this.cm;
 			var settings    = _this.settings;
-            
-            if (!settings.emoji)
-            {
-                alert("settings.emoji == false");
-                return ;
-            }
-            
 			var path        = settings.pluginPath + pluginName + "/";
 			var editor      = this.editor;
 			var cursor      = cm.getCursor();

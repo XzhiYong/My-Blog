@@ -1,5 +1,6 @@
 package com.site.blog.my.core.controller.admin;
 
+import com.site.blog.my.core.service.BlogCoverService;
 import com.site.blog.my.core.util.QiniuUtils;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
@@ -26,10 +27,21 @@ public class UploadController {
     @Autowired
     private QiniuUtils qiniuUtils;
 
+    @Autowired
+    private BlogCoverService blogCoverService;
+
     @PostMapping({"/upload/file"})
     @ResponseBody
     public Result upload(@RequestParam("file") MultipartFile file) throws URISyntaxException {
         return ResultGenerator.genSuccessResult(qiniuUtils.upload(file, "blog"));
+    }
+
+
+    @PostMapping({"/upload/file/cover"})
+    @ResponseBody
+    public Boolean uploadCover(@RequestParam("file") MultipartFile file) {
+        String url = qiniuUtils.upload(file, "blog");
+        return blogCoverService.saveCover(url);
     }
 
 }

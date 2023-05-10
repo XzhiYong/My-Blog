@@ -114,7 +114,11 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public int getTotalBlogs() {
-        return blogMapper.getTotalBlogs(null);
+        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
+
+        PageQueryUtil pageUtil = new PageQueryUtil(new HashMap<>());
+        pageUtil.put("userId", user.getAdminUserId());
+        return blogMapper.getTotalBlogs(pageUtil);
     }
 
     @Override
@@ -311,6 +315,11 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public boolean updateStatus(Map<String, Object> params) {
         return blogMapper.updateByStatusIds(params);
+    }
+
+    @Override
+    public List<Long> getUserIdByBlog(Integer adminUserId) {
+        return new ArrayList<>();
     }
 
     /**

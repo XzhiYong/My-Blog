@@ -14,8 +14,11 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img th:src="${user.headPortrait}" class="img-circle elevation-2" alt="User Image">&nbsp&nbsp&nbsp
-          <a th:href="@{/admin/profile}"><span th:text="${user.loginUserName}" style="color: whitesmoke">1111</span></a>
+          <img th:src="${user.headPortrait}" class="img-circle elevation-2" alt="User Image">
+          &nbsp&nbsp&nbsp
+          <a th:href="@{/admin/profile}">
+            <span th:text="${user.loginUserName}" style="color: whitesmoke">1111</span>
+          </a>
         </div>
         <div class="info">
           <a href="#" class="d-block" th:text="${session.loginUser}"></a>
@@ -126,6 +129,18 @@
                 </a>
               </li>
             </shiro:hasPermission>
+            <shiro:hasPermission name="博客封面">　　
+            <li class="nav-item">
+              <a
+                  th:href="@{/admin/cover}"
+                  th:class="${path}=='roles'?'nav-link active':'nav-link'"
+              >
+                <i class="fa fa-wrench nav-icon"></i>
+                <p>博客封面</p>
+              </a>
+            </li>
+            </shiro:hasPermission>
+
             <shiro:hasPermission name="系统配置">　　
 
               <li class="nav-item">

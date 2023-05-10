@@ -146,7 +146,7 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
         if (user == null) {
             return ResultGenerator.genFailResult("未找到手机号");
         }
-        BoundValueOperations boundValueOperations = redisTemplate.boundValueOps("password:" + adminUser.getMobile());
+        BoundValueOperations boundValueOperations = redisTemplate.boundValueOps("register:" + adminUser.getMobile());
         Object o = boundValueOperations.get();
         if (!Objects.equals(o, adminUser.getVerificationCode())) {
             return ResultGenerator.genFailResult("验证码不正确");

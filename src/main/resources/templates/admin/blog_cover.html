@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <header th:replace="admin/header::header-fragment">
+  </header>
+  <body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+      <!-- 引入页面头header-fragment -->
+      <div th:replace="admin/header::header-nav"></div>
+      <!-- 引入工具栏sidebar-fragment -->
+      <div th:replace="admin/sidebar::sidebar-fragment(${path})"></div>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+          </div><!-- /.container-fluid -->
+        </div>
+        <!-- Main content -->
+        <div class="content">
+          <div class="container-fluid">
+            <div class="card card-primary card-outline">
+              <div class="card-header">
+                <h3 class="card-title">博客封面管理</h3>
+              </div> <!-- /.card-body -->
+              <div class="card-body">
+                <div class="grid-btn">
+                  <div class="card">
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        id="btn"
+                        style="height: 40px ;width : 150px"
+                    >上传文件
+                    </button>
+                    <input class="file-upload" style="display: none;" type="file" accept="image/*" name="picture"/>
+                  </div>
+
+                  <button class="btn btn-danger" style="height: 40px ;width : 150px" onclick="DelFile()">
+                    <i
+                        class="fa fa-trash-o"
+                    ></i>&nbsp;删除
+                  </button>
+
+                </div>
+
+                <div>
+
+                </div>
+
+                <!-- 模态框（Modal） -->
+                <div
+                    class="modal fade"
+                    id="myModal"
+                    tabindex="-1"
+                    role="dialog"
+                    aria-labelledby="myModalLabel"
+                    aria-hidden="true"
+                >
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                          &times;
+                        </button>
+                        <h6 class="modal-title" id="myModalLabel">
+                          设置权限
+                        </h6>
+                      </div>
+                      <div class="modal-body">
+                        <ul id="treeDemo" class="ztree"></ul>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            onclick="updatePermission()"
+                            data-dissmiss="modal"
+                        >
+                          提交更改
+                        </button>
+                      </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal -->
+                </div>
+                <table id="jqGrid" class="table table-bordered">
+                </table>
+
+                <div id="jqGridPager">
+
+                </div>
+              </div><!-- /.card-body -->
+            </div>
+          </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content -->
+      </div>
+      <!-- /.content-wrapper -->
+      <!-- 引入页脚footer-fragment -->
+      <div th:replace="admin/footer::footer-fragment"></div>
+    </div>
+    <!-- jQuery -->
+    <script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
+    <script th:src="@{/admin/plugins/jquery/jquery.ztree.core.js}"></script>
+    <script th:src="@{/admin/plugins/jquery/jquery.ztree.excheck.js}"></script>
+    <script th:src="@{/admin/plugins/jquery/jquery.ztree.exedit.js}"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script th:src="@{/admin/plugins/jQueryUI/jquery-ui.min.js}"></script>
+    <!-- Bootstrap 4 -->
+    <script th:src="@{/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <!-- AdminLTE App -->
+    <script th:src="@{/admin/dist/js/adminlte.min.js}"></script>
+    <!-- jqgrid -->
+    <script th:src="@{/admin/plugins/jqgrid-5.7.0/jquery.jqGrid.min.js}"></script>
+    <script th:src="@{/admin/plugins/jqgrid-5.7.0/grid.locale-cn.js}"></script>
+    <!-- sweetalert -->
+    <script th:src="@{/admin/plugins/sweetalert/sweetalert.min.js}"></script>
+    <script th:src="@{/admin/dist/js/public.js}"></script>
+    <script th:src="@{/admin/dist/js/blogCover.js}"></script>
+    <script>
+
+        $(document).on("click", "#btn", function () {
+            //获得用户上传的图片节点
+            var img = document.getElementById('picture');
+
+            // 点击图片的同时，点击上传文件的input
+            $('.file-upload').click();
+            // 将上传的图片显示到页面上
+            $(document).on("change", ".file-upload", function () {
+                var fileObj = $(".file-upload")[0];
+                var formData = new FormData();
+                formData.append("file", fileObj.files[0]);
+                $.ajax({
+                    url: "/admin/upload/file/cover",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    async: false,
+                    success: function (data) {
+                        if (data) {
+                            reload();
+                        } else {
+                            swal("上传失败", {
+                                icon: "error",
+                            });
+                        }
+                    }
+
+                })
+
+            });
+        });
+    </script>
+  </body>
+</html>

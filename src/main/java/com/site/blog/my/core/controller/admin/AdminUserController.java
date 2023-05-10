@@ -49,7 +49,7 @@ public class AdminUserController {
     }
 
     @ResponseBody
-    @GetMapping("password/update")
+    @PostMapping("password/update")
     public Result updatePassword(@RequestBody AdminUser adminUser) {
         return adminUserService.updateMobilePassword(adminUser);
     }

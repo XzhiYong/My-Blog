@@ -19,7 +19,7 @@ import java.util.Map;
 public class CommentServiceImpl implements CommentService {
     @Autowired
     private BlogCommentMapper blogCommentMapper;
-    
+
     @Autowired
     private BlogService blogService;
 
@@ -38,7 +38,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public int getTotalComments() {
-
         return blogCommentMapper.getTotalBlogComments(null);
     }
 

@@ -43,7 +43,7 @@ $(function () {
                         xhr.open("POST", "/admin/upload/file");
                         xhr.onreadystatechange = function () {
                             if (xhr.readyState == 4 && xhr.status == 200) {
-                                var json=JSON.parse(xhr.responseText);
+                                var json = JSON.parse(xhr.responseText);
                                 if (json.resultCode == 200) {
                                     blogEditor.insertValue("![](" + json.data + ")");
                                 } else {
@@ -195,8 +195,7 @@ $('#saveButton').click(function () {
                 }).then(function () {
                     window.location.href = "/admin/blogs";
                 })
-            }
-            else {
+            } else {
                 $('#articleModal').modal('hide');
                 swal(result.message, {
                     icon: "error",
@@ -216,11 +215,4 @@ $('#cancelButton').click(function () {
     window.location.href = "/admin/blogs";
 });
 
-/**
- * 随机封面功能
- */
-$('#randomCoverImage').click(function () {
-    var rand = parseInt(Math.random() * 40 + 1);
-    $("#blogCoverImage").attr("src", '/admin/dist/img/rand/' + rand + ".jpg");
-    $("#blogCoverImage").attr("style", "width:160px ;height: 120px;display:block;");
-});
+
