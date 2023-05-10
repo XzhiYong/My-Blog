@@ -51,7 +51,7 @@
                             </span>
                 <div class="tags post-tags">
                   <th:block th:each="tag : ${blogDetailVO.blogTags}">
-                    <a class="tag" rel="tag" th:href="@{'/tag/' + ${tag}}">
+                    <a class="tag" rel="tag" >
                       <th:block th:text="${tag}"></th:block>
                     </a>&nbsp;
                   </th:block>

@@ -68,6 +68,9 @@ public class BlogController {
     @GetMapping("/blogs/edit/{blogId}")
     public String edit(HttpServletRequest request, @PathVariable("blogId") Long blogId) {
         request.setAttribute("path", "edit");
+        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
+
+        request.setAttribute("user", user);
         Blog blog = blogService.getBlogById(blogId);
         if (blog == null) {
             return "error/error_400";
