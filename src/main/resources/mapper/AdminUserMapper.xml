@@ -23,7 +23,7 @@
         select
         <include refid="Base_Column_List"/>
         from tb_admin_user
-        where admin_user_id = #{adminUserId,jdbcType=INTEGER}
+        where admin_user_id = #{adminUserId}
     </select>
     <select id="findByUsername" resultType="com.site.blog.my.core.entity.AdminUser">
         select *

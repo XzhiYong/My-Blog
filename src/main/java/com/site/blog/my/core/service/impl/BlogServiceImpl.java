@@ -27,7 +27,6 @@ public class BlogServiceImpl implements BlogService {
     private final BlogCategoryMapper categoryMapper;
     private final BlogTagMapper tagMapper;
     private final BlogTagRelationMapper blogTagRelationMapper;
-    private final BlogCommentMapper blogCommentMapper;
     private final QiniuUtils qiniuUtils;
 
     @Override
@@ -226,13 +225,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public BlogDetailVO getBlogDetail(Long id) {
-        Blog blog = blogMapper.selectByPrimaryKey(id);
-        //不为空且状态为已发布
-        BlogDetailVO blogDetailVO = getBlogDetailVO(blog);
-        if (blogDetailVO != null) {
-            return blogDetailVO;
-        }
-        return null;
+        return getBlogDetailVO(blogMapper.selectByPrimaryKey(id));
     }
 
     @Override
@@ -350,11 +343,6 @@ public class BlogServiceImpl implements BlogService {
                 List<String> tags = Arrays.asList(blog.getBlogTags().split(","));
                 blogDetailVO.setBlogTags(tags);
             }
-            //设置评论数
-            Map params = new HashMap();
-            params.put("blogId", blog.getBlogId());
-            params.put("commentStatus", 1);//过滤审核通过的数据
-            blogDetailVO.setCommentCount(blogCommentMapper.getTotalBlogComments(params));
             return blogDetailVO;
         }
         return null;

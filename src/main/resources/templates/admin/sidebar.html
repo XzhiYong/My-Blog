@@ -63,16 +63,6 @@
                 </a>
               </li>
             </shiro:hasPermission>
-            <shiro:hasPermission name="评论管理">　　
-              <li class="nav-item">
-                <a th:href="@{/admin/comments}" th:class="${path}=='comments'?'nav-link active':'nav-link'">
-                  <i class="fa fa-comments nav-icon" aria-hidden="true"></i>
-                  <p>
-                    评论管理
-                  </p>
-                </a>
-              </li>
-            </shiro:hasPermission>
             <shiro:hasPermission name="分类管理">　　
               <li class="nav-item">
                 <a th:href="@{/admin/categories}" th:class="${path}=='categories'?'nav-link active':'nav-link'">
@@ -172,8 +162,15 @@
                   <p>安全退出</p>
                 </a>
               </li>
+       
             </shiro:hasPermission>
           </shiro:hasPermission>
+          <li class="nav-item">
+            <a th:href="@{/admin/note}" class="nav-link">
+              <i class="fa fa-sign-out nav-icon"></i>
+              <p>安全退出</p>
+            </a>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

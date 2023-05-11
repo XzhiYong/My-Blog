@@ -27,4 +27,3 @@ public class CommonController {
         shearCaptcha.write(httpServletResponse.getOutputStream());
     }
 }
-

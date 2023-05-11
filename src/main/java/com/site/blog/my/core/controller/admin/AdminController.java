@@ -38,8 +38,6 @@ public class AdminController {
     @Resource
     private TagService tagService;
     @Resource
-    private CommentService commentService;
-    @Resource
     private RoleService roleService;
 
 
@@ -51,6 +49,11 @@ public class AdminController {
         }
         request.setAttribute("user", user);
         return "admin/index";
+    }
+    @GetMapping({"/note"})
+    public String note(HttpServletRequest request) {
+
+        return "admin/note";
     }
 
     @GetMapping({"", "/", "/index", "/index.html"})
@@ -64,7 +67,6 @@ public class AdminController {
         request.setAttribute("blogCount", blogService.getTotalBlogs());
         request.setAttribute("linkCount", linkService.getTotalLinks());
         request.setAttribute("tagCount", tagService.getTotalTags());
-        request.setAttribute("commentCount", commentService.getTotalComments());
         List<SysRole> userIdByRole = roleService.getUserIdByRole(user.getAdminUserId());
         request.setAttribute("role", userIdByRole);
         request.setAttribute("user", user);
