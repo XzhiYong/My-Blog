@@ -26,7 +26,7 @@ public class BlogCoverServiceImpl implements BlogCoverService {
     @Override
     public PageInfo<BlogCover> pageList(Map<String, Object> params) {
         PageHelper.startPage(MapUtil.getInt(params, "page", 1), MapUtil.getInt(params, "limit", 10));
-        List<BlogCover> blogCovers = blogCoverMapper.selectList(new QueryWrapper<>());
+        List<BlogCover> blogCovers = blogCoverMapper.selectList(new QueryWrapper<BlogCover>().orderByDesc("create_time"));
         return new PageInfo<>(blogCovers);
     }
 
