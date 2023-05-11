@@ -6,21 +6,28 @@
         <result column="uid" property="uid"/>
         <association property="user" column="uid" javaType="com.site.blog.my.core.entity.AdminUser" autoMapping="true"
                      select="com.site.blog.my.core.dao.AdminUserMapper.selectByPrimaryKey"/>
-        <collection property="replyBlogComments" column="cid" ofType="com.site.blog.my.core.entity.BlogComment" autoMapping="true"
+        <association property="replyToBlogComment" column="{cid=cid,blogId=blog_id}" javaType="com.site.blog.my.core.entity.BlogComment" autoMapping="true"
                      select="com.site.blog.my.core.dao.BlogCommentMapper.selectByParentCommentId"/>
+        <collection property="replyBlogComments" column="{cid=cid,blogId=blog_id}" ofType="com.site.blog.my.core.entity.BlogComment" autoMapping="true"
+                     select="com.site.blog.my.core.dao.BlogCommentMapper.selectByParentCommentIds" />
 
     </resultMap>
 
     <select id="selectAllParentCommentNullPage" resultMap="selectAllParentCommentNullPageMap">
-        select *
+        select *,#{blogId} as blogId
         from tb_blog_comment
         where parentCommentId is null
           and blog_id = #{blogId}
     </select>
 
-    <select id="selectByParentCommentId" resultMap="selectAllParentCommentNullPageMap">
+    <select id="selectByParentCommentIds" resultMap="selectAllParentCommentNullPageMap">
         select * from tb_blog_comment where parentCommentId=#{cid}
           and blog_id = #{blogId}
+    </select>
+
+
+    <select id="selectByParentCommentId" resultMap="selectAllParentCommentNullPageMap">
+        select * from tb_blog_comment where cid=#{cid} and blog_id = #{blogId}
     </select>
 
 </mapper>

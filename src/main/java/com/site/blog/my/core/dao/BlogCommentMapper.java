@@ -19,5 +19,7 @@ public interface BlogCommentMapper extends BaseMapper<BlogComment> {
 
     List<BlogComment> selectAllParentCommentNullPage(Long blogId);
 
-    List<BlogComment> selectByParentCommentId(Integer cid);
+    List<BlogComment> selectByParentCommentIds(Integer cid);
+    
+    BlogComment selectByParentCommentId(Integer parentCommentId);
 }

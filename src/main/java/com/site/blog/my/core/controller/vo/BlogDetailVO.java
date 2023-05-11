@@ -1,8 +1,11 @@
 package com.site.blog.my.core.controller.vo;
 
+import com.site.blog.my.core.entity.AdminUser;
+import lombok.Data;
+
 import java.util.Date;
 import java.util.List;
-
+@Data
 public class BlogDetailVO {
     private Long blogId;
 
@@ -27,6 +30,8 @@ public class BlogDetailVO {
     private Byte enableComment;
 
     private Date createTime;
+
+    private AdminUser adminUser;
 
     public Long getBlogId() {
         return blogId;

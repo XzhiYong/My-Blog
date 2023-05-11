@@ -20,6 +20,7 @@
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.site.blog.my.core.entity.Blog">
         <result column="blog_content" jdbcType="LONGVARCHAR" property="blogContent"/>
+        <association column="user_id" property="adminUser"  javaType="com.site.blog.my.core.entity.AdminUser" autoMapping="true" select="com.site.blog.my.core.dao.AdminUserMapper.selectByPrimaryKey"/>
     </resultMap>
     <sql id="Base_Column_List">
         blog_id, blog_title, blog_sub_url, blog_cover_image, blog_category_id, blog_category_name, 
