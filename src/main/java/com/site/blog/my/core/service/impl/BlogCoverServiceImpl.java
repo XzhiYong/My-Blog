@@ -32,6 +32,7 @@ public class BlogCoverServiceImpl implements BlogCoverService {
 
     @Override
     public Boolean saveCover(String url) {
+        
         BlogCover blogCover = new BlogCover();
         blogCover.setUrl(url);
         blogCover.setCreateTime(new Date());
