@@ -11,16 +11,15 @@
       <link rel="stylesheet" th:href="@{/blog/amaze/css/mycss.css}">
       <link rel="stylesheet" th:href="@{/admin/plugins/bootstrap/css/bootstrap.css}"/>
       <link rel="stylesheet" th:href="@{/admin/dist/css/font-awesome.min.css}">
+      <link rel="stylesheet" th:href="@{static/blog/emoji/emoji.js}">
 
       <style>
           .hljs {
               background: none;
           }
-
           pre code {
               white-space: pre;
           }
-
           blockquote {
               border-left: 4px solid #42b983;
               padding: 10px 0px 10px 15px;
@@ -29,7 +28,6 @@
               max-width: 890px;
           }
       </style>
-
     </head>
     <body>
       <div th:replace="blog/amaze/header::nav-fragment"></div>
@@ -258,20 +256,21 @@
                     </div>
                   </div>
 
+                  <a href="javaScript:;" class="addemoji">表情</a>
                   <div class="msg-list">
                   </div>
                 </div>
+              </div>
             </div>
-          </div>
 
+          </div>
+          <p class="back-top" id="back-top" style="display:none">
+            <a href="#top">
+              <span></span>
+            </a>
+          </p>
         </div>
-        <p class="back-top" id="back-top" style="display:none">
-          <a href="#top">
-            <span></span>
-          </a>
-        </p>
-      </div>
-      <footer th:replace="blog/amaze/footer::footer-fragment"></footer>
+        <footer th:replace="blog/amaze/footer::footer-fragment"></footer>
     </body>
     <script th:src="@{/blog/default/js/jquery.min.js}"></script>
     <script th:src="@{/blog/plugins/highlight/highlight.pack.js}"></script>
@@ -283,7 +282,7 @@
     <!-- sweetalert -->
     <script th:src="@{/admin/plugins/sweetalert/sweetalert.min.js}"></script>
     <script>
-        
+
         function reply(obj) {
             var commentId = $(obj).data('commentid');
             var parentCommentId = $(obj).data('parentcommentid');
@@ -295,7 +294,7 @@
         }
 
         $(function () {
-            
+
             $("#back-top").hide();
             $(window).scroll(function () {
                 if ($(this).scrollTop() > 300) {
@@ -324,7 +323,7 @@
                 $("#commentslist").load(/*[[@{comment/commentlist}]]*/"comment/commentlist",
                     {
                         'page': page,
-                        'blogId':[[${blogDetailVO.blogId}]]
+                        'blogId': [[${blogDetailVO.blogId}]]
                     }, function () {
                         var page = $("#page").val('');
                     })
@@ -374,7 +373,7 @@
             $("#commentslist").load(/*[[@{comment/delete}]]*/"comment/delete",
                 {
                     'cid': cid,
-                    'blogId':[[${blogDetailVO.blogId}]]
+                    'blogId': [[${blogDetailVO.blogId}]]
                 })
         }
 
@@ -384,7 +383,7 @@
             $("#commentslist").load(/*[[@{comment/commentlist}]]*/"comment/commentlist",
                 {
                     'page': page,
-                    'blogId':[[${blogDetailVO.blogId}]]
+                    'blogId': [[${blogDetailVO.blogId}]]
                 })
 
         }
@@ -394,16 +393,9 @@
             $("#commentslist").load(/*[[@{comment/commentlist}]]*/"comment/commentlist",
                 {
                     'page': page,
-                    'blogId':[[${blogDetailVO.blogId}]]
+                    'blogId': [[${blogDetailVO.blogId}]]
                 })
         }
 
-        //保持原有的光标位置
-        function messageWall_keepOldRange() {
-            messageWall_range.collapse(false);
-            let sel = window.getSelection();
-            sel.removeAllRanges();
-            sel.addRange(messageWall_range);
-        }
     </script>
   </html>
