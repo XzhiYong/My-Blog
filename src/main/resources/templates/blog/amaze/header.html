@@ -9,32 +9,34 @@
     <meta http-equiv="Window-target" content="_top"/>
     <link rel="stylesheet" th:href="@{/blog/amaze/css/base.css}">
     <style>
-      .msg {
-          position: relative;
-          margin: 16px;
-          float:left;
-      }
-      .msg img {
-          width: 60px;
-          height: 60px;
-      }
-      .alarm {
-          position: absolute;
-          color: white;
-          font-size: 13px;
-          background-color: red;
-          /*height: 24px;改前*/
-          min-height: 10px;/*改后新增的代码*/
-          min-width:10px;/*改后新增的代码*/
-          line-height: 24px;
-          right:-12%;
-          top: -12px;
-          text-align: center;
-          -webkit-border-radius: 24px;
-          border-radius: 24px;
-          padding:2px;
-      }
-  </style>
+        .msg {
+            position: relative;
+            margin: 16px;
+            float: left;
+        }
+
+        .msg img {
+            width: 60px;
+            height: 60px;
+        }
+
+        .alarm {
+            position: absolute;
+            color: white;
+            font-size: 13px;
+            background-color: red;
+            /*height: 24px;改前*/
+            min-height: 10px; /*改后新增的代码*/
+            min-width: 10px; /*改后新增的代码*/
+            line-height: 24px;
+            right: -12%;
+            top: -12px;
+            text-align: center;
+            -webkit-border-radius: 24px;
+            border-radius: 24px;
+            padding: 2px;
+        }
+    </style>
   </head>
   <nav th:fragment="nav-fragment" class="navbar navbar-default navbar-custom navbar-fixed-top">
     <div class="container-fluid">
@@ -85,7 +87,7 @@
                     alt=""
                 >
                 <div class="alarm">
-                  1..  
+                  99+
                 </div>
               </div>
             </li>
@@ -100,6 +102,9 @@
             </li>
             <li>
               <a href="https://github.com/XzhiYong">GitHub</a>
+            </li>
+            <li>
+              <a th:href="@{/api/socket/index/1}">test</a>
             </li>
             <li>
               <a th:href="@{/admin/login}">发布自己的博客</a>
