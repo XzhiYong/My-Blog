@@ -36,7 +36,7 @@ public class CommentController {
     public String postcomment(HttpServletRequest request, BlogComment comment) {
         AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
         if (user==null) {
-            request.setAttribute("errorMsg", "验证码错误");
+            request.setAttribute("errorMsg", "请先登录");
             return "admin/login";
         }
         comment.setUid(user.getAdminUserId());

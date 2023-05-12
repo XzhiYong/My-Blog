@@ -2,10 +2,12 @@ package com.site.blog.my.core.controller.blog;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.site.blog.my.core.controller.vo.BlogDetailVO;
+import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.BlogComment;
 import com.site.blog.my.core.entity.BlogLink;
 import com.site.blog.my.core.service.*;
 import com.site.blog.my.core.util.PageResult;
+import org.apache.shiro.SecurityUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -86,27 +88,27 @@ public class MyBlogController {
      */
     @GetMapping({"/blog/{blogId}", "/article/{blogId}"})
     public String detail(HttpServletRequest request, @PathVariable("blogId") Long blogId) {
-        return getDetail(request, blogId,null);
+        return getDetail(request, blogId, null);
     }
 
     @NotNull
-    public String getDetail(HttpServletRequest request, Long blogId,Integer commentPage) {
-        if(commentPage==null){
-            commentPage=1;
+    public String getDetail(HttpServletRequest request, Long blogId, Integer commentPage) {
+        if (commentPage == null) {
+            commentPage = 1;
         }
         BlogDetailVO blogDetailVO = blogService.getBlogDetail(blogId);
         if (blogDetailVO != null) {
             request.setAttribute("blogDetailVO", blogDetailVO);
         }
         request.setAttribute("pageName", "详情");
-
         request.setAttribute("configurations", configService.getAllConfigs());
-
-        IPage<BlogComment> commentIPage = blogCommentService.commentPage(commentPage,blogId);
-
+        IPage<BlogComment> commentIPage = blogCommentService.commentPage(commentPage, blogId);
         request.setAttribute("page", commentIPage);
         List<BlogComment> comments = commentIPage.getRecords();
         request.setAttribute("comments", comments);
+        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
+        request.setAttribute("user", user);
+        request.setAttribute("isUser", user != null);
         return "blog/" + theme + "/detail";
     }
 

@@ -103,7 +103,7 @@ public class AdminController {
             session.setAttribute("loginUserId", adminUser.getAdminUserId());
             session.setAttribute("loginUserName", adminUser.getLoginUserName());
             session.setAttribute("user", adminUser);
-            return "redirect:/admin/index";
+            return "redirect:/index";
         } catch (UnknownAccountException uae) {
             session.setAttribute("errorMsg", "账号不存在!");
             return "admin/login";

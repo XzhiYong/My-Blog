@@ -108,16 +108,24 @@
                                 th:text="${#dates.format(comment.createTime,'yyyy-MM-dd HH:mm:ss')}"
                             >2020-04-10 16:01:27</span>
 
-                            <span th:attr="data-commentId=${comment.cid},data-nickName=${comment.user.loginUserName},data-parentCommentId=${comment.parentCommentId!=null ? comment.parentCommentId:comment.cid}"
-                                class="summary-text small" onclick="reply(this)"
-                            >回复ta</span>
                             <a
-                                href="javascript:void(0);" onclick="deletecomment(this)"
-                                th:attr="data-commentid=${comment.cid}"
-                            ><span
-                                class="summary-text small"
-                            >删除</span>
+                                href="javascript:void(0)"
+                                onclick="reply(this)"
+                                th:attr="data-commentId=${comment.cid},data-nickName=${comment.user.loginUserName},data-parentCommentId=${comment.parentCommentId!=null ? comment.parentCommentId:comment.cid}"
+                            >
+                             <span
+                                 class="summary-text small"
+                             >回复ta</span>
                             </a>
+                            <span th:if="${user}">
+                                      <a
+                                          href="javascript:void(0);" onclick="deletecomment(this)"
+                                          th:attr="data-commentid=${comment.cid}"
+                                          th:if="${user.adminUserId}==${comment.uid}"
+                                      ><span
+                                          class="summary-text small"
+                                      >删除</span></a>
+                                </span>
                           </a>
                         </div>
 
@@ -125,39 +133,59 @@
                         </div>
                         <!--  评论回复-->
                         <div class="p-1 comments m-3">
-                          <div class="container comment  m-1 p-0"
-                               th:each="reply,replystat: ${comment.replyBlogComments}">
+                          <div
+                              class="container comment  m-1 p-0"
+                              th:each="reply,replystat: ${comment.replyBlogComments}"
+                          >
                             <a class="me-a avatar p-0 m-0 ">
-                              <img class="w-100 h-100 rounded-circle" th:src="@{${reply.user.headPortrait}}"
-                                   src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1586518306370&di=600bf4377f924f0839d54e1c415228da&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201712%2F17%2F20171217170206_MAmwi.png"
-                                   alt="">
+                              <img
+                                  class="w-100 h-100 rounded-circle" th:src="@{${reply.user.headPortrait}}"
+                                  src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1586518306370&di=600bf4377f924f0839d54e1c415228da&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201712%2F17%2F20171217170206_MAmwi.png"
+                                  alt=""
+                              >
                             </a>
                             <div class=" ml-3  ">
                               <div class="container ml-2">
                                 <a class="author ">
                                   <span th:text="${reply.user.loginUserName}">冯宝宝</span>
-                                  <span class="border-primary border rounded text-primary small  p-1"
-                                        th:text="${reply.user.nickName}">机智一批</span>
-                                  <span class="text-info"
-                                        th:text="|@ ${reply.replyToBlogComment.user.loginUserName}|">@王也 </span>
-                                  <span class="summary-text small"
-                                        th:text="${#dates.format(reply.createTime,'yyyy-MM-dd HH:mm:ss')}">2020-04-10 16:01:27</span>
+                                  <span
+                                      class="border-primary border rounded text-primary small  p-1"
+                                      th:text="${reply.user.nickName}"
+                                  >机智一批</span>
+                                  <span
+                                      class="text-info"
+                                      th:text="|@ ${reply.replyToBlogComment.user.loginUserName}|"
+                                  >@王也 </span>
+                                  <span
+                                      class="summary-text small"
+                                      th:text="${#dates.format(reply.createTime,'yyyy-MM-dd HH:mm:ss')}"
+                                  >2020-04-10 16:01:27</span>
                                 </a>
                               </div>
-                              <div class="messageText ml-2 container m-2" th:text="${reply.content}">
-                                王也，你被埋过吗？
-                              </div>
                               <div class="messageText ml-2 container m-2">
-
-                                <a href="#" onclick="reply(this) "
-                                   th:attr="data-commentId=${reply.cid},data-nickName=${reply.user.loginUserName},data-parentCommentId=${reply.parentCommentId!=null ? reply.parentCommentId:reply.cid}"><span
-                                    class="summary-text small">回复ta</span></a>
-                                <a href="#" onclick="deletecomment(this)"
-                                   th:attr="data-commentid=${reply.cid}"><span
-                                    class="summary-text small" >删除</span></a>
+                                <a
+                                    href="javascript:void(0)" onclick="reply(this) "
+                                    th:attr="data-commentId=${reply.cid},data-nickName=${reply.user.loginUserName},data-parentCommentId=${reply.parentCommentId!=null ? reply.parentCommentId:reply.cid}"
+                                ><span
+                                    class="summary-text small"
+                                >回复ta</span>
+                                </a>
+                                <span th:if="${user}">
+                                      <a
+                                          href="javascript:void(0);" onclick="deletecomment(this)"
+                                          th:attr="data-commentid=${comment.cid}"
+                                          th:if="${user.adminUserId}==${comment.uid}"
+                                      ><span
+                                          class="summary-text small"
+                                      >删除</span></a>
+                                </span>
 
                               </div>
                             </div>
+                            <div class="messageText ml-2 container m-2" th:text="${reply.content}">
+                              王也，你被埋过吗？
+                            </div>
+
 
                           </div>
 
@@ -187,7 +215,7 @@
                       </li>
                       <li class="page-item"><span
                           class="page-link" onclick="nextpage(this)"
-                          th:attr="data-page=${page.current + 1 > page.pages?page.pages: page.current + 1}"
+                          th:attr="data-page=${page.current + 1}"
                           style="color: #17a2b8;cursor:pointer"
                       >下一页</span>
                       </li>
@@ -215,7 +243,6 @@
                 <div id="noteEdit">
                   <textarea name="content" id="content" placeholder="说点什么。。。"></textarea>
                 </div>
-
                 <!--提交列表-->
                 <div class="container-fluid m-0 mt-3 p-0 h-100">
                   <div class=" mb-1 p-0  inline  btn  btn-info text-center">
@@ -230,8 +257,10 @@
 
                     </div>
                   </div>
+
+                  <div class="msg-list">
+                  </div>
                 </div>
-              </div>
             </div>
           </div>
 
@@ -254,6 +283,7 @@
     <!-- sweetalert -->
     <script th:src="@{/admin/plugins/sweetalert/sweetalert.min.js}"></script>
     <script>
+        
         function reply(obj) {
             var commentId = $(obj).data('commentid');
             var parentCommentId = $(obj).data('parentcommentid');
@@ -265,6 +295,7 @@
         }
 
         $(function () {
+            
             $("#back-top").hide();
             $(window).scroll(function () {
                 if ($(this).scrollTop() > 300) {
@@ -290,12 +321,10 @@
 
             $(".changepage").click(function () {
                 var page = $(this).attr('data-page');
-
-                // comment/commentlist
-                console.log("pages")
                 $("#commentslist").load(/*[[@{comment/commentlist}]]*/"comment/commentlist",
                     {
-                        'page': page
+                        'page': page,
+                        'blogId':[[${blogDetailVO.blogId}]]
                     }, function () {
                         var page = $("#page").val('');
                     })
@@ -344,16 +373,18 @@
             var cid = $(obj).data('commentid');
             $("#commentslist").load(/*[[@{comment/delete}]]*/"comment/delete",
                 {
-                    'cid': cid
+                    'cid': cid,
+                    'blogId':[[${blogDetailVO.blogId}]]
                 })
         }
 
-
         function nextpage(obj) {
             var page = $(obj).data('page');
+            console.log(page)
             $("#commentslist").load(/*[[@{comment/commentlist}]]*/"comment/commentlist",
                 {
-                    'page': page
+                    'page': page,
+                    'blogId':[[${blogDetailVO.blogId}]]
                 })
 
         }
@@ -362,8 +393,17 @@
             var page = $(obj).data('page');
             $("#commentslist").load(/*[[@{comment/commentlist}]]*/"comment/commentlist",
                 {
-                    'page': page
+                    'page': page,
+                    'blogId':[[${blogDetailVO.blogId}]]
                 })
+        }
+
+        //保持原有的光标位置
+        function messageWall_keepOldRange() {
+            messageWall_range.collapse(false);
+            let sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(messageWall_range);
         }
     </script>
   </html>
