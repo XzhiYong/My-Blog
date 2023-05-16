@@ -11,10 +11,12 @@
                   <div class="pull-left">
                     <div class="blog-flex-center">
                       <div class="blog-flex0">
-                        <img
-                            th:src="${blog.adminUser.headPortrait}" alt=""
-                            class="link avatar avatar-image"
-                        >
+                        <a th:href="@{/home(userId=${blog.adminUser.adminUserId})}">
+                          <img
+                              th:src="${blog.adminUser.headPortrait}" alt=""
+                              class="link avatar avatar-image"
+                          >
+                        </a>
                       </div>
                       <div class="author-lockup blog-flex1">
                         <a

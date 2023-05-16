@@ -44,6 +44,14 @@ public interface BlogService {
     PageResult getBlogsForIndexPage(int page);
 
     /**
+     * 获取首页文章列表
+     *
+     * @param page
+     * @return
+     */
+    PageResult getBlogsForUserPage(int page,Integer userId);
+
+    /**
      * 首页侧边栏数据列表
      * 0-点击最多 1-最新发布
      *

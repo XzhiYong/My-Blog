@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +22,7 @@ import java.util.Map;
 @Controller
 public class MyBlogController {
 
-//    public static String theme = "default";
+    //    public static String theme = "default";
 //    public static String theme = "yummy-jekyll";
     public static String theme = "amaze";
     @Resource
@@ -36,6 +37,8 @@ public class MyBlogController {
     private CategoryService categoryService;
     @Resource
     private BlogCommentService blogCommentService;
+    @Resource
+    private AdminUserService adminUserService;
 
     /**
      * 首页
@@ -221,7 +224,7 @@ public class MyBlogController {
                 request.setAttribute("personalLinks", linkMap.get((byte) 2));
             }
         }
-        
+
         request.setAttribute("configurations", configService.getAllConfigs());
         return "blog/" + theme + "/link";
     }
@@ -236,6 +239,24 @@ public class MyBlogController {
         request.setAttribute("configurations", configService.getAllConfigs());
         request.setAttribute("pageName", "关于");
         return "blog/" + theme + "/about";
+    }
+
+    /**
+     * 个人主页
+     *
+     * @return
+     */
+    @GetMapping({"/home"})
+    public String home(HttpServletRequest request, @RequestParam Integer userId) {
+
+        request.setAttribute("blogPageResult", blogService.getBlogsForUserPage(1, userId));
+        request.setAttribute("newBlogs", blogService.getBlogListForIndexPage(1));
+        request.setAttribute("hotBlogs", blogService.getBlogListForIndexPage(0));
+        request.setAttribute("hotTags", tagService.getBlogTagCountForIndex());
+        request.setAttribute("user", adminUserService.getUserDetailById(Math.toIntExact(userId)));
+        request.setAttribute("pageName", "详情页");
+        request.setAttribute("configurations", configService.getAllConfigs());
+        return "blog/" + theme + "/home";
     }
 
     /**

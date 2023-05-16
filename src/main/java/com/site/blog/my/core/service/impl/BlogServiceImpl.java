@@ -9,6 +9,7 @@ import com.site.blog.my.core.service.BlogService;
 import com.site.blog.my.core.util.*;
 import lombok.AllArgsConstructor;
 import org.apache.shiro.SecurityUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -198,15 +199,30 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public PageResult getBlogsForIndexPage(int page) {
         PageQueryUtil params = new PageQueryUtil(new HashMap<>());
+        PageResult pageResult = getPageResult(page, params, null);
+        return pageResult;
+    }
+
+    @NotNull
+    private PageResult getPageResult(int page, PageQueryUtil params, Integer userId) {
         params.put("page", page);
         //每页8条
         params.put("limit", 8);
         params.put("blogStatus", 2);//过滤发布状态下的数据
+        if (userId != null) {
+            params.put("userId", userId);//过滤发布状态下的数据
+        }
         List<Blog> blogList = blogMapper.findBlogList(params);
         List<BlogListVO> blogListVOS = getBlogListVOsByBlogs(blogList);
         int total = blogMapper.getTotalBlogs(params);
         PageResult pageResult = new PageResult(blogListVOS, total, params.getLimit(), params.getPage());
         return pageResult;
+    }
+
+    @Override
+    public PageResult getBlogsForUserPage(int page, Integer userId) {
+        PageQueryUtil params = new PageQueryUtil(new HashMap<>());
+        return getPageResult(page, params, userId);
     }
 
     @Override
