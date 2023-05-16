@@ -5,11 +5,25 @@ $(function () {
         var img = document.getElementById('picture').src;
         var userName = $('#loginUserName').val();
         var nickName = $('#nickName').val();
+        var remark = $('#remark').val();
+        var sex = $("#sex option:selected").val();
+        var education = $("#education option:selected").val();
+        var birthday = $('#birthday').val();
         console.log(nickName)
         var email = $('#email').val();
 
         //ajax提交数据
-        var params = {"loginUserName": userName, "nickName": nickName, "email": email, headPortrait: img}
+        var params = {
+            "loginUserName": userName,
+            "nickName": nickName,
+            "email": email,
+            "headPortrait": img,
+            "remark": remark,
+            "sex": sex,
+            "education": education,
+            "birthday": birthday
+        }
+        console.log(params)
         $.ajax({
             type: "POST",
             url: "/admin/profile/name",
@@ -24,7 +38,7 @@ $(function () {
                 }
             }
         });
-      
+
     });
     //修改密码
     $('#updatePasswordButton').click(function () {

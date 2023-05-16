@@ -9,17 +9,101 @@
       <link rel="shortcut icon" th:href="@{${configurations.get('websiteIcon')}}"/>
       <link rel="stylesheet" th:href="@{/blog/amaze/css/base.css}">
       <link rel="stylesheet" th:href="@{/blog/amaze/css/mycss.css}">
+      <link rel="stylesheet" th:href="@{/blog/amaze/css/jquery.emoji.css}">
       <link rel="stylesheet" th:href="@{/admin/plugins/bootstrap/css/bootstrap.css}"/>
       <link rel="stylesheet" th:href="@{/admin/dist/css/font-awesome.min.css}">
-      <link rel="stylesheet" th:href="@{static/blog/emoji/emoji.js}">
+      <link rel="stylesheet" th:href="@{/admin/dist/css/font-awesome.min.css}">
 
       <style>
+          #content_in_messageWall {
+              min-height: 141px;
+              max-height: 141px;
+              background-color: #fff;
+              border: 1px solid #ccc;
+              border-radius: 4px;
+              box-shadow: 0 1px 1px rgb(0 0 0 / 8%) inset;
+              color: #555;
+              display: block;
+              font-size: 14px;
+              line-height: 1.42857;
+              padding: 6px 12px;
+              transition: border-color .15s ease-in-out 0s, box-shadow .15s ease-in-out 0s;
+              width: 100%;
+              overflow: auto;
+          }
+
+          /**给div加 placeholder  **/
+          div[contenteditable]:empty:before {
+              content: attr(placeholder);
+              color: #CCCCCC;
+          }
+
+          div[contenteditable]:focus {
+              content: none;
+          }
+
+          .msg-list {
+              margin-top: 20px;
+          }
+
+          .play-line {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              margin-top: 10px;
+          }
+
+          .msg-content .play-line {
+              display: flex;
+              align-items: center;
+              justify-content: flex-end;
+          }
+
+
+          .emoji-item .emoji-icon {
+              width: 20px;
+              height: 20px;
+              background: url(/static/blog/img/emoji-icon.png) no-repeat center center;
+              background-size: contain;
+              margin-right: 10px;
+          }
+
+          .emoji-item .text {
+              color: #666666;
+              font-size: 12px;
+          }
+
+          .push-btn {
+              padding: 9px 15px;
+              font-size: 12px;
+              border-radius: 3px;
+              color: #FFF;
+              background-color: #21C9C9;
+              outline: 0;
+              box-shadow: none;
+              border: none;
+              outline: none;
+              cursor: pointer;
+          }
+
+          .msg-list {
+              margin-top: 20px;
+          }
+
+          .play-item .text {
+              color: #999999;
+              font-size: 12px;
+              margin-left: 4px;
+          }
+
           .hljs {
               background: none;
           }
+
           pre code {
               white-space: pre;
           }
+
           blockquote {
               border-left: 4px solid #42b983;
               padding: 10px 0px 10px 15px;
@@ -59,6 +143,7 @@
               </div>
             </div>
           </div>
+        </div>
       </header>
       <div class="container">
         <div class="am-g am-g-fixed blog-fixed">
@@ -127,7 +212,7 @@
                           </a>
                         </div>
 
-                        <div class="messageText ml-2 container m-2" th:text="${comment.content}">诸葛青，你败过吗？
+                        <div class="messageText ml-2 container m-2" th:utext="${comment.content}">诸葛青，你败过吗？
                         </div>
                         <!--  评论回复-->
                         <div class="p-1 comments m-3">
@@ -152,7 +237,7 @@
                                   >机智一批</span>
                                   <span
                                       class="text-info"
-                                      th:text="|@ ${reply.replyToBlogComment.user.loginUserName}|"
+                                      th:text="|@ ${reply.replyToBlogComment.user.nickName}|"
                                   >@王也 </span>
                                   <span
                                       class="summary-text small"
@@ -180,13 +265,10 @@
 
                               </div>
                             </div>
-                            <div class="messageText ml-2 container m-2" th:text="${reply.content}">
+                            <div class="messageText ml-2 container m-2" th:utext="${reply.content}">
                               王也，你被埋过吗？
                             </div>
-
-
                           </div>
-
                         </div>
                       </div>
                     </div>
@@ -235,42 +317,33 @@
                     </ul>
                   </nav>
                 </div>
-                <input type="hidden" name="parentCommentId" value="-1" id="parentCommentId">
-                <input type="hidden" name="replyCommentId" value="-1" id="replyCommentId">
-                <!--            输入框-->
-                <div id="noteEdit">
-                  <textarea name="content" id="content" placeholder="说点什么。。。"></textarea>
-                </div>
-                <!--提交列表-->
-                <div class="container-fluid m-0 mt-3 p-0 h-100">
-                  <div class=" mb-1 p-0  inline  btn  btn-info text-center">
-                    <div class="container  text-center pt-1" id="sender">
-                      <li class="fa fa-edit"></li>
-                      发送
-                      <!--                        <input type="hidden" class="border-0 btn-info ">-->
+                <div class="push-msg-wrap">
+                  <input type="hidden" name="parentCommentId" value="-1" id="parentCommentId">
+                  <input type="hidden" name="replyCommentId" value="-1" id="replyCommentId">
+                  <div
+                      id="content_in_messageWall"
+                      class="container-fluid m-0 mt-3 p-0 h-100"
+                      contenteditable="true"
+                      placeholder="把精彩分享处理，还能@其他人哦"
+                  ></div>
+                  <div class="play-line">
+                    <div style="display: flex;">
+                      <div class="emoji-item" onclick="messageWall_keepOldRange()">
+                        <img th:src="@{/blog/img/emoji-icon.png}">
+                        <span class="text" id="emoji_in_messageWall">添加表情</span>
+                      </div>
                     </div>
-                  </div>
-                  <div class=" mb-1 p-0  inline small text-danger   text-center">
-                    <div class="container  text-center pt-1" id="errmsg">
-
-                    </div>
-                  </div>
-
-                  <a href="javaScript:;" class="addemoji">表情</a>
-                  <div class="msg-list">
+                    <button class="push-btn" onclick="messageWall_sendMessage()">发表</button>
                   </div>
                 </div>
               </div>
             </div>
-
           </div>
-          <p class="back-top" id="back-top" style="display:none">
-            <a href="#top">
-              <span></span>
-            </a>
-          </p>
         </div>
-        <footer th:replace="blog/amaze/footer::footer-fragment"></footer>
+      </div>
+
+      <footer th:replace="blog/amaze/footer::footer-fragment"></footer>
+
     </body>
     <script th:src="@{/blog/default/js/jquery.min.js}"></script>
     <script th:src="@{/blog/plugins/highlight/highlight.pack.js}"></script>
@@ -279,18 +352,25 @@
 
     <script th:src="@{/blog/plugins/search/background.js}"></script>
     <script th:src="@{/blog/plugins/search/click.js}"></script>
+    <script th:src="@{/blog/plugins/atwho/jquery.atwho.js}"></script>
+    <script th:src="@{/blog/plugins/atwho/jquery.caret.js}"></script>
+    <script th:src="@{/blog/plugins/emoji/jquery.emoji.js}"></script>
+    <script th:src="@{/blog/plugins/emoji/jquery.mCustomScrollbar.min.js}"></script>
     <!-- sweetalert -->
     <script th:src="@{/admin/plugins/sweetalert/sweetalert.min.js}"></script>
     <script>
+
+        var messageWall_range;  // 定义最后光标对象
 
         function reply(obj) {
             var commentId = $(obj).data('commentid');
             var parentCommentId = $(obj).data('parentcommentid');
             var nickName = $(obj).data('nickname');
+            console.log(commentId, parentCommentId)
             // alert(commentId)
             $("#parentCommentId").val(parentCommentId);
             $("#replyCommentId").val(commentId);
-            $("#content").attr("placeholder", "@" + nickName).focus();
+            $("#content_in_messageWall").attr("placeholder", "@" + nickName).focus();
         }
 
         $(function () {
@@ -325,46 +405,36 @@
                         'page': page,
                         'blogId': [[${blogDetailVO.blogId}]]
                     }, function () {
-                        var page = $("#page").val('');
+                        alert("11")
                     })
             })
 
-
-            function clear() {
-
-                $("#content").val('');
-                $("#parentCommentId").val('-1');
-                $('#replyCommentId').val('-1');
-                $('#remind').removeAttr('checked');
-                $("#content").attr('placeholder', '说点什么。。');
-            }
 
             $(".reply").click(function () {
                 alert('addasfasf')
             })
 
-            $("#sender").click(function () {
-                var content = $("#content").val();
-                if (content == null || content.length <= 0) {
-                    $("#errmsg").text("留言内容不能为空");
-                    return;
+            //初始化 emoji功能
+            messageWall_initEmoji();
+
+            //获取输入框的光标位置
+            var editor = document.querySelector('#content_in_messageWall')
+            editor.onclick = function () {
+                // 获取选定对象
+                var sel = window.getSelection();
+                if (sel.rangeCount && sel.getRangeAt) {
+                    messageWall_range = sel.getRangeAt(0);
+                    messageWall_range.deleteContents()
                 }
-                var parentCommentId = $("#parentCommentId").val();
-                var replyCommentId = $("#replyCommentId").val();
-                var remind = $("#remind").prop("checked");
-
-                $("#commentslist").load(/*[[@{comment/postcomment}]]*/"comment/postcomment",
-                    {
-                        'content': content,
-                        'parentCommentId': parentCommentId,
-                        'replyCommentId': replyCommentId,
-                        'remind': remind,
-                        'blogId': [[${blogDetailVO.blogId}]]
-                    }, function () {
-                        clear();
-                    })
-
-            })
+            }
+            editor.onkeyup = function () {
+                var sel = window.getSelection();
+                if (sel.rangeCount && sel.getRangeAt) {
+                    // 设置最后光标对象
+                    messageWall_range = sel.getRangeAt(0);
+                    messageWall_range.deleteContents()
+                }
+            }
         })
 
         function deletecomment(obj) {
@@ -397,5 +467,65 @@
                 })
         }
 
+
+        function messageWall_initEmoji() {
+            //源码地址https://github.com/eshengsky/jQuery-emoji
+            //初始化 emoji功能
+            $("#content_in_messageWall").emoji({
+                button: "#emoji_in_messageWall",
+                showTab: false,
+                animation: 'slide',
+                position: 'topLeft',
+                icons: [{
+                    name: "QQ表情",
+                    path: "/blog/img/emoji/",
+                    maxNum: 91,
+                    excludeNums: [30, 56, 68, 69],  //排除的表情
+                    file: ".gif"
+                }]
+            });
+        }
+
+        //保持原有的光标位置
+        function messageWall_keepOldRange() {
+            messageWall_range.collapse(false);
+            let sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(messageWall_range);
+        }
+
+        function messageWall_sendMessage() {
+            var content = $("#content_in_messageWall").html();
+            if (content == null || content.trim() == '') {
+                alert('请填写内容');
+                return;
+            }
+            var r = confirm("确定要发表此留言吗!");
+            if (r === true) {
+                var parentCommentId = $("#parentCommentId").val();
+                var replyCommentId = $("#replyCommentId").val();
+                var remind = $("#remind").prop("checked");
+
+                $("#commentslist").load(/*[[@{comment/postcomment}]]*/"comment/postcomment",
+                    {
+                        'content': content,
+                        'parentCommentId': parentCommentId,
+                        'replyCommentId': replyCommentId,
+                        'remind': remind,
+                        'blogId': [[${blogDetailVO.blogId}]]
+                    }, function () {
+                        clear();
+                    })
+            }
+
+            function clear() {
+
+                $("#content").val('');
+                $("#parentCommentId").val('-1');
+                $('#replyCommentId').val('-1');
+                $('#remind').removeAttr('checked');
+                $("#content").attr('placeholder', '说点什么。。');
+            }
+        }
     </script>
   </html>

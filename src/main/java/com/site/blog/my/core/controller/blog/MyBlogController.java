@@ -21,8 +21,8 @@ import java.util.Map;
 @Controller
 public class MyBlogController {
 
-    //public static String theme = "default";
-    //public static String theme = "yummy-jekyll";
+//    public static String theme = "default";
+//    public static String theme = "yummy-jekyll";
     public static String theme = "amaze";
     @Resource
     private BlogService blogService;
@@ -221,8 +221,21 @@ public class MyBlogController {
                 request.setAttribute("personalLinks", linkMap.get((byte) 2));
             }
         }
+        
         request.setAttribute("configurations", configService.getAllConfigs());
         return "blog/" + theme + "/link";
+    }
+
+    /**
+     * 友情链接页
+     *
+     * @return
+     */
+    @GetMapping({"/about"})
+    public String about(HttpServletRequest request) {
+        request.setAttribute("configurations", configService.getAllConfigs());
+        request.setAttribute("pageName", "关于");
+        return "blog/" + theme + "/about";
     }
 
     /**

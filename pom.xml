@@ -33,7 +33,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.hifiveai</groupId>
+            <artifactId>hifive-openapi</artifactId>
+            <version>4.2.0_2-RELEASE</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.tencentcloudapi/tencentcloud-sdk-java-sms -->
         <dependency>
             <groupId>com.tencentcloudapi</groupId>

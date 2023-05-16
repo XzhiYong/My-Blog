@@ -1,11 +1,14 @@
 spring:
   profiles:
     active: prod
-
+  # spring 静态资源扫描路径
   servlet:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
+  web:
+    resources:
+      static-locations: classpath:/static/
 
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml

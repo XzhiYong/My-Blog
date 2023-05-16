@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
   <header th:replace="admin/header::header-fragment"></header>
   <body class="hold-transition sidebar-mini">
     <div class="wrapper">
@@ -61,6 +61,38 @@
                       </div>
                       <!-- text input -->
                       <div class="form-group">
+                        <label for="sex">性别</label>
+                        <select class="form-check form-check-inline" id="sex">
+                          <option value="1">男</option>
+                          <option value="2">女</option>
+                        </select>
+                      </div>
+                      <!-- text input -->
+                      <div class="form-group">
+                        <label for="birthday">生日</label>
+                        <input
+                            type="date" class="form-control" id="birthday"
+                            name="birthday"
+                            min="1900-01-01" max="2023-01-01" th:value="${user.birthday}"
+                        >
+                      </div>
+                      <!-- text input -->
+                      <div class="form-group">
+                        <label>学历</label>
+                        <label>
+                          <select class="form-check form-check-inline" id="education">
+                            <option value="1">小学</option>
+                            <option value="2">初中</option>
+                            <option value="3">高中</option>
+                            <option value="4">大专</option>
+                            <option value="5">本科</option>
+                            <option value="6">研究生</option>
+                            <option value="7">博士</option>
+                          </select>
+                        </label>
+                      </div>
+                      <!-- text input -->
+                      <div class="form-group">
                         <label>邮箱</label>
                         <input
                             type="text" class="form-control" id="email"
@@ -68,6 +100,19 @@
                             placeholder="请输入邮箱" th:value="${user.email}"
                         >
                       </div>
+                      <!-- text input -->
+                      <div class="form-group">
+                        <label for="remark">个人描述</label>
+                        <textarea
+                            class="form-control"
+                            id="remark"
+                            style="height: 200px"
+                            cols="10"
+                            rows="10"
+                            th:text="${user.remark}"
+                        ></textarea>
+                      </div>
+
 
                       <div class="card-footer">
                         <button
@@ -150,7 +195,7 @@
     <script th:src="@{/admin/dist/js/profile.js}"></script>
 
     <script>
-
+        
         $(document).on("click", "#btn", function () {
             //获得用户上传的图片节点
             var img = document.getElementById('picture');

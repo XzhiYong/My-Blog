@@ -55,7 +55,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         comment.setCreateTime(new Date());
 
         Integer parentComment = comment.getParentCommentId();
-        if (parentComment.equals(-1)) {
+        if (parentComment.equals(-1) ) {
             comment.setParentCommentId(null);
 
         } else {
