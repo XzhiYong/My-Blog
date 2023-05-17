@@ -4,6 +4,12 @@ $(function () {
         datatype: "json",
         colModel: [
             {label: 'id', name: 'adminUserId', index: 'adminUserId', width: 50, key: true, hidden: true},
+            {
+                label: '头像', name: 'headPortrait', index: 'headPortrait', width: 140, align: "center",
+                formatter: function (value, options, rowObject) {
+                    return '<img src=' + value + ' alt="" id="picture" style="height: 50px;width: 100px">';
+                }
+            },
             {label: '账号', name: 'loginUserName', index: 'loginUserName', width: 200, align: "center"},
             {label: '昵称', name: 'nickName', index: 'nickName', width: 120, align: "center"},
             {label: '手机号', name: 'mobile', index: 'mobile', width: 120, align: "center"},
@@ -91,7 +97,6 @@ function addUser() {
 //绑定modal上的保存按钮
 $('#saveButton').click(function () {
     var userId = $("#adminUserId").val();
-    console.log(userId)
     var userName = $("#adminUserName").val();
     var nickName = $("#nickName").val();
     var locked = $("#locked").val();
@@ -210,9 +215,11 @@ function update(id) {
 
 }
 
-function selectRole(id) {
-    $('#roleModel').modal('show');
+var id;
 
+function selectRole(id) {
+    this.id = id;
+    $('#roleModel').modal('show');
     $.ajax({
         type: 'GET',//方法类型
         url: "/admin/roles/userRoleList/" + id,
@@ -222,10 +229,8 @@ function selectRole(id) {
                 var rightArr = result.data.roles
                 var leftArr = result.data.notRoles
                 $("#shuttleBox").transferItem({
-
                     'leftName': '未授权',
                     'rightName': '已授权',
-
                     data: {
                         leftArr,
                         rightArr
@@ -250,19 +255,13 @@ function selectRole(id) {
 }
 
 function addRole() {
-    var ids = getSelectedRows();
-    var userId = ids[0];
     var roleIds = [];
-
-    var elementsByClassName = document.getElementsByClassName("fl ty-transfer-list transfer-list-right");
-    var elementsByClassNameElement = elementsByClassName[0];
-    var elementsByClassName1 = elementsByClassNameElement.getElementsByClassName("tyue-checkbox-txt");
-    for (let i = 0; i < elementsByClassName1.length; i++) {
-
-        roleIds.push(elementsByClassName1[i].id)
+    var right = $("#right span")
+    for (let i = 0; i < right.length; i++) {
+        roleIds.push(right[i].id)
     }
     const data = {
-        "userId": userId,
+        "userId": id,
         "roleIds": roleIds
     };
     $.ajax({

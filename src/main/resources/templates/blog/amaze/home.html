@@ -18,12 +18,6 @@
             text-align: center;
         }
 
-        .home-body {
-            height: auto;
-            width: 50%;
-            margin: 20px auto auto;
-        }
-
         .headPortrait {
             display: inline-block;
             vertical-align: middle;
@@ -34,7 +28,7 @@
     </style>
   </head>
   <body>
-    <div class="home">
+    <div class="blog">
 
       <div th:replace="blog/amaze/header::nav-fragment"></div>
       <div th:replace="blog/amaze/header::header-fragment"></div>
@@ -47,8 +41,7 @@
           <span><b>加入的时间：</b><i th:text="${user.createTime}"></i>;</span>
         </div>
       </div>
-      <div class="home-body">
-
+      <div class="am-g am-g-fixed blog-fixed">
         <div th:replace="blog/amaze/blog-list::blog-list-fragment"></div>
         <div th:replace="blog/amaze/side::side-fragment"></div>
       </div>

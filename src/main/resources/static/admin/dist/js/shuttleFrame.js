@@ -50,7 +50,7 @@
 				</div>
 
 				<div class="ty-transfer-list-body">
-					<ul class="ty-tree-select">
+					<ul class="ty-tree-select" id="left">
 					</ul>
 				</div>
 
@@ -77,7 +77,7 @@
                     `</div>
 				</div>
 				<div class="ty-transfer-list-body">
-					<ul class="ty-tree-select">
+					<ul class="ty-tree-select" id="right">
 					</ul>
 				</div>
 			</div>
@@ -93,17 +93,17 @@
                 var strLeft = '';
                 var strRight = '';
                 data.leftArr.forEach(function (item, index) {
-                    strLeft += '<li><div class="ty-tree-div"><label class="tyue-checkbox-wrapper"> <span class="tyue-checkbox">' +
-                        ' <input type="checkbox" class="tyue-checkbox-input" id="tyue-checkbox-blue"> <span class="tyue-checkbox-circle">' +
-                        ' </span>  </span> <span id="' + item.id + '" class="tyue-checkbox-txt" title="' + item.name +
+                    strLeft += '<li><div class="ty-tree-div"><label class="tyue-checkbox-wrapper"> <i class="tyue-checkbox">' +
+                        ' <input type="checkbox" class="tyue-checkbox-input" id="tyue-checkbox-blue"> <i class="tyue-checkbox-circle">' +
+                        ' </i>  </i> <span id="' + item.id + '" class="tyue-checkbox-txt" title="' + item.name +
                         '">' + item.name +
                         '</span></label></div></li>'
                 })
                 data.rightArr.forEach(function (item, index) {
                     strRight +=
-                        '<li><div class="ty-tree-div"><label class="tyue-checkbox-wrapper"> <span class="tyue-checkbox">' +
-                        ' <input type="checkbox" class="tyue-checkbox-input" id="tyue-checkbox-blue"> <span class="tyue-checkbox-circle">' +
-                        ' </span>  </span> <span id="' + item.id + '" class="tyue-checkbox-txt1" title="' + item.name +
+                        '<li><div class="ty-tree-div"><label class="tyue-checkbox-wrapper"> <i class="tyue-checkbox">' +
+                        ' <input type="checkbox" class="tyue-checkbox-input" id="tyue-checkbox-blue"> <i class="tyue-checkbox-circle">' +
+                        ' </i>  </i> <span id="' + item.id + '" class="tyue-checkbox-txt1" title="' + item.name +
                         '">' + item.name +
                         '</span></label></div></li>'
                 })
