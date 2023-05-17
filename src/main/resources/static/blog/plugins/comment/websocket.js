@@ -19,7 +19,14 @@ websocket.onopen = function () {
 var U01data, Uidata, Usdata
 //接收到消息的回调方法
 websocket.onmessage = function (event) {
-    console.log("接收消息" + event);
+
+    $.ajax({
+        type: 'GET',//方法类型
+        url: "/msg/count",
+        success: function (result) {
+            $(".count").text(result);
+        }
+    });
 }
 
 //连接关闭的回调方法

@@ -1,3 +1,4 @@
+
 .msg {
     position: relative;
     width: 60px;
@@ -547,19 +548,6 @@ button {
         -moz-hyphens: auto;
         hyphens: auto;
     }
-}
-
-/**
-   * links
-   */
-
-a {
-    color: #5085FF;
-}
-
-a:hover,
-a:focus {
-    color: #0350ff;
 }
 
 a:focus {

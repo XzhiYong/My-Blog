@@ -71,13 +71,14 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         BlogMsg blogMsg = new BlogMsg();
         blogMsg.setBlogId(comment.getBlogId());
         blogMsg.setCId(comment.getUid());
-        blogMsg.setUId(blog.getAdminUserId());
+        blogMsg.setUId(blog.getAdminUser().getAdminUserId());
         blogMsg.setMsg(comment.getContent());
         comment.setCreateTime(new Date());
 
         Integer parentComment = comment.getParentCommentId();
         if (parentComment.equals(-1)) {
             blogMsg.setTitle("评论了你的文章");
+            blogMsg.setUId(blog.getAdminUser().getAdminUserId());
             comment.setParentCommentId(null);
 
         } else {
@@ -85,10 +86,12 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
             if (comment1.isRemind()) {
                 replyRemind(comment1);
             }
+            blogMsg.setUId(comment1.getUid());
+            blogMsg.setTitle("回复了你的评论");
+            
         }
         Integer replyComment = comment.getReplyCommentId();
         if (replyComment.equals(-1)) {
-            blogMsg.setTitle("回复了你的评论");
             comment.setReplyCommentId(null);
         }
         boolean b = blogCommentMapper.insert(comment) > 0;
