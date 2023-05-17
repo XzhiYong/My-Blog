@@ -6,6 +6,7 @@ import com.site.blog.my.core.controller.vo.BlogDetailVO;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.BlogComment;
 import com.site.blog.my.core.entity.BlogLink;
+import com.site.blog.my.core.entity.BlogMsg;
 import com.site.blog.my.core.util.PageResult;
 import org.apache.shiro.SecurityUtils;
 import org.jetbrains.annotations.NotNull;
@@ -45,6 +46,7 @@ public class MyBlogController extends BaseController {
         AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
         if (user != null) {
             request.setAttribute("user", user);
+            request.setAttribute("msgCount", blogMsgService.lambdaQuery().eq(BlogMsg::getUId, user.getAdminUserId()).eq(BlogMsg::getState, 0).count());
         }
         request.setAttribute("blogPageResult", blogPageResult);
         request.setAttribute("newBlogs", blogService.getBlogListForIndexPage(1));
@@ -76,6 +78,16 @@ public class MyBlogController extends BaseController {
      */
     @GetMapping({"/blog/{blogId}", "/article/{blogId}"})
     public String detail(HttpServletRequest request, @PathVariable("blogId") Long blogId) {
+        return getDetail(request, blogId, null);
+    }
+
+    /**
+     * 详情页
+     *
+     * @return
+     */
+    @GetMapping("/blog/detail")
+    public String detailOne(HttpServletRequest request, @RequestParam("blogId") Long blogId) {
         return getDetail(request, blogId, null);
     }
 

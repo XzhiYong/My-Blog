@@ -36,7 +36,7 @@ public class PermissionController extends BaseController {
 
         List<Permission> terrList = permissionService.getTerrList();
 
-        List<RolePermission> rolePermissions = permissionMapper.selectList(new LambdaQueryWrapper<RolePermission>().eq(RolePermission::getRoleId, id));
+        List<RolePermission> rolePermissions = rolePermissionMapper.selectList(new LambdaQueryWrapper<RolePermission>().eq(RolePermission::getRoleId, id));
 
         List<Map<String, Object>> collect = terrList.stream().map(item -> {
             Map<String, Object> params = new HashMap<>();

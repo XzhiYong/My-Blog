@@ -5,6 +5,7 @@ import com.site.blog.my.core.controller.BaseController;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.BlogComment;
 import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,10 +24,13 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/blog")
 public class CommentController extends BaseController {
 
+    @Autowired
+    MyBlogController myBlogController;
+
     @RequestMapping("/comment/postcomment")
     public String postcomment(HttpServletRequest request, BlogComment comment) {
         AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
-        if (user==null) {
+        if (user == null) {
             request.setAttribute("errorMsg", "请先登录");
             return "admin/login";
         }

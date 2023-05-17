@@ -48,14 +48,16 @@
             <div th:if="${user}">
               <li>
                 <div class="msg">
-                  <img src="/blog/amaze/images/msg-system.png"/>
-                  <div class="alarm">
-                    1
-                  </div>
+                  <a th:href="@{/msg/index}">
+                    <img src="/blog/amaze/images/msg-system.png"/>
+                    <div class="alarm">
+                      <span th:text="${msgCount}">0</span>
+                    </div>
+                  </a>
                 </div>
               </li>
             </div>
-    
+
             <li>
               <a th:href="@{/index}">主页</a>
             </li>
@@ -76,7 +78,7 @@
         </div>
       </div>
       <!-- /.navbar-collapse -->
-      <script th:src="@{/blog/plugins/jquery/jquery.min.js}"></script>    
+      <script th:src="@{/blog/plugins/jquery/jquery.min.js}"></script>
       <script th:src="@{/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
 
       <script>

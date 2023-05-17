@@ -15,6 +15,6 @@
         select *
         from tb_blog_msg
         where u_id = #{userId}
-        order by create_time desc;
+        order by create_time desc
     </select>
 </mapper>

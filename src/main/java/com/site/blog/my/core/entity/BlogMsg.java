@@ -16,6 +16,7 @@ public class BlogMsg {
     @TableId(type = IdType.AUTO)
     private int id;
 
+    @TableField("u_id")
     private Integer uId;
 
     private AdminUser user;
@@ -31,9 +32,11 @@ public class BlogMsg {
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
-    private Integer blogId;
+    private Long blogId;
 
     private Blog blog;
+
+    private Integer state;
 
 
 }

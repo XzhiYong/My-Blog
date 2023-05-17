@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width">
     <link rel="shortcut icon" th:href="@{${configurations.get('websiteIcon')}}"/>
     <link rel="stylesheet" th:href="@{/blog/amaze/css/base.css}">
-    <link rel="stylesheet" href="http://at.alicdn.com/t/font_1700510_buojade7274.css"/>
+    <link rel="stylesheet" th:href="@{/admin/plugins/bootstrap/css/bootstrap.css}">
 
     <title>---主页</title>
     <style>
@@ -29,7 +29,6 @@
   </head>
   <body>
     <div class="blog">
-
       <div th:replace="blog/amaze/header::nav-fragment"></div>
       <div th:replace="blog/amaze/header::header-fragment"></div>
       <div class="home-header">
@@ -42,7 +41,29 @@
         </div>
       </div>
       <div class="am-g am-g-fixed blog-fixed">
-        
+
+        <div>
+          <main class="articles-list" style="border: black 1px solid; margin: auto;width: auto;height: auto;">
+            <ul>
+              <li th:each="msg:${msgList.list}">
+                <a th:href="@{/home(userId=${msg.user1.adminUserId})}">
+                  <img style="width: 50px;height: 50px" class="headPortrait" th:src="${msg.user1.headPortrait}">&nbsp;&nbsp;&nbsp;
+                </a>
+                <span>
+                  <a th:href="@{/home(userId=${msg.user1.adminUserId})}"><span th:text="${msg.user1.nickName}"></span></a>
+                  <span th:text="${msg.title}"></span> 
+                  ，内容为：
+                  <a th:href="@{/blog/detail(blogId=${msg.blog.blogId})}"><span th:text="${msg.msg}"></span></a>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;时间：
+                  <span th:text="${msg.createTime}">2023-06-01</span>
+                </span>
+                <HR SIZE="10">
+              </li>
+            </ul>
+
+          </main>
+
+        </div>
       </div>
 
     </div>
@@ -50,5 +71,6 @@
 
     <script th:src="@{/blog/plugins/search/click.js}"></script>
     <script th:src="@{/blog/plugins/search/background.js}"></script>
+    <script th:src="@{/blog/plugins/comment/websocket.js}"></script>
   </body>
 </html>

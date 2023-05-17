@@ -5,11 +5,13 @@ import com.site.blog.my.core.controller.vo.SimpleBlogListVO;
 import com.site.blog.my.core.entity.Blog;
 import com.site.blog.my.core.util.PageQueryUtil;
 import com.site.blog.my.core.util.PageResult;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public interface BlogService {
     String saveBlog(Blog blog);
 

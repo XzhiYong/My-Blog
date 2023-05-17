@@ -1,8 +1,8 @@
 package com.site.blog.my.core.controller;
 
-import com.site.blog.my.core.controller.blog.MyBlogController;
 import com.site.blog.my.core.dao.RolePermissionMapper;
 import com.site.blog.my.core.dao.SysUserRoleMapper;
+import com.site.blog.my.core.entity.BlogMsg;
 import com.site.blog.my.core.service.*;
 import com.site.blog.my.core.util.QiniuUtils;
 import com.site.blog.my.core.util.SendSmsUtil;
@@ -53,7 +53,7 @@ public class BaseController {
     protected PermissionService permissionService;
 
     @Resource
-    protected RolePermissionMapper permissionMapper;
+    protected RolePermissionMapper rolePermissionMapper;
 
     @Resource
     protected SendSmsUtil sendSmsUtil;
@@ -62,5 +62,5 @@ public class BaseController {
     protected QiniuUtils qiniuUtils;
 
     @Resource
-    protected MyBlogController myBlogController;
+    protected BlogMsgService blogMsgService;
 }

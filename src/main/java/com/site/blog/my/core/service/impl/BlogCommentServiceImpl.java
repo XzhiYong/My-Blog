@@ -5,12 +5,19 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.site.blog.my.core.dao.BlogCommentMapper;
+import com.site.blog.my.core.entity.Blog;
 import com.site.blog.my.core.entity.BlogComment;
+import com.site.blog.my.core.entity.BlogMsg;
 import com.site.blog.my.core.service.BlogCommentService;
+import com.site.blog.my.core.service.BlogMsgService;
+import com.site.blog.my.core.service.BlogService;
+import com.site.blog.my.core.webSocket.WebSocketServer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -25,8 +32,16 @@ import java.util.List;
 @Service
 public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogComment> implements BlogCommentService {
 
+
     @Autowired
-    BlogCommentMapper blogCommentMapper;
+    private BlogCommentMapper blogCommentMapper;
+
+    @Autowired
+    @Lazy
+    private BlogService blogService;
+
+    @Autowired
+    private BlogMsgService blogMsgService;
 
     @Override
     public IPage<BlogComment> commentPage(Integer currentPage, Long blogId) {
@@ -52,10 +67,17 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
     @Transactional
     @Override
     public boolean saveComment(BlogComment comment) {
+        Blog blog = blogService.getBlogById(comment.getBlogId());
+        BlogMsg blogMsg = new BlogMsg();
+        blogMsg.setBlogId(comment.getBlogId());
+        blogMsg.setCId(comment.getUid());
+        blogMsg.setUId(blog.getAdminUserId());
+        blogMsg.setMsg(comment.getContent());
         comment.setCreateTime(new Date());
 
         Integer parentComment = comment.getParentCommentId();
-        if (parentComment.equals(-1) ) {
+        if (parentComment.equals(-1)) {
+            blogMsg.setTitle("评论了你的文章");
             comment.setParentCommentId(null);
 
         } else {
@@ -66,9 +88,20 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         }
         Integer replyComment = comment.getReplyCommentId();
         if (replyComment.equals(-1)) {
+            blogMsg.setTitle("回复了你的评论");
             comment.setReplyCommentId(null);
         }
-        return blogCommentMapper.insert(comment) > 0;
+        boolean b = blogCommentMapper.insert(comment) > 0;
+        if (b) {
+            try {
+                blogMsgService.save(blogMsg);
+
+                WebSocketServer.sendInfo("true", "xiazhi");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return b;
     }
 
 

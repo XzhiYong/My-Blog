@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import org.apache.shiro.SecurityUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -39,6 +40,7 @@ public class BlogServiceImpl implements BlogService {
     
     private final QiniuUtils qiniuUtils;
     
+    @Lazy
     private final BlogCommentService blogCommentService;
 
     @Override
