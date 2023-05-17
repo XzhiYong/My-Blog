@@ -550,6 +550,19 @@ button {
     }
 }
 
+/**
+   * links
+   */
+
+a {
+    color: #5085FF;
+}
+
+a:hover,
+a:focus {
+    color: #0350ff;
+}
+
 a:focus {
     outline: thin dotted;
     outline: 1px auto -webkit-focus-ring-color;
