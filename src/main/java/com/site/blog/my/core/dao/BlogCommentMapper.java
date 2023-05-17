@@ -21,5 +21,5 @@ public interface BlogCommentMapper extends BaseMapper<BlogComment> {
 
     List<BlogComment> selectByParentCommentIds(Integer cid);
     
-    BlogComment selectByParentCommentId(Integer parentCommentId);
+    BlogComment selectByParentCommentId(Integer replyCommentId);
 }

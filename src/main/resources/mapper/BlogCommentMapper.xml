@@ -6,7 +6,7 @@
         <result column="uid" property="uid"/>
         <association property="user" column="uid" javaType="com.site.blog.my.core.entity.AdminUser" autoMapping="true"
                      select="com.site.blog.my.core.dao.AdminUserMapper.selectByPrimaryKey"/>
-        <association property="replyToBlogComment" column="{cid=cid,blogId=blog_id}" javaType="com.site.blog.my.core.entity.BlogComment" autoMapping="true"
+        <association property="replyToBlogComment" column="{replyCommentId=replyCommentId,blogId=blog_id}" javaType="com.site.blog.my.core.entity.BlogComment" autoMapping="true"
                      select="com.site.blog.my.core.dao.BlogCommentMapper.selectByParentCommentId"/>
         <collection property="replyBlogComments" column="{cid=cid,blogId=blog_id}" ofType="com.site.blog.my.core.entity.BlogComment" autoMapping="true"
                      select="com.site.blog.my.core.dao.BlogCommentMapper.selectByParentCommentIds" />
@@ -17,7 +17,7 @@
         select *,#{blogId} as blogId
         from tb_blog_comment
         where parentCommentId is null
-          and blog_id = #{blogId}
+          and blog_id = #{blogId} order by createTime desc
     </select>
 
     <select id="selectByParentCommentIds" resultMap="selectAllParentCommentNullPageMap">
@@ -27,7 +27,7 @@
 
 
     <select id="selectByParentCommentId" resultMap="selectAllParentCommentNullPageMap">
-        select * from tb_blog_comment where cid=#{cid} and blog_id = #{blogId}
+        select * from tb_blog_comment where cid=#{replyCommentId} and blog_id = #{blogId}
     </select>
 
 </mapper>

@@ -1,10 +1,15 @@
 package com.site.blog.my.core.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.site.blog.my.core.controller.vo.BlogDetailVO;
 import com.site.blog.my.core.controller.vo.BlogListVO;
 import com.site.blog.my.core.controller.vo.SimpleBlogListVO;
-import com.site.blog.my.core.dao.*;
+import com.site.blog.my.core.dao.BlogCategoryMapper;
+import com.site.blog.my.core.dao.BlogMapper;
+import com.site.blog.my.core.dao.BlogTagMapper;
+import com.site.blog.my.core.dao.BlogTagRelationMapper;
 import com.site.blog.my.core.entity.*;
+import com.site.blog.my.core.service.BlogCommentService;
 import com.site.blog.my.core.service.BlogService;
 import com.site.blog.my.core.util.*;
 import lombok.AllArgsConstructor;
@@ -25,10 +30,16 @@ import java.util.stream.Collectors;
 public class BlogServiceImpl implements BlogService {
 
     private final BlogMapper blogMapper;
+    
     private final BlogCategoryMapper categoryMapper;
+    
     private final BlogTagMapper tagMapper;
+    
     private final BlogTagRelationMapper blogTagRelationMapper;
+    
     private final QiniuUtils qiniuUtils;
+    
+    private final BlogCommentService blogCommentService;
 
     @Override
     @Transactional
@@ -359,6 +370,8 @@ public class BlogServiceImpl implements BlogService {
                 List<String> tags = Arrays.asList(blog.getBlogTags().split(","));
                 blogDetailVO.setBlogTags(tags);
             }
+            blogDetailVO.setCommentCount(Math.toIntExact(blogCommentService.count(new LambdaQueryWrapper<BlogComment>()
+                .eq(BlogComment::getBlogId, blog.getBlogId()))));
             return blogDetailVO;
         }
         return null;
