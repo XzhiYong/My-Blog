@@ -18,6 +18,12 @@ public class BlogMsg {
 
     private Integer uId;
 
+    private AdminUser user;
+
+    private Integer cId;
+
+    private AdminUser user1;
+
     private String msg;
 
     private String title;
@@ -26,6 +32,8 @@ public class BlogMsg {
     private Date createTime;
 
     private Integer blogId;
+
+    private Blog blog;
 
 
 }

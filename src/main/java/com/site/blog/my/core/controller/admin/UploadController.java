@@ -1,10 +1,8 @@
 package com.site.blog.my.core.controller.admin;
 
-import com.site.blog.my.core.service.BlogCoverService;
-import com.site.blog.my.core.util.QiniuUtils;
+import com.site.blog.my.core.controller.BaseController;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,20 +20,13 @@ import java.net.URISyntaxException;
  */
 @Controller
 @RequestMapping("/admin")
-public class UploadController {
-
-    @Autowired
-    private QiniuUtils qiniuUtils;
-
-    @Autowired
-    private BlogCoverService blogCoverService;
+public class UploadController extends BaseController {
 
     @PostMapping({"/upload/file"})
     @ResponseBody
     public Result upload(@RequestParam("file") MultipartFile file) throws URISyntaxException {
         return ResultGenerator.genSuccessResult(qiniuUtils.upload(file, "blog"));
     }
-
 
     @PostMapping({"/upload/file/cover"})
     @ResponseBody

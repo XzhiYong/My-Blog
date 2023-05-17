@@ -10,13 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 
-/**
- * Created with IntelliJ IDEA.
- *
- * @ Auther: 马超伟
- * @ Date: 2020/06/16/14:38
- * @ Description:
- */
 @Controller("web_Scoket_system")
 @RequestMapping("/api/socket")
 public class SystemController {

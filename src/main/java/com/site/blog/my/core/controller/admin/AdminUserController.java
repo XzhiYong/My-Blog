@@ -1,7 +1,7 @@
 package com.site.blog.my.core.controller.admin;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.site.blog.my.core.dao.SysUserRoleMapper;
+import com.site.blog.my.core.controller.BaseController;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.SysUserRole;
 import com.site.blog.my.core.service.AdminUserService;
@@ -24,13 +24,11 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/admin/user")
-public class AdminUserController {
+public class AdminUserController extends BaseController {
     @Autowired
     private AdminUserService adminUserService;
     @Autowired
     private RoleService roleService;
-    @Autowired
-    private SysUserRoleMapper sysUserRoleMapper;
 
     @GetMapping
     public String index(HttpServletRequest request) {
@@ -40,7 +38,6 @@ public class AdminUserController {
         request.setAttribute("users", adminUserService.list());
         request.setAttribute("roles", roleService.list());
         return "admin/user";
-
     }
 
     @GetMapping("password")

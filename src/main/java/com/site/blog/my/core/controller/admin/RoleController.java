@@ -1,15 +1,14 @@
 package com.site.blog.my.core.controller.admin;
 
+import com.site.blog.my.core.controller.BaseController;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.SysRole;
-import com.site.blog.my.core.service.RoleService;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
@@ -20,11 +19,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/admin/roles")
-public class RoleController {
-
-    @Resource
-    private RoleService roleService;
-
+public class RoleController extends BaseController {
 
     @GetMapping
     public String index(HttpServletRequest request) {

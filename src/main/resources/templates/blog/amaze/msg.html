@@ -1,0 +1,54 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <title th:text="${configurations.get('websiteName')}+' | '+${pageName}">关于</title>
+    <meta name="description" th:content="${configurations.get('websiteDescription')}">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" th:href="@{${configurations.get('websiteIcon')}}"/>
+    <link rel="stylesheet" th:href="@{/blog/amaze/css/base.css}">
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_1700510_buojade7274.css"/>
+
+    <title>---主页</title>
+    <style>
+
+        .home-header {
+            height: auto;
+            width: 100%;
+            text-align: center;
+        }
+
+        .headPortrait {
+            display: inline-block;
+            vertical-align: middle;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="blog">
+
+      <div th:replace="blog/amaze/header::nav-fragment"></div>
+      <div th:replace="blog/amaze/header::header-fragment"></div>
+      <div class="home-header">
+        <img class="headPortrait" th:src="${user.headPortrait}">
+        <div>
+          <span><b>账号：</b><i th:text="${user.loginUserName}"></i>;</span>&nbsp;&nbsp;&nbsp;
+          <span><b>昵称：</b><i th:text="${user.nickName}"></i>;</span>
+          <br>
+          <span><b>加入的时间：</b><i th:text="${user.createTime}"></i>;</span>
+        </div>
+      </div>
+      <div class="am-g am-g-fixed blog-fixed">
+        
+      </div>
+
+    </div>
+
+
+    <script th:src="@{/blog/plugins/search/click.js}"></script>
+    <script th:src="@{/blog/plugins/search/background.js}"></script>
+  </body>
+</html>

@@ -1,7 +1,6 @@
 package com.site.blog.my.core.controller.admin;
 
 import com.site.blog.my.core.entity.AdminUser;
-import com.site.blog.my.core.service.CategoryService;
 import com.site.blog.my.core.util.PageQueryUtil;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
@@ -11,7 +10,6 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
@@ -23,10 +21,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/admin")
-public class CategoryController {
-
-    @Resource
-    private CategoryService categoryService;
+public class CategoryController extends BlogController {
 
     @GetMapping("/categories")
     public String categoryPage(HttpServletRequest request) {

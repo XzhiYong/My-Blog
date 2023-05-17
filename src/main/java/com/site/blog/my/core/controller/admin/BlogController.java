@@ -1,9 +1,8 @@
 package com.site.blog.my.core.controller.admin;
 
+import com.site.blog.my.core.controller.BaseController;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.Blog;
-import com.site.blog.my.core.service.BlogService;
-import com.site.blog.my.core.service.CategoryService;
 import com.site.blog.my.core.util.PageQueryUtil;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
@@ -14,7 +13,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -30,12 +28,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/admin")
-public class BlogController {
-
-    @Resource
-    private BlogService blogService;
-    @Resource
-    private CategoryService categoryService;
+public class BlogController extends BaseController {
 
     @GetMapping("/blogs/list")
     @ResponseBody

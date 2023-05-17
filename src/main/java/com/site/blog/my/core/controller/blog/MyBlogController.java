@@ -1,11 +1,11 @@
 package com.site.blog.my.core.controller.blog;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.site.blog.my.core.controller.BaseController;
 import com.site.blog.my.core.controller.vo.BlogDetailVO;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.BlogComment;
 import com.site.blog.my.core.entity.BlogLink;
-import com.site.blog.my.core.service.*;
 import com.site.blog.my.core.util.PageResult;
 import org.apache.shiro.SecurityUtils;
 import org.jetbrains.annotations.NotNull;
@@ -14,31 +14,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
 @Controller
-public class MyBlogController {
-
-    //    public static String theme = "default";
-//    public static String theme = "yummy-jekyll";
-    public static String theme = "amaze";
-    @Resource
-    private BlogService blogService;
-    @Resource
-    private TagService tagService;
-    @Resource
-    private LinkService linkService;
-    @Resource
-    private ConfigService configService;
-    @Resource
-    private CategoryService categoryService;
-    @Resource
-    private BlogCommentService blogCommentService;
-    @Resource
-    private AdminUserService adminUserService;
+public class MyBlogController extends BaseController {
 
     /**
      * 首页
@@ -60,6 +41,10 @@ public class MyBlogController {
         PageResult blogPageResult = blogService.getBlogsForIndexPage(pageNum);
         if (blogPageResult == null) {
             return "error/error_404";
+        }
+        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
+        if (user != null) {
+            request.setAttribute("user", user);
         }
         request.setAttribute("blogPageResult", blogPageResult);
         request.setAttribute("newBlogs", blogService.getBlogListForIndexPage(1));
@@ -258,6 +243,7 @@ public class MyBlogController {
         request.setAttribute("configurations", configService.getAllConfigs());
         return "blog/" + theme + "/home";
     }
+
 
     /**
      * 关于页面 以及其他配置了subUrl的文章页

@@ -1,11 +1,10 @@
 package com.site.blog.my.core.controller.blog;
 
 
+import com.site.blog.my.core.controller.BaseController;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.BlogComment;
-import com.site.blog.my.core.service.BlogCommentService;
 import org.apache.shiro.SecurityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,15 +21,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 @RequestMapping("/blog")
-public class CommentController {
-
-    public static String theme = "amaze";
-
-    @Autowired
-    BlogCommentService blogCommentService;
-
-    @Autowired
-    MyBlogController myBlogController;
+public class CommentController extends BaseController {
 
     @RequestMapping("/comment/postcomment")
     public String postcomment(HttpServletRequest request, BlogComment comment) {

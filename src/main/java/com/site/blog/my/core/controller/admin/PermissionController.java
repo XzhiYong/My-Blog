@@ -2,13 +2,11 @@ package com.site.blog.my.core.controller.admin;
 
 import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.site.blog.my.core.dao.RolePermissionMapper;
+import com.site.blog.my.core.controller.BaseController;
 import com.site.blog.my.core.entity.Permission;
 import com.site.blog.my.core.entity.RolePermission;
-import com.site.blog.my.core.service.PermissionService;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,13 +22,7 @@ import java.util.stream.Collectors;
  */
 @Controller
 @RequestMapping("/admin/permission")
-public class PermissionController {
-
-    @Autowired
-    private PermissionService permissionService;
-
-    @Autowired
-    private RolePermissionMapper permissionMapper;
+public class PermissionController extends BaseController {
 
     @PostMapping("/setPermission")
     @ResponseBody

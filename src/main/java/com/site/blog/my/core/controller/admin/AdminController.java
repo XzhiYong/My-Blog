@@ -1,6 +1,7 @@
 package com.site.blog.my.core.controller.admin;
 
 import cn.hutool.captcha.ShearCaptcha;
+import com.site.blog.my.core.controller.BaseController;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.SysRole;
 import com.site.blog.my.core.service.*;
@@ -25,21 +26,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/admin")
-public class AdminController {
-
-    @Resource
-    private AdminUserService adminUserService;
-    @Resource
-    private BlogService blogService;
-    @Resource
-    private CategoryService categoryService;
-    @Resource
-    private LinkService linkService;
-    @Resource
-    private TagService tagService;
-    @Resource
-    private RoleService roleService;
-
+public class AdminController extends BaseController {
 
     @GetMapping({"/login"})
     public String login(HttpServletRequest request) {
