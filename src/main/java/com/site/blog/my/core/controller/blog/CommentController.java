@@ -4,11 +4,12 @@ package com.site.blog.my.core.controller.blog;
 import com.site.blog.my.core.controller.BaseController;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.BlogComment;
+import com.site.blog.my.core.util.Result;
+import com.site.blog.my.core.util.ResultGenerator;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,28 +28,28 @@ public class CommentController extends BaseController {
     @Autowired
     MyBlogController myBlogController;
 
-    @RequestMapping("/comment/postcomment")
-    public String postcomment(HttpServletRequest request, BlogComment comment) {
+    @ResponseBody
+    @PostMapping("/comment/postcomment")
+    public Result postcomment(HttpServletRequest request, @RequestBody BlogComment comment) {
         AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
         if (user == null) {
-            request.setAttribute("errorMsg", "请先登录");
-            return "admin/login";
+            return ResultGenerator.genFailResult("未登录");
         }
         comment.setUid(user.getAdminUserId());
         blogCommentService.saveComment(comment);
-        return myBlogController.getDetail(request, comment.getBlogId(), null);
+        myBlogController.getDetail(request, comment.getBlogId(), null);
+        return ResultGenerator.genSuccessResult();
     }
 
-    @RequestMapping("/comment/commentlist")
+    @PostMapping("/comment/commentlist")
     public String commentlist(HttpServletRequest request, @RequestParam("blogId") Long blogId, Integer page) {
-
         return myBlogController.getDetail(request, blogId, page);
     }
 
-    @RequestMapping("/comment/delete")
-    public String deleteComment(HttpServletRequest request, @RequestParam("blogId") Long blogId, Integer cid) {
-        blogCommentService.deleteComment(cid);
-        return myBlogController.getDetail(request, blogId, null);
+    @ResponseBody
+    @DeleteMapping("/comment/delete/{id}")
+    public Result deleteComment(@PathVariable Integer id) {
+        return ResultGenerator.genSuccessResult(blogCommentService.deleteComment(id));
     }
 
     @RequestMapping({"/comment"})

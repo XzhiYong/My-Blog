@@ -1,12 +1,9 @@
 package com.site.blog.my.core.controller.blog;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.pagehelper.PageInfo;
 import com.site.blog.my.core.controller.BaseController;
 import com.site.blog.my.core.controller.vo.BlogDetailVO;
-import com.site.blog.my.core.entity.AdminUser;
-import com.site.blog.my.core.entity.BlogComment;
-import com.site.blog.my.core.entity.BlogLink;
-import com.site.blog.my.core.entity.BlogMsg;
+import com.site.blog.my.core.entity.*;
 import com.site.blog.my.core.util.PageResult;
 import org.apache.shiro.SecurityUtils;
 import org.jetbrains.annotations.NotNull;
@@ -102,9 +99,9 @@ public class MyBlogController extends BaseController {
         }
         request.setAttribute("pageName", "详情");
         request.setAttribute("configurations", configService.getAllConfigs());
-        IPage<BlogComment> commentIPage = blogCommentService.commentPage(commentPage, blogId);
+        PageInfo<BlogComment> commentIPage = blogCommentService.commentPage(commentPage, blogId);
         request.setAttribute("page", commentIPage);
-        List<BlogComment> comments = commentIPage.getRecords();
+        List<BlogComment> comments = commentIPage.getList();
         request.setAttribute("comments", comments);
         AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
         request.setAttribute("user", user);
@@ -120,6 +117,18 @@ public class MyBlogController extends BaseController {
     @GetMapping({"/tag/{tagId}"})
     public String tag(HttpServletRequest request, @PathVariable("tagId") Integer tagId) {
         return tag(request, tagId, 1);
+    }
+
+
+    /**
+     * 标签列表页
+     *
+     * @return
+     */
+    @GetMapping({"/tag"})
+    public String tagName(HttpServletRequest request, @RequestParam("tagName") String tagName) {
+        BlogTag blogTag = tagService.selectByTagName(tagName);
+        return tag(request, blogTag.getTagId(), 1);
     }
 
     /**
@@ -148,6 +157,16 @@ public class MyBlogController extends BaseController {
      */
     @GetMapping({"/category/{categoryName}"})
     public String category(HttpServletRequest request, @PathVariable("categoryName") String categoryName) {
+        return category(request, categoryName, 1);
+    }
+
+    /**
+     * 分类列表页
+     *
+     * @return
+     */
+    @GetMapping({"/category"})
+    public String categoryName(HttpServletRequest request, @RequestParam("categoryName") String categoryName) {
         return category(request, categoryName, 1);
     }
 

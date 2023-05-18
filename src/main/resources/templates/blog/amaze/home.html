@@ -37,7 +37,7 @@
           <span><b>账号：</b><i th:text="${user.loginUserName}"></i>;</span>&nbsp;&nbsp;&nbsp;
           <span><b>昵称：</b><i th:text="${user.nickName}"></i>;</span>
           <br>
-          <span><b>加入的时间：</b><i th:text="${user.createTime}"></i>;</span>
+          <span><b>加入的时间：</b><i th:text="${#dates.format(user.createTime)}"></i>;</span>
         </div>
       </div>
       <div class="am-g am-g-fixed blog-fixed">

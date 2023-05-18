@@ -1,10 +1,8 @@
 package com.site.blog.my.core.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.github.pagehelper.PageInfo;
 import com.site.blog.my.core.entity.BlogComment;
-
-import java.util.List;
 
 /**
  * <p>
@@ -20,7 +18,7 @@ public interface BlogCommentService extends IService<BlogComment> {
 
     void replyRemind(BlogComment comment);
 
-    IPage<BlogComment> commentPage(Integer currentPage, Long blogId);
+    PageInfo<BlogComment> commentPage(Integer currentPage, Long blogId);
 
     boolean deleteComment(Integer cid);
 }

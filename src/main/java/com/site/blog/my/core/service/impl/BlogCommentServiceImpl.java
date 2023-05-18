@@ -1,9 +1,8 @@
 package com.site.blog.my.core.service.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.site.blog.my.core.dao.BlogCommentMapper;
 import com.site.blog.my.core.entity.Blog;
 import com.site.blog.my.core.entity.BlogComment;
@@ -44,14 +43,10 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
     private BlogMsgService blogMsgService;
 
     @Override
-    public IPage<BlogComment> commentPage(Integer currentPage, Long blogId) {
+    public PageInfo<BlogComment> commentPage(Integer currentPage, Long blogId) {
         PageHelper.startPage(currentPage, 10);
         List<BlogComment> blogComments = blogCommentMapper.selectAllParentCommentNullPage(blogId);
-        Page<BlogComment> page = new Page<>();
-        page.setRecords(blogComments);
-        page.setSize(10);
-        page.setCurrent(currentPage);
-        return page;
+        return new PageInfo<>(blogComments);
     }
 
     @Override

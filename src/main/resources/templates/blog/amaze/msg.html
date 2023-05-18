@@ -55,7 +55,7 @@
                   ，内容为：
                   <a th:href="@{/blog/detail(blogId=${msg.blog.blogId})}"><span th:utext="${msg.msg}"></span></a>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;时间：
-                  <span th:text="${msg.createTime}">2023-06-01</span>
+                  <span th:text="${#dates.format(msg.createTime)}">2023-06-01</span>
                 </span>
                 <HR SIZE="10">
               </li>

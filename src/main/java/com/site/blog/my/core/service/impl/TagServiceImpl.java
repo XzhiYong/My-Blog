@@ -4,7 +4,6 @@ import com.site.blog.my.core.dao.BlogTagMapper;
 import com.site.blog.my.core.dao.BlogTagRelationMapper;
 import com.site.blog.my.core.entity.BlogTag;
 import com.site.blog.my.core.entity.BlogTagCount;
-import com.site.blog.my.core.entity.BlogTagRelation;
 import com.site.blog.my.core.service.TagService;
 import com.site.blog.my.core.util.PageQueryUtil;
 import com.site.blog.my.core.util.PageResult;
@@ -44,6 +43,11 @@ public class TagServiceImpl implements TagService {
             return blogTagMapper.insertSelective(blogTag) > 0;
         }
         return false;
+    }
+
+    @Override
+    public BlogTag selectByTagName(String tagName) {
+        return blogTagMapper.selectByTagName(tagName);
     }
 
     @Override
