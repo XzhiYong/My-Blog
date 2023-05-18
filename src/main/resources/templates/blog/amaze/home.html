@@ -34,6 +34,9 @@
       <div class="home-header">
         <img class="headPortrait" th:src="${user.headPortrait}">
         <div>
+          <img th:src="@{/blog/img/geo-alt-fill.svg}">
+          <span th:text="${user.location}">无法获取位置</span>
+          <br>
           <span><b>账号：</b><i th:text="${user.loginUserName}"></i>;</span>&nbsp;&nbsp;&nbsp;
           <span><b>昵称：</b><i th:text="${user.nickName}"></i>;</span>
           <br>

@@ -1,6 +1,7 @@
 package com.site.blog.my.core.service.impl;
 
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -10,6 +11,7 @@ import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.SysRole;
 import com.site.blog.my.core.service.AdminUserService;
 import com.site.blog.my.core.service.RoleService;
+import com.site.blog.my.core.util.IpRegionUtil;
 import com.site.blog.my.core.util.MD5Util;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
@@ -53,7 +55,11 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
 
     @Override
     public AdminUser getUserDetailById(Integer loginUserId) {
-        return adminUserMapper.selectByPrimaryKey(loginUserId);
+        AdminUser user = adminUserMapper.selectByPrimaryKey(loginUserId);
+        if (StrUtil.isNotBlank(user.getIp())) {
+            user.setLocation(IpRegionUtil.searchByXdb(user.getIp()));
+        }
+        return user;
     }
 
     @Override
@@ -97,6 +103,9 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
         AdminUser byUsername = adminUserMapper.findByUsername(username);
         if (byUsername == null) {
             return null;
+        }
+        if (StrUtil.isNotBlank(byUsername.getIp())) {
+            byUsername.setLocation(IpRegionUtil.searchByXdb(byUsername.getIp()));
         }
         List<SysRole> userIdByRole = roleService.getUserIdByRole(byUsername.getAdminUserId());
         byUsername.setSysRole(userIdByRole);

@@ -4,15 +4,16 @@ import cn.hutool.captcha.ShearCaptcha;
 import com.site.blog.my.core.controller.BaseController;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.SysRole;
-import com.site.blog.my.core.service.*;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
@@ -37,6 +38,7 @@ public class AdminController extends BaseController {
         request.setAttribute("user", user);
         return "admin/index";
     }
+
     @GetMapping({"/note"})
     public String note(HttpServletRequest request) {
 
@@ -65,7 +67,7 @@ public class AdminController extends BaseController {
                         @RequestParam("password") String password,
                         @RequestParam(value = "verifyCode", required = false) String verifyCode,
                         @RequestParam(value = "isVerifyCode", defaultValue = "true") boolean isVerifyCode,
-                        HttpSession session) {
+                        HttpSession session, HttpServletRequest request) {
 
         if (!StringUtils.hasText(verifyCode)) {
             session.setAttribute("errorMsg", "验证码不能为空");
@@ -84,8 +86,12 @@ public class AdminController extends BaseController {
         }
         try {
             AdminUser adminUser = adminUserService.login(userName, password);
-            adminUser.setLoginCount((adminUser.getLoginCount() == null ? 0 : adminUser.getLoginCount()) + 1);
+            int i = adminUser.getLoginCount() == null ? 0 : adminUser.getLoginCount();
+            int count = i + 1;
+            String remoteAddr = request.getRemoteAddr();
+            adminUser.setLoginCount(count);
             adminUser.setLastLoginTime(new Date());
+            adminUser.setIp(remoteAddr);
             adminUserService.updateById(adminUser);
             session.setAttribute("loginUserId", adminUser.getAdminUserId());
             session.setAttribute("loginUserName", adminUser.getLoginUserName());

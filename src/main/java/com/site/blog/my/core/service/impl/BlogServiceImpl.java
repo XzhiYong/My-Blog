@@ -1,5 +1,6 @@
 package com.site.blog.my.core.service.impl;
 
+import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.site.blog.my.core.controller.vo.BlogDetailVO;
 import com.site.blog.my.core.controller.vo.BlogListVO;
@@ -31,15 +32,15 @@ import java.util.stream.Collectors;
 public class BlogServiceImpl implements BlogService {
 
     private final BlogMapper blogMapper;
-    
+
     private final BlogCategoryMapper categoryMapper;
-    
+
     private final BlogTagMapper tagMapper;
-    
+
     private final BlogTagRelationMapper blogTagRelationMapper;
-    
+
     private final QiniuUtils qiniuUtils;
-    
+
     @Lazy
     private final BlogCommentService blogCommentService;
 
@@ -284,7 +285,7 @@ public class BlogServiceImpl implements BlogService {
                 blogCategory.setCategoryId(0);
             }
             if (blogCategory != null && page > 0) {
-                Map param = new HashMap();
+                Map<String, Object> param = MapUtil.newHashMap(4);
                 param.put("page", page);
                 param.put("limit", 9);
                 param.put("blogCategoryId", blogCategory.getCategoryId());

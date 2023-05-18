@@ -41,25 +41,31 @@ public class AdminUser {
 
     @TableField("head_portrait")
     private String headPortrait;
-    
+
     @TableField("mobile")
     private String mobile;
-    
+
     @TableField("email")
     private String email;
-    
+
     @TableField("birthday")
     private String birthday;
-    
+
     @TableField("education")
     private String education;
-    
+
     @TableField("sex")
     private Integer sex;
-    
+
     @TableField("remark")
     private String remark;
-    
+
+    @TableField("ip")
+    private String ip;
+
+    @TableField(exist = false)
+    private String location;
+
     @TableField(exist = false)
     private String verificationCode;
 
