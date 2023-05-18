@@ -53,7 +53,7 @@
                   <a th:href="@{/home(userId=${msg.user1.adminUserId})}"><span th:text="${msg.user1.nickName}"></span></a>
                   <span th:text="${msg.title}"></span> 
                   ，内容为：
-                  <a th:href="@{/blog/detail(blogId=${msg.blog.blogId})}"><span th:text="${msg.msg}"></span></a>
+                  <a th:href="@{/blog/detail(blogId=${msg.blog.blogId})}"><span th:utext="${msg.msg}"></span></a>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;时间：
                   <span th:text="${msg.createTime}">2023-06-01</span>
                 </span>

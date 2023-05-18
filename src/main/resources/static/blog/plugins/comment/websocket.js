@@ -1,8 +1,10 @@
+var devUrl = "ws://192.168.3.182:5689/api/websocket/100";
+var prodUrl = "ws://127.0.0.1:9898/api/websocket/100";
 var websocket = null;
 //判断当前浏览器是否支持WebSocket
 if ('WebSocket' in window) {
     //改成你的地址
-    websocket = new WebSocket("ws://192.168.3.182:5689/api/websocket/100");
+    websocket = new WebSocket(devUrl);
 } else {
     alert('当前浏览器 Not support websocket')
 }
@@ -16,7 +18,6 @@ websocket.onerror = function () {
 websocket.onopen = function () {
     console.log("WebSocket连接成功");
 }
-var U01data, Uidata, Usdata
 //接收到消息的回调方法
 websocket.onmessage = function (event) {
 
