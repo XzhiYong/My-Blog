@@ -28,6 +28,7 @@ $(function () {
                     }
                 }
             },
+            {label: 'ip', name: 'ip', index: 'ip', width: 120, align: "center"},
             {label: '登录次数', name: 'loginCount', index: 'loginCount', width: 120, align: "center"},
             {label: '上次登录时间', name: 'lastLoginTime', index: 'lastLoginTime', width: 120, align: "center"},
             {

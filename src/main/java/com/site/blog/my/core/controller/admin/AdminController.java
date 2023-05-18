@@ -4,6 +4,7 @@ import cn.hutool.captcha.ShearCaptcha;
 import com.site.blog.my.core.controller.BaseController;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.SysRole;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -25,6 +26,7 @@ import java.util.List;
  * @email 2449207463@qq.com
  * @link http://13blog.site
  */
+@Slf4j
 @Controller
 @RequestMapping("/admin")
 public class AdminController extends BaseController {
@@ -79,7 +81,10 @@ public class AdminController extends BaseController {
         }
         if (isVerifyCode) {
             ShearCaptcha shearCaptcha = (ShearCaptcha) session.getAttribute("verifyCode");
-            if (shearCaptcha == null || !shearCaptcha.verify(verifyCode)) {
+            String code = shearCaptcha.getCode();
+            log.info("系统验证码:" + code);
+            log.info("用户验证码:" + verifyCode);
+            if (!code.equals(verifyCode)) {
                 session.setAttribute("errorMsg", "验证码错误");
                 return "admin/login";
             }

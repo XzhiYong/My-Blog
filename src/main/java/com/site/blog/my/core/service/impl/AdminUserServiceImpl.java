@@ -57,7 +57,7 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
     public AdminUser getUserDetailById(Integer loginUserId) {
         AdminUser user = adminUserMapper.selectByPrimaryKey(loginUserId);
         if (StrUtil.isNotBlank(user.getIp())) {
-            user.setLocation(IpRegionUtil.searchByXdb(user.getIp()));
+            user.setLocation(IpRegionUtil.searchByBaiDu(user.getIp()));
         }
         return user;
     }
@@ -105,7 +105,7 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
             return null;
         }
         if (StrUtil.isNotBlank(byUsername.getIp())) {
-            byUsername.setLocation(IpRegionUtil.searchByXdb(byUsername.getIp()));
+            byUsername.setLocation(IpRegionUtil.searchByBaiDu(byUsername.getIp()));
         }
         List<SysRole> userIdByRole = roleService.getUserIdByRole(byUsername.getAdminUserId());
         byUsername.setSysRole(userIdByRole);

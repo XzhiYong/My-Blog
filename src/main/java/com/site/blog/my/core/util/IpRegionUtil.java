@@ -35,8 +35,9 @@ public class IpRegionUtil {
 
     /** xdb文件缓存的搜索器 */
     private static volatile Searcher searcher;
-    
-    public IpRegionUtil(){
+
+    public IpRegionUtil() {
+        initVectorIndex();
         initXdb();
     }
 
