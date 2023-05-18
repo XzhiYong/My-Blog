@@ -40,9 +40,9 @@
 
     <insert id="insert" parameterType="com.site.blog.my.core.entity.AdminUser">
         insert into tb_admin_user (admin_user_id, login_user_name, login_password,
-                                   nick_name, locked, email, mobile, create_time)
+                                   nick_name, locked, email, mobile, create_time,ip)
         values (#{adminUserId,jdbcType=INTEGER}, #{loginUserName,jdbcType=VARCHAR}, #{loginPassword,jdbcType=VARCHAR},
-                #{nickName,jdbcType=VARCHAR}, #{locked,jdbcType=TINYINT}, #{email}, #{mobile}, now())
+                #{nickName,jdbcType=VARCHAR}, #{locked,jdbcType=TINYINT}, #{email}, #{mobile}, now(),#{ip})
     </insert>
     <insert id="insertSelective" parameterType="com.site.blog.my.core.entity.AdminUser">
         insert into tb_admin_user

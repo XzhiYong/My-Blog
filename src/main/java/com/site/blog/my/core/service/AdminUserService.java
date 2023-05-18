@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.util.Result;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 public interface AdminUserService extends IService<AdminUser> {
@@ -44,7 +44,7 @@ public interface AdminUserService extends IService<AdminUser> {
 
     PageInfo<AdminUser> pageList(Map<String, Object> params);
 
-    Result register(AdminUser adminUser, HttpSession session);
+    Result register(AdminUser adminUser, HttpServletRequest request);
 
     Result updateMobilePassword(AdminUser adminUser);
 }

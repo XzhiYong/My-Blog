@@ -1,6 +1,7 @@
 package com.site.blog.my.core.controller.admin;
 
 import cn.hutool.captcha.ShearCaptcha;
+import cn.hutool.extra.servlet.ServletUtil;
 import com.site.blog.my.core.controller.BaseController;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.SysRole;
@@ -93,10 +94,10 @@ public class AdminController extends BaseController {
             AdminUser adminUser = adminUserService.login(userName, password);
             int i = adminUser.getLoginCount() == null ? 0 : adminUser.getLoginCount();
             int count = i + 1;
-            String remoteAddr = request.getRemoteAddr();
             adminUser.setLoginCount(count);
             adminUser.setLastLoginTime(new Date());
-            adminUser.setIp(remoteAddr);
+            String clientIp = ServletUtil.getClientIP(request);
+            adminUser.setIp(clientIp);
             adminUserService.updateById(adminUser);
             session.setAttribute("loginUserId", adminUser.getAdminUserId());
             session.setAttribute("loginUserName", adminUser.getLoginUserName());

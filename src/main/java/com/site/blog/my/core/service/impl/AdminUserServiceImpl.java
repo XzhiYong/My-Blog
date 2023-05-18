@@ -2,6 +2,7 @@ package com.site.blog.my.core.service.impl;
 
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.servlet.ServletUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -24,7 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Service
@@ -121,9 +122,11 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Result register(AdminUser adminUser, HttpSession session) {
+    public Result register(AdminUser adminUser, HttpServletRequest request) {
         String loginUserName = adminUser.getLoginUserName();
         String mobile = adminUser.getMobile();
+        String clientIP = ServletUtil.getClientIP(request);
+        adminUser.setIp(clientIP);
         if (adminUserMapper.findByUsername(loginUserName) != null || adminUserMapper.findByUsername(mobile) != null
         ) {
             return ResultGenerator.genFailResult("账号或手机号已注册");

@@ -6,6 +6,7 @@ import com.site.blog.my.core.util.Result;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -30,8 +31,8 @@ public class RegisterController extends BaseController {
     @ResponseBody
     @PostMapping
     public Result register(@RequestBody AdminUser adminUser,
-                           HttpSession session) {
-        Result register = adminUserService.register(adminUser, session);
+                           HttpSession session, HttpServletRequest request) {
+        Result register = adminUserService.register(adminUser,request);
         if (register.getResultCode() == 200) {
            try {
                adminUserService.login(adminUser.getLoginUserName(), (String) register.getData());

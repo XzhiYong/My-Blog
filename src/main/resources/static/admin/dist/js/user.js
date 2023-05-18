@@ -5,20 +5,20 @@ $(function () {
         colModel: [
             {label: 'id', name: 'adminUserId', index: 'adminUserId', width: 50, key: true, hidden: true},
             {
-                label: '头像', name: 'headPortrait', index: 'headPortrait', width: 140, align: "center",
+                label: '头像', name: 'headPortrait', index: 'headPortrait', width: 100, align: "center",
                 formatter: function (value, options, rowObject) {
                     return '<img src=' + value + ' alt="" id="picture" style="height: 50px;width: 100px">';
                 }
             },
-            {label: '账号', name: 'loginUserName', index: 'loginUserName', width: 200, align: "center"},
-            {label: '昵称', name: 'nickName', index: 'nickName', width: 120, align: "center"},
-            {label: '手机号', name: 'mobile', index: 'mobile', width: 120, align: "center"},
-            {label: '邮箱', name: 'email', index: 'email', width: 120, align: "center"},
+            {label: '账号', name: 'loginUserName', index: 'loginUserName', width: 100, align: "center"},
+            {label: '昵称', name: 'nickName', index: 'nickName', width: 100, align: "center"},
+            {label: '手机号', name: 'mobile', index: 'mobile', width: 70, align: "center"},
+            {label: '邮箱', name: 'email', index: 'email', width: 80, align: "center"},
             {
                 label: '状态',
                 name: 'locked',
                 index: 'locked',
-                width: 120,
+                width: 50,
                 align: "center",
                 formatter: function (value, options, rowObject) {
                     if (value === 0) {
@@ -28,8 +28,8 @@ $(function () {
                     }
                 }
             },
-            {label: 'ip', name: 'ip', index: 'ip', width: 120, align: "center"},
-            {label: '登录次数', name: 'loginCount', index: 'loginCount', width: 120, align: "center"},
+            {label: 'ip', name: 'ip', index: 'ip', width: 70, align: "center"},
+            {label: '登录次数', name: 'loginCount', index: 'loginCount', width: 50, align: "center"},
             {label: '上次登录时间', name: 'lastLoginTime', index: 'lastLoginTime', width: 120, align: "center"},
             {
                 label: '操作',
