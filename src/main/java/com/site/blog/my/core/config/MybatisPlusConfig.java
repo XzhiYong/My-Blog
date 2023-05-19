@@ -3,7 +3,6 @@ package com.site.blog.my.core.config;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
  * mybatis-plus配置
  */
 @Configuration
-@MapperScan({"com.site.my.code.dao"})
 public class MybatisPlusConfig {
 
     /**

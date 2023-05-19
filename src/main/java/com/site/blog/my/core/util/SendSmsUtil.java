@@ -2,7 +2,7 @@ package com.site.blog.my.core.util;
 
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.json.JSONUtil;
-import com.site.blog.my.core.dao.SmsMsgMapper;
+import com.site.blog.my.core.mapper.SmsMsgMapper;
 import com.site.blog.my.core.entity.SmsMsg;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.profile.ClientProfile;

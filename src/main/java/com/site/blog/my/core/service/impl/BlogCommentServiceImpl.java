@@ -3,7 +3,7 @@ package com.site.blog.my.core.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.site.blog.my.core.dao.BlogCommentMapper;
+import com.site.blog.my.core.mapper.BlogCommentMapper;
 import com.site.blog.my.core.entity.Blog;
 import com.site.blog.my.core.entity.BlogComment;
 import com.site.blog.my.core.entity.BlogMsg;

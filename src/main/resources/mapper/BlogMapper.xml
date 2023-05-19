@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.site.blog.my.core.dao.BlogMapper">
+<mapper namespace="com.site.blog.my.core.mapper.BlogMapper">
     <resultMap id="BaseResultMap" type="com.site.blog.my.core.entity.Blog">
         <id column="blog_id" jdbcType="BIGINT" property="blogId"/>
         <result column="blog_title" jdbcType="VARCHAR" property="blogTitle"/>
@@ -16,11 +16,11 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
         <association property="adminUser" column="user_id" javaType="com.site.blog.my.core.entity.AdminUser"
-                     select="com.site.blog.my.core.dao.AdminUserMapper.selectByPrimaryKey" autoMapping="true"/>
+                     select="com.site.blog.my.core.mapper.AdminUserMapper.selectByPrimaryKey" autoMapping="true"/>
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.site.blog.my.core.entity.Blog">
         <result column="blog_content" jdbcType="LONGVARCHAR" property="blogContent"/>
-        <association column="user_id" property="adminUser"  javaType="com.site.blog.my.core.entity.AdminUser" autoMapping="true" select="com.site.blog.my.core.dao.AdminUserMapper.selectByPrimaryKey"/>
+        <association column="user_id" property="adminUser"  javaType="com.site.blog.my.core.entity.AdminUser" autoMapping="true" select="com.site.blog.my.core.mapper.AdminUserMapper.selectByPrimaryKey"/>
     </resultMap>
     <sql id="Base_Column_List">
         blog_id, blog_title, blog_sub_url, blog_cover_image, blog_category_id, blog_category_name, 

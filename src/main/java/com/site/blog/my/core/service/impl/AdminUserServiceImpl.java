@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.site.blog.my.core.auth.AuthToken;
-import com.site.blog.my.core.dao.AdminUserMapper;
+import com.site.blog.my.core.mapper.AdminUserMapper;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.SysRole;
 import com.site.blog.my.core.service.AdminUserService;

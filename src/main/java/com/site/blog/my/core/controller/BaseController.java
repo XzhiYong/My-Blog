@@ -1,8 +1,7 @@
 package com.site.blog.my.core.controller;
 
-import com.site.blog.my.core.dao.RolePermissionMapper;
-import com.site.blog.my.core.dao.SysUserRoleMapper;
-import com.site.blog.my.core.entity.BlogMsg;
+import com.site.blog.my.core.mapper.RolePermissionMapper;
+import com.site.blog.my.core.mapper.SysUserRoleMapper;
 import com.site.blog.my.core.service.*;
 import com.site.blog.my.core.util.QiniuUtils;
 import com.site.blog.my.core.util.SendSmsUtil;
@@ -63,4 +62,7 @@ public class BaseController {
 
     @Resource
     protected BlogMsgService blogMsgService;
+
+    @Resource
+    protected SysSignService sysSignService;
 }

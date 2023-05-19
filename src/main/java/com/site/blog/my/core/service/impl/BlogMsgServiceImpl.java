@@ -4,7 +4,7 @@ import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.site.blog.my.core.dao.BlogMsgMapper;
+import com.site.blog.my.core.mapper.BlogMsgMapper;
 import com.site.blog.my.core.entity.BlogMsg;
 import com.site.blog.my.core.service.BlogMsgService;
 import org.springframework.stereotype.Service;

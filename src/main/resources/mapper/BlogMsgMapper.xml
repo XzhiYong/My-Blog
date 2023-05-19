@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.site.blog.my.core.dao.BlogMsgMapper">
+<mapper namespace="com.site.blog.my.core.mapper.BlogMsgMapper">
     <resultMap id="msgListMap" type="com.site.blog.my.core.entity.BlogMsg">
         <id property="id" column="id"/>
         <association property="user" column="u_id" autoMapping="true" javaType="com.site.blog.my.core.entity.AdminUser"
-                     select="com.site.blog.my.core.dao.AdminUserMapper.selectByPrimaryKey"/>
+                     select="com.site.blog.my.core.mapper.AdminUserMapper.selectByPrimaryKey"/>
         <association property="user1" column="c_id" autoMapping="true" javaType="com.site.blog.my.core.entity.AdminUser"
-                     select="com.site.blog.my.core.dao.AdminUserMapper.selectByPrimaryKey"/>
+                     select="com.site.blog.my.core.mapper.AdminUserMapper.selectByPrimaryKey"/>
         <association property="blog" column="blog_id" autoMapping="true" javaType="com.site.blog.my.core.entity.Blog"
-                     select="com.site.blog.my.core.dao.BlogMapper.selectByPrimaryKey"/>
+                     select="com.site.blog.my.core.mapper.BlogMapper.selectByPrimaryKey"/>
     </resultMap>
 
     <select id="msgList" resultMap="msgListMap">

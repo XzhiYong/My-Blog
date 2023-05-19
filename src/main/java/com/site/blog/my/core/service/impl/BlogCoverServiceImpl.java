@@ -4,7 +4,7 @@ import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.site.blog.my.core.dao.BlogCoverMapper;
+import com.site.blog.my.core.mapper.BlogCoverMapper;
 import com.site.blog.my.core.entity.BlogCover;
 import com.site.blog.my.core.service.BlogCoverService;
 import org.springframework.beans.factory.annotation.Autowired;

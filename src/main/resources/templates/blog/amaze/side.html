@@ -20,15 +20,26 @@
       <section>
         <div class="sidebar-header">
                 <span class="sidebar-header-title">
+                    签到
+                </span>
+        </div>
+        <div class="sign" style="border: black 1px solid;height: 100px">
+          <button type="button" class="sign" style="margin: 10px auto auto">今日签到</button>
+          可获得小红花
+        </div>
+      </section>
+      <section>
+        <div class="sidebar-header">
+                <span class="sidebar-header-title">
                     热门标签
                 </span>
         </div>
         <div class="tags ">
           <th:block th:if="${null != hotTags}">
             <th:block th:each="hotTag : ${hotTags}">
-              
+
               <a rel="tag" th:href="@{'/tag/' + ${hotTag.tagId}}">
-                
+
                 <th:block th:text="${hotTag.tagName}+'('+${hotTag.tagCount}+')'"></th:block>
               </a>
             </th:block>

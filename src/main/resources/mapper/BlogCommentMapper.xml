@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.site.blog.my.core.dao.BlogCommentMapper">
+<mapper namespace="com.site.blog.my.core.mapper.BlogCommentMapper">
     <resultMap id="selectAllParentCommentNullPageMap" type="com.site.blog.my.core.entity.BlogComment">
         <id column="cid" property="cid"/>
         <result column="uid" property="uid"/>
         <association property="user" column="uid" javaType="com.site.blog.my.core.entity.AdminUser" autoMapping="true"
-                     select="com.site.blog.my.core.dao.AdminUserMapper.selectByPrimaryKey"/>
+                     select="com.site.blog.my.core.mapper.AdminUserMapper.selectByPrimaryKey"/>
         <association property="replyToBlogComment" column="{replyCommentId=replyCommentId,blogId=blog_id}" javaType="com.site.blog.my.core.entity.BlogComment" autoMapping="true"
-                     select="com.site.blog.my.core.dao.BlogCommentMapper.selectByParentCommentId"/>
+                     select="com.site.blog.my.core.mapper.BlogCommentMapper.selectByParentCommentId"/>
         <collection property="replyBlogComments" column="{cid=cid,blogId=blog_id}" ofType="com.site.blog.my.core.entity.BlogComment" autoMapping="true"
-                     select="com.site.blog.my.core.dao.BlogCommentMapper.selectByParentCommentIds" />
+                     select="com.site.blog.my.core.mapper.BlogCommentMapper.selectByParentCommentIds" />
 
     </resultMap>
 
