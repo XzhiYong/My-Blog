@@ -1,6 +1,7 @@
 package com.site.blog.my.core.controller.admin;
 
 import com.site.blog.my.core.controller.BaseController;
+import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,16 @@ public class UploadController extends BaseController {
     public Boolean uploadCover(@RequestParam("file") MultipartFile file) {
         String url = qiniuUtils.upload(file, "blog");
         return blogCoverService.saveCover(url);
+    }
+
+    @PostMapping({"/upload/file/user"})
+    @ResponseBody
+    public Boolean uploadUser(@RequestParam("file") MultipartFile file, @RequestParam Integer userId) {
+        String url = qiniuUtils.upload(file, "blog");
+        AdminUser adminUser=new AdminUser();
+        adminUser.setAdminUserId(userId);
+        adminUser.setHeadPortrait(url);
+        return adminUserService.updateById(adminUser);
     }
 
 }

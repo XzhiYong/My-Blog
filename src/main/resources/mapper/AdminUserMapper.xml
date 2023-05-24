@@ -9,7 +9,7 @@
         <result column="locked" jdbcType="TINYINT" property="locked"/>
     </resultMap>
     <sql id="Base_Column_List">
-        admin_user_id, login_user_name, login_password, nick_name, locked,head_portrait as headPortrait,create_time as createTime,login_count,ip
+        admin_user_id, login_user_name, login_password, nick_name, locked,head_portrait as headPortrait,create_time as createTime,login_count,ip,email,sex
     </sql>
 
     <select id="login" resultMap="BaseResultMap">

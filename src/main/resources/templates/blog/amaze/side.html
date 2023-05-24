@@ -1,96 +1,108 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <div th:fragment="side-fragment" class="am-u-lg-4 am-u-sm-12 am-u-lg-offset-0 am-u-sm-offset-0 sidebar-container">
-    <section>
+  <body>
+
+    <div th:fragment="side-fragment" class="am-u-lg-4 am-u-sm-12 am-u-lg-offset-0 am-u-sm-offset-0 sidebar-container">
       <section>
-        <div class="sidebar-header">
+        <section>
+          <div class="sidebar-header">
                 <span class="sidebar-header-title">
                     搜索文章
                 </span>
-        </div>
-        <div class="sidebar-search">
-          <form method="get" onsubmit="return false;" accept-charset="utf-8">
-            <div class="search-input">
-              <input type="text" name="keyword" id="searchbox" placeholder="输入关键字搜索">
-              <button type="submit" class="search-submit" onclick="search()"></button>
-              <div>
-          </form>
-        </div>
-      </section>
-      <section>
-        <div class="sidebar-header">
+          </div>
+          <div class="sidebar-search">
+            <form method="get" onsubmit="return false;" accept-charset="utf-8">
+              <div class="search-input">
+                <input type="text" name="keyword" id="searchbox" placeholder="输入关键字搜索">
+                <button type="submit" class="search-submit" onclick="search()"></button>
+              </div>
+            </form>
+          </div>
+        </section>
+        <section>
+          <div class="sidebar-header">
                 <span class="sidebar-header-title">
                     签到
                 </span>
-        </div>
-        <div class="sign" style="border: black 1px solid;height: 100px">
-          <button type="button" class="sign" style="margin: 10px auto auto">今日签到</button>
-          可获得小红花
-        </div>
-      </section>
-      <section>
-        <div class="sidebar-header">
+          </div>
+          <div class="sign" style="border: black 0 solid;height: 60px">
+            <div style="margin: auto;">
+              <button
+                  type="button"
+                  id="li-sign"
+                  style="height:30px;width:100px;margin-top: 15px;margin-left: 50px;background: #FF5722;border: black 0 solid;color: white"
+              >今日签到
+              </button>
+              <span style="color: black; margin-left: 30px">签到可得20小红花</span>
+            </div>
+          </div>
+        </section>
+        <section>
+          <div class="sidebar-header">
                 <span class="sidebar-header-title">
                     热门标签
                 </span>
-        </div>
-        <div class="tags ">
-          <th:block th:if="${null != hotTags}">
-            <th:block th:each="hotTag : ${hotTags}">
+          </div>
+          <div class="tags ">
+            <th:block th:if="${null != hotTags}">
+              <th:block th:each="hotTag : ${hotTags}">
 
-              <a rel="tag" th:href="@{'/tag/' + ${hotTag.tagId}}">
+                <a rel="tag" th:href="@{'/tag/' + ${hotTag.tagId}}">
 
-                <th:block th:text="${hotTag.tagName}+'('+${hotTag.tagCount}+')'"></th:block>
-              </a>
+                  <th:block th:text="${hotTag.tagName}+'('+${hotTag.tagCount}+')'"></th:block>
+                </a>
+              </th:block>
             </th:block>
-          </th:block>
-        </div>
-      </section>
-      <section>
-        <div class="sidebar-header">
+          </div>
+        </section>
+        <section>
+          <div class="sidebar-header">
                 <span class="sidebar-header-title">
                     最新发布
                 </span>
-        </div>
-        <div class="sidebar-list">
-          <ul class="sidebar-list-body sidebar-list-items">
-            <th:block th:if="${null != newBlogs}">
-              <th:block th:each="newBlog : ${newBlogs}">
-                <li class="sidebar-list-item">
-                  <a
-                      th:href="@{'/blog/' + ${newBlog.blogId}}"
-                      class="tag tooltipped tooltipped-n"
-                  >
-                    <th:block th:text="${newBlog.blogTitle}"></th:block>
-                  </a>
-                </li>
+          </div>
+          <div class="sidebar-list">
+            <ul class="sidebar-list-body sidebar-list-items">
+              <th:block th:if="${null != newBlogs}">
+                <th:block th:each="newBlog : ${newBlogs}">
+                  <li class="sidebar-list-item">
+                    <a
+                        th:href="@{'/blog/' + ${newBlog.blogId}}"
+                        class="tag tooltipped tooltipped-n"
+                    >
+                      <th:block th:text="${newBlog.blogTitle}"></th:block>
+                    </a>
+                  </li>
+                </th:block>
               </th:block>
-            </th:block>
-          </ul>
-        </div>
-      </section>
-      <section>
-        <div class="sidebar-header">
+            </ul>
+          </div>
+        </section>
+        <section>
+          <div class="sidebar-header">
                 <span class="sidebar-header-title">
                     点击最多
                 </span>
-        </div>
-        <main class="sidebar-lists">
-          <ul>
-            <th:block th:if="${null != hotBlogs}">
-              <th:block th:each="hotBlog : ${hotBlogs}">
-                <li class="sidebar-list-item">
-                  <a
-                      class="tag tooltipped tooltipped-n"
-                      th:href="@{'/blog/' + ${hotBlog.blogId}}"
-                  >
-                    <th:block th:text="${hotBlog.blogTitle}"></th:block>
-                  </a>
-                </li>
+          </div>
+          <main class="sidebar-lists">
+            <ul>
+              <th:block th:if="${null != hotBlogs}">
+                <th:block th:each="hotBlog : ${hotBlogs}">
+                  <li class="sidebar-list-item">
+                    <a
+                        class="tag tooltipped tooltipped-n"
+                        th:href="@{'/blog/' + ${hotBlog.blogId}}"
+                    >
+                      <th:block th:text="${hotBlog.blogTitle}"></th:block>
+                    </a>
+                  </li>
+                </th:block>
               </th:block>
-            </th:block>
-          </ul>
-        </main>
+            </ul>
+          </main>
+        </section>
       </section>
-  </div>
+    </div>
+    
+  </body>
 </html>

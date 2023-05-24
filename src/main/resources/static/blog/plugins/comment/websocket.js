@@ -1,4 +1,4 @@
-var devUrl = "ws://192.168.3.182:5689/api/websocket/100";
+var devUrl = "ws://192.168.3.182:5689/";
 var prodUrl = "ws://127.0.0.1:9898/api/websocket/100";
 var websocket = null;
 //判断当前浏览器是否支持WebSocket

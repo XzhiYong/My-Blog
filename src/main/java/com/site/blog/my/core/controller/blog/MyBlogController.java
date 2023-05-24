@@ -263,16 +263,40 @@ public class MyBlogController extends BaseController {
      * @return
      */
     @GetMapping({"/home"})
-    public String home(HttpServletRequest request, @RequestParam Integer userId) {
+    public String home(HttpServletRequest request, @RequestParam(required = false) Integer userId) {
+        AdminUser user;
+        if (userId == null) {
+            user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
+        } else {
+            user = adminUserService.getUserDetailById(Math.toIntExact(userId));
+        }
 
         request.setAttribute("blogPageResult", blogService.getBlogsForUserPage(1, userId));
         request.setAttribute("newBlogs", blogService.getBlogListForIndexPage(1));
         request.setAttribute("hotBlogs", blogService.getBlogListForIndexPage(0));
         request.setAttribute("hotTags", tagService.getBlogTagCountForIndex());
-        request.setAttribute("user", adminUserService.getUserDetailById(Math.toIntExact(userId)));
+        request.setAttribute("user", user);
         request.setAttribute("pageName", "详情页");
         request.setAttribute("configurations", configService.getAllConfigs());
         return "blog/" + theme + "/home";
+    }
+
+
+    /**
+     * 个人主页
+     *
+     * @return
+     */
+    @GetMapping({"/set"})
+    public String set(HttpServletRequest request) {
+        AdminUser user=(AdminUser) SecurityUtils.getSubject().getPrincipal();
+        if (user == null) {
+           return "/admin/login";
+        }
+        request.setAttribute("user",adminUserService.getUserDetailById(user.getAdminUserId()));
+        request.setAttribute("pageName", "账号设置");
+        request.setAttribute("configurations", configService.getAllConfigs());
+        return "blog/" + theme + "/set";
     }
 
 

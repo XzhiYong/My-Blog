@@ -130,17 +130,6 @@
                 </a>
               </li>
             </shiro:hasPermission>
-
-            <li class="nav-item">
-              <a
-                  th:href="@{/admin/sys-sign}"
-                  th:class="${path}=='roles'?'nav-link active':'nav-link'"
-              >
-                <i class="fa fa-wrench nav-icon"></i>
-                <p>签到配置</p>
-              </a>
-            </li>
-
             <shiro:hasPermission name="系统配置">　　
 
               <li class="nav-item">

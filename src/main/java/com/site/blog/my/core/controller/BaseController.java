@@ -62,7 +62,4 @@ public class BaseController {
 
     @Resource
     protected BlogMsgService blogMsgService;
-
-    @Resource
-    protected SysSignService sysSignService;
 }

@@ -31,7 +31,7 @@ public class QiniuUtils {
         int dotPos = Objects.requireNonNull(file.getOriginalFilename()).lastIndexOf(".");
         if (dotPos < 0) {
             return null;
-        }
+        }    
         String fileExt = file.getOriginalFilename().substring(dotPos + 1).toLowerCase();
 
         String fileName = IdUtil.randomUUID().replaceAll("-", "") + "." + fileExt;
