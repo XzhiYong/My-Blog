@@ -27,7 +27,7 @@ logging:
         blog:
           my:
             core:
-              dao: debug
+              mapper: debug
     org:
       springframework: info
 

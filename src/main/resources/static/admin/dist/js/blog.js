@@ -82,6 +82,7 @@ $(function () {
  * 搜索功能
  */
 function search() {
+    alert("111")
     //标题关键字
     var keyword = $('#keyword').val();
     if (!validLength(keyword, 20)) {
@@ -186,3 +187,5 @@ function updateStatus() {
     });
 
 }
+
+

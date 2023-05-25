@@ -2,7 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="${configurations.get('websiteName')}+' | '+${pageName}">关于</title>
+    <meta name="description" th:content="${configurations.get('websiteDescription')}">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" th:href="@{${configurations.get('websiteIcon')}}"/>
     <link rel="stylesheet" th:href="@{/admin/plugins/layui/css/layui.css}">
     <link rel="stylesheet" th:href="@{/blog/amaze/css/base.css}">
     <link rel="stylesheet" th:href="@{/blog/amaze/css/set.css}">
@@ -33,7 +36,7 @@
           </ul>
           <div class="layui-tab-content" style="padding: 20px 0;">
             <div class="layui-form layui-form-pane layui-tab-item layui-show">
-              <form method="post">
+              <form>
                 <div class="layui-form-item">
                   <label for="L_email" class="layui-form-label">邮箱</label>
                   <div class="layui-input-inline">
@@ -161,10 +164,10 @@
             layui.use('upload', function (upload) {
                 var avatarAdd = $('.avatar-add');
                 $(".img-headPortrait");
-                
+
                 upload.render({
                     elem: '.upload-img'
-                    , url: '/admin/upload/file/user?userId='+[[${user.adminUserId}]]
+                    , url: '/admin/upload/file/user?userId=' + [[${user.adminUserId}]]
                     , size: 500000
                     , before: function () {
                         avatarAdd.find('.loading').show();
@@ -184,17 +187,7 @@
             });
         }
 
-        //监听提交
-        form.on('submit(userForm)', function (data) {
-            console.log(data.field)
-            $.post('/admin/user/set', data.field, function (res) {
-                layer.msg(res.msg)
-                if (res.status === 0) {
-                    location.reload()
-                }
-            })
-            return false;
-        });
+
     </script>
 
   </body>

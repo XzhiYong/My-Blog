@@ -27,8 +27,6 @@ public class BlogMsg {
 
     private String msg;
 
-    private String title;
-
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
@@ -37,6 +35,11 @@ public class BlogMsg {
     private Blog blog;
 
     private Integer state;
+
+    private Integer type;
+
+    @TableLogic
+    private Boolean isDeleted;
 
 
 }

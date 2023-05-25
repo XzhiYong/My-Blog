@@ -51,6 +51,9 @@ public class MyBlogController extends BaseController {
         request.setAttribute("hotTags", tagService.getBlogTagCountForIndex());
         request.setAttribute("pageName", "首页");
         request.setAttribute("configurations", configService.getAllConfigs());
+
+        getSign(request, user);
+        
         return "blog/" + theme + "/index";
     }
 
@@ -147,6 +150,7 @@ public class MyBlogController extends BaseController {
         request.setAttribute("hotBlogs", blogService.getBlogListForIndexPage(0));
         request.setAttribute("hotTags", tagService.getBlogTagCountForIndex());
         request.setAttribute("configurations", configService.getAllConfigs());
+        getSign(request, null);
         return "blog/" + theme + "/list";
     }
 
@@ -186,6 +190,7 @@ public class MyBlogController extends BaseController {
         request.setAttribute("hotBlogs", blogService.getBlogListForIndexPage(0));
         request.setAttribute("hotTags", tagService.getBlogTagCountForIndex());
         request.setAttribute("configurations", configService.getAllConfigs());
+        getSign(request, null);
         return "blog/" + theme + "/list";
     }
 
@@ -215,6 +220,8 @@ public class MyBlogController extends BaseController {
         request.setAttribute("hotBlogs", blogService.getBlogListForIndexPage(0));
         request.setAttribute("hotTags", tagService.getBlogTagCountForIndex());
         request.setAttribute("configurations", configService.getAllConfigs());
+        getSign(request, null);
+
         return "blog/" + theme + "/list";
     }
 
@@ -278,6 +285,7 @@ public class MyBlogController extends BaseController {
         request.setAttribute("user", user);
         request.setAttribute("pageName", "详情页");
         request.setAttribute("configurations", configService.getAllConfigs());
+        getSign(request, null);
         return "blog/" + theme + "/home";
     }
 
@@ -289,11 +297,11 @@ public class MyBlogController extends BaseController {
      */
     @GetMapping({"/set"})
     public String set(HttpServletRequest request) {
-        AdminUser user=(AdminUser) SecurityUtils.getSubject().getPrincipal();
+        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
         if (user == null) {
-           return "/admin/login";
+            return "/admin/login";
         }
-        request.setAttribute("user",adminUserService.getUserDetailById(user.getAdminUserId()));
+        request.setAttribute("user", adminUserService.getUserDetailById(user.getAdminUserId()));
         request.setAttribute("pageName", "账号设置");
         request.setAttribute("configurations", configService.getAllConfigs());
         return "blog/" + theme + "/set";

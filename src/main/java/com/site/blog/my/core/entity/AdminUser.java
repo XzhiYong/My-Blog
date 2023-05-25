@@ -63,6 +63,9 @@ public class AdminUser {
     @TableField("ip")
     private String ip;
 
+    @TableField("point")
+    private Integer point;
+
     @TableField(exist = false)
     private String location;
 

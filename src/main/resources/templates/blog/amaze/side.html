@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
   <body>
-
     <div th:fragment="side-fragment" class="am-u-lg-4 am-u-sm-12 am-u-lg-offset-0 am-u-sm-offset-0 sidebar-container">
       <section>
         <section>
@@ -25,15 +24,28 @@
                     签到
                 </span>
           </div>
-          <div class="sign" style="border: black 0 solid;height: 60px">
-            <div style="margin: auto;">
-              <button
-                  type="button"
-                  id="li-sign"
-                  style="height:30px;width:100px;margin-top: 15px;margin-left: 50px;background: #FF5722;border: black 0 solid;color: white"
-              >今日签到
-              </button>
-              <span style="color: black; margin-left: 30px">签到可得20小红花</span>
+          <div class="fly-panel fly-signin">
+            <div class="fly-panel-title">
+              <a
+                  href="javascript:;"
+                  class="fly-link"
+                  id="LAY_signinHelp"
+                  onclick="signinHelp()"
+                  style="color:#999;"
+              >说明
+              </a>
+              <span class="fly-signin-days">已连续签到<cite th:text="${sign.day}"></cite>天</span>
+            </div>
+            <div class="fly-panel-main fly-signin-main">
+              <span th:if="!${sign.isIn}">
+              <span class="layui-btn layui-btn-danger" onclick="signIn()">今日签到</span>
+              <span>可获得<cite th:text="${sign.count}"></cite>飞吻</span>
+              </span>
+              <span th:if=" ${sign.isIn}">
+              <button class="layui-btn layui-btn-disabled">今日已签到</button>
+              <span>获得了<cite th:text="${sign.count}"></cite>飞吻</span>
+              </span>
+
             </div>
           </div>
         </section>
@@ -103,6 +115,6 @@
         </section>
       </section>
     </div>
-    
+
   </body>
 </html>

@@ -8,69 +8,155 @@
     <link rel="shortcut icon" th:href="@{${configurations.get('websiteIcon')}}"/>
     <link rel="stylesheet" th:href="@{/blog/amaze/css/base.css}">
     <link rel="stylesheet" th:href="@{/admin/plugins/bootstrap/css/bootstrap.css}">
-
-    <title>---主页</title>
+    <link rel="stylesheet" th:href="@{/admin/plugins/layui/css/layui.css}">
+    <title>主页</title>
     <style>
-
-        .home-header {
-            height: auto;
-            width: 100%;
-            text-align: center;
-        }
-
-        .headPortrait {
-            display: inline-block;
-            vertical-align: middle;
-            border-radius: 50%;
-            width: 100px;
-            height: 100px;
+        a {
+            color: #0E0EFF;
         }
     </style>
   </head>
   <body>
-    <div class="blog">
-      <div th:replace="blog/amaze/header::nav-fragment"></div>
-      <div th:replace="blog/amaze/header::header-fragment"></div>
-      <div class="home-header">
-        <img class="headPortrait" th:src="${user.headPortrait}">
-        <div>
-          <span><b>账号：</b><i th:text="${user.loginUserName}"></i>;</span>&nbsp;&nbsp;&nbsp;
-          <span><b>昵称：</b><i th:text="${user.nickName}"></i>;</span>
-          <br>
-          <span><b>加入的时间：</b><i th:text="${user.createTime}"></i>;</span>
-        </div>
-      </div>
-      <div class="am-g am-g-fixed blog-fixed">
 
-        <div>
-          <main class="articles-list" style="border: black 1px ; margin: 30px auto;width: auto;height: auto;">
-            <ul>
-              <li th:each="msg:${msgList.list}">
-                <a th:href="@{/home(userId=${msg.user1.adminUserId})}">
-                  <img style="width: 50px;height: 50px" class="headPortrait" th:src="${msg.user1.headPortrait}">&nbsp;&nbsp;&nbsp;
-                </a>
-                <span>
-                  <a th:href="@{/home(userId=${msg.user1.adminUserId})}"><span th:text="${msg.user1.nickName}"></span></a>
-                  <span th:text="${msg.title}"></span> 
-                  ，内容为：
-                  <a th:href="@{/blog/detail(blogId=${msg.blog.blogId})}"><span th:utext="${msg.msg}"></span></a>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;时间：
-                  <span th:text="${#dates.format(msg.createTime)}">2023-06-01</span>
-                </span>
-                <HR SIZE="10">
+    <div th:replace="blog/amaze/header::nav-fragment"></div>
+    <div th:replace="blog/amaze/header::header-fragment"></div>
+
+    <div class="layui-container fly-marginTop fly-user-main">
+
+      <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon">&#xe602;</i>
+      </div>
+      <div class="site-mobile-shade"></div>
+
+      <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon">&#xe602;</i>
+      </div>
+      <div class="site-mobile-shade"></div>
+
+
+      <div class="fly-panel fly-panel-user" pad20>
+        <div class="layui-tab layui-tab-brief" lay-filter="user" id="LAY_msg" style="margin-top: 15px;">
+          <button class="layui-btn layui-btn-danger" id="LAY_delallmsg">清空全部消息</button>
+          <div id="LAY_minemsg" style="margin-top: 10px;">
+            <ul class="mine-msg">
+              <li data-id="${msg.id}" th:each="msg:${msgList.list}">
+                <blockquote class="layui-elem-quote">
+                  
+                  <span th:if="${msg.type==0}">
+                    系统消息:<i th:text="${msg.msg}"></i>
+                  </span>
+
+                  <span th:if="${msg.type==1}">
+                  <a th:href="@{/home(userId=${msg.user1.adminUserId})}" target="_blank">
+                    <cite th:text="${msg.user1.nickName}">111</cite>
+                  </a>
+                 &nbsp; 回答了您的文章  &nbsp;
+                  <a target="_blank" th:href="@{/blog/detail(blogId=${msg.blog.blogId})}">
+                    <cite th:text="${msg.blog.blogTitle}"></cite>
+                  </a>
+                  </span>
+
+                  <span th:if="${msg.type==2}">
+                     <a th:href="@{/home(userId=${msg.user1.adminUserId})}" target="_blank">
+                       <cite th:text="${msg.user1.nickName}"></cite>
+                      </a>
+                         &nbsp;  回复了您的评论&nbsp; 
+                      <a th:href="@{/blog/detail(blogId=${msg.blog.blogId})}" target="_blank">
+                         <cite th:text="${msg.msg}"></cite>
+                       </a>
+                       &nbsp;  所属文章：
+                          <a target="_blank" th:href="@{/blog/detail(blogId=${msg.blog.blogId})}">
+                             <cite th:text="${msg.blog.blogTitle}"></cite>
+                           </a>
+                  </span>
+
+                </blockquote>
+                <p>
+                  <span th:text="${#dates.format(msg.createTime,'yyyy-MM-dd')}"></span>
+                  <a
+                      href="javascript:;"
+                      th:attr="data-id=${msg.id}"
+                      onclick="deleteById(this)"
+
+                      class="layui-btn layui-btn-small layui-btn-danger fly-delete"
+                  >删除
+                  </a>
+                </p>
               </li>
             </ul>
-
-          </main>
-
+            <div style="text-align: center">
+              <div id="laypage-main">
+              </div>
+              <script>
+                  layui.use(['laypage', 'layer'], function () {
+                      var laypage = layui.laypage, layer = layui.layer;
+                      //完整功能
+                      laypage.render({
+                          elem: 'laypage-main',
+                          count: [[${msgList.total}]],
+                          curr: [[${msgList.pageNum}]],
+                          limit: [[${msgList.pageSize}]],
+                          layout: ['prev', 'page', 'next', 'skip'],
+                          jump: function (obj, first) {
+                              if (!first) {
+                                  location.href = "/msg/list?page=" + obj.curr;
+                              }
+                          }
+                      });
+                  })
+              </script>
+            </div>
+          </div>
         </div>
       </div>
-
     </div>
 
+    <div style="margin-bottom: 15%"></div>
+    <footer th:replace="blog/amaze/footer::footer-fragment"></footer>
 
+    <script th:src="@{/blog/amaze/js/header.js}"></script>
     <script th:src="@{/blog/plugins/search/click.js}"></script>
     <script th:src="@{/blog/plugins/search/background.js}"></script>
     <script th:src="@{/blog/plugins/comment/websocket.js}"></script>
+    <script>
+        //删除全部
+        $('#LAY_delallmsg').on('click', function () {
+            layer.confirm('确定清空吗？', function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/msg/message/remove?all=" + true,
+                    success: function (r) {
+                        if (r.resultCode === 200) {
+                            layer.msg("清空成功", {icon: 1});
+                            reload()
+                        } else {
+                            layer.msg(r.msg, {icon: 5});
+                        }
+                    }
+                });
+
+            });
+        });
+
+        function deleteById(obj) {
+            var id = $(obj).data('id');
+            layer.confirm('确定要删除吗？', function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/msg/message/remove?all=" + false + "&id=" + id,
+                    success: function (r) {
+                        if (r.resultCode === 200) {
+                            layer.msg("删除成功", {icon: 1});
+                            location.reload();
+                        } else {
+                            layer.msg(r.msg, {icon: 5});
+                        }
+                    }
+                });
+
+            });
+        }
+
+    </script>
   </body>
 </html>

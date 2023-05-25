@@ -72,7 +72,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
 
         Integer parentComment = comment.getParentCommentId();
         if (parentComment.equals(-1)) {
-            blogMsg.setTitle("评论了你的文章");
+            blogMsg.setType(1);
             blogMsg.setUId(blog.getAdminUser().getAdminUserId());
             comment.setParentCommentId(null);
 
@@ -82,7 +82,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
                 replyRemind(comment1);
             }
             blogMsg.setUId(comment1.getUid());
-            blogMsg.setTitle("回复了你的评论");
+            blogMsg.setType(2);
             
         }
         Integer replyComment = comment.getReplyCommentId();

@@ -2,14 +2,10 @@ $(function () {
     //修改个人信息
     $('#updateUserNameButton').click(function () {
         $("#updateUserNameButton").attr("disabled", true);
-        var img = document.getElementById('picture').src;
         var userName = $('#loginUserName').val();
         var nickName = $('#nickName').val();
         var remark = $('#remark').val();
         var sex = $("#sex option:selected").val();
-        var education = $("#education option:selected").val();
-        var birthday = $('#birthday').val();
-        console.log(nickName)
         var email = $('#email').val();
 
         //ajax提交数据
@@ -17,11 +13,8 @@ $(function () {
             "loginUserName": userName,
             "nickName": nickName,
             "email": email,
-            "headPortrait": img,
             "remark": remark,
             "sex": sex,
-            "education": education,
-            "birthday": birthday
         }
         console.log(params)
         $.ajax({

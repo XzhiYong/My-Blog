@@ -1,3 +1,106 @@
+/* 签到 */
+.fly-signin cite {
+    padding: 0 5px;
+    color: #FF5722;
+    font-style: normal;
+}
+
+.fly-signin .layui-badge-dot {
+    top: -7px;
+    margin-left: 0px;
+}
+
+.fly-signin-list {
+    padding: 0;
+    line-height: 30px;
+}
+
+.fly-signin-list .layui-tab-item {
+    padding: 10px;
+    height: 320px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.fly-signin-list li {
+    margin-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px dotted #e2e2e2;
+    white-space: nowrap;
+}
+
+.fly-signin-list li:first-child {
+    margin-top: 0;
+}
+
+.fly-signin-list li:last-child {
+    border: none 0;
+}
+
+.fly-signin-list img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    border-radius: 2px;
+}
+
+.fly-signin-list span {
+    padding-left: 10px;
+}
+
+.fly-signin-list span i {
+    color: #FF5722;
+}
+
+.fly-signin-list .fly-none {
+    padding-top: 20px;
+    min-height: 0;
+}
+
+.fly-signin-days {
+    position: absolute;
+    right: 15px;
+    padding-left: 10px;
+    color: #999;
+}
+
+.fly-signin-main {
+    position: relative;
+    height: 38px;
+    padding: 24px 15px;
+    text-align: center;
+}
+
+.fly-signin-main span {
+    padding-left: 10px;
+}
+.home-header {
+    height: auto;
+    width: 100%;
+    text-align: center;
+}
+
+.headPortrait {
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+}
+
+.mine-msg li > p {
+    position: relative;
+    margin-top: 5px;
+    line-height: 26px;
+    text-align: right;
+}
+
+.mine-msg li > p span {
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #999;
+}
 
 .msg {
     position: relative;
@@ -28,6 +131,7 @@
     border-radius: 50px;
     padding: 2px;
 }
+
 /**
  * Fix the flawed CSS box model - Yes, IE6's box model is better
  * Browser support: IE8+
