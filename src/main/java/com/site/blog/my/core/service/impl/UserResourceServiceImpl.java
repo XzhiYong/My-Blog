@@ -87,7 +87,8 @@ public class UserResourceServiceImpl extends ServiceImpl<UserResourceMapper, Use
         adminUser = adminUserService.getById(adminUser.getAdminUserId());
 
         SysResource sysResource = sysResourceService.getById(id);
-        if (sysResource.getPoint() > adminUser.getPoint()) {
+        int point = adminUser.getPoint() == null ? 0 : adminUser.getPoint();
+        if (sysResource.getPoint() > point) {
             return ResultGenerator.genFailResult("你的积分不足，抓紧多签到！");
         }
         UserResource userResource = new UserResource();
@@ -96,7 +97,7 @@ public class UserResourceServiceImpl extends ServiceImpl<UserResourceMapper, Use
         userResource.setStatus(false);
         save(userResource);
 
-        adminUser.setPoint(adminUser.getPoint() - sysResource.getPoint());
+        adminUser.setPoint(point - sysResource.getPoint());
         return ResultGenerator.genSuccessResult(adminUserService.updateById(adminUser));
     }
 }

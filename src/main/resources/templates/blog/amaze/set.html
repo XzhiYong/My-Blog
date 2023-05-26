@@ -176,7 +176,7 @@
                         if (res.resultCode === 200) {
                             img.src = res.data;
                         } else {
-                            layer.msg(res.msg, {icon: 5});
+                            layer.msg(res.message, {icon: 5});
                         }
                         avatarAdd.find('.loading').hide();
                     }

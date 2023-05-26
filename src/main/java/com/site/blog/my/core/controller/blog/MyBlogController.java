@@ -1,5 +1,6 @@
 package com.site.blog.my.core.controller.blog;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
@@ -335,7 +336,7 @@ public class MyBlogController extends BaseController {
         List<UserResource> userResources = userResourceService.listVo(params);
 
         List<Integer> collect = userResources.stream().map(UserResource::getResourceId).collect(Collectors.toList());
-        List<SysResource> resources = sysResourceService.list(new LambdaQueryWrapper<SysResource>().notIn(SysResource::getId, collect));
+        List<SysResource> resources = sysResourceService.list(new LambdaQueryWrapper<SysResource>().notIn(CollUtil.isNotEmpty(collect), SysResource::getId, collect));
         List<SysResource> resourceList = resources.stream().filter(item -> !collect.contains(item.getId())).collect(Collectors.toList());
         request.setAttribute("list", resourceList);
 
