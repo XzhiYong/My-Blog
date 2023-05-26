@@ -5,6 +5,8 @@ import cn.hutool.extra.servlet.ServletUtil;
 import com.site.blog.my.core.controller.BaseController;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.SysRole;
+import com.site.blog.my.core.util.Result;
+import com.site.blog.my.core.util.ResultGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -151,19 +153,16 @@ public class AdminController extends BaseController {
         }
     }
 
-    @PostMapping("/profile/name")
+    @PostMapping("/user/update")
     @ResponseBody
-    public String nameUpdate(HttpServletRequest request, @RequestBody AdminUser adminUser) {
+    public Result userUpdate(@RequestBody AdminUser adminUser) {
 
         AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
-        if (user == null) {
-            return "admin/login";
-        }
         adminUser.setAdminUserId(user.getAdminUserId());
         if (adminUserService.updateById(adminUser)) {
-            return "success";
+            return ResultGenerator.genSuccessResult();
         } else {
-            return "修改失败";
+            return ResultGenerator.genFailResult("修改失败");
         }
     }
 

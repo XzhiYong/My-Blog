@@ -36,59 +36,59 @@
           </ul>
           <div class="layui-tab-content" style="padding: 20px 0;">
             <div class="layui-form layui-form-pane layui-tab-item layui-show">
-              <form>
-                <div class="layui-form-item">
-                  <label for="L_email" class="layui-form-label">邮箱</label>
-                  <div class="layui-input-inline">
-                    <input
-                        type="text" id="L_email" name="email" required lay-verify="email"
-                        autocomplete="off" th:value="${user.email}" class="layui-input"
-                    >
-                  </div>
+              <div class="layui-form-item">
+                <label for="L_email" class="layui-form-label">邮箱</label>
+                <div class="layui-input-inline">
+                  <input
+                      type="text" id="L_email" name="email" required lay-verify="email"
+                      autocomplete="off" th:value="${user.email}" class="layui-input"
+                  >
                 </div>
-                <div class="layui-form-item">
-                  <label for="L_loginUserName" class="layui-form-label">账号</label>
-                  <div class="layui-input-inline">
-                    <input
-                        type="text" id="L_loginUserName" name="loginUserName" required lay-verify="required"
-                        autocomplete="off" th:value="${user.loginUserName}" class="layui-input"
-                    >
-                  </div>
+              </div>
+              <div class="layui-form-item">
+                <label for="L_loginUserName" class="layui-form-label">账号</label>
+                <div class="layui-input-inline">
+                  <input
+                      type="text" id="L_loginUserName" name="loginUserName" required lay-verify="required"
+                      autocomplete="off" th:value="${user.loginUserName}" class="layui-input"
+                  >
                 </div>
-                <div class="layui-form-item">
-                  <label for="L_username" class="layui-form-label">昵称</label>
-                  <div class="layui-input-inline">
-                    <input
-                        type="text" id="L_username" name="nickName" required lay-verify="required"
-                        autocomplete="off" th:value="${user.nickName}" class="layui-input"
-                    >
-                  </div>
+              </div>
+              <div class="layui-form-item">
+                <label for="L_username" class="layui-form-label">昵称</label>
+                <div class="layui-input-inline">
+                  <input
+                      type="text" id="L_username" name="nickName" required lay-verify="required"
+                      autocomplete="off" th:value="${user.nickName}" class="layui-input"
+                  >
                 </div>
-                <div class="layui-form-item">
-                  <label for="L_username" class="layui-form-label">性别</label>
-                  <div class="layui-input-inline" style="width: 260px">
-                    <input type="radio" name="gender" th:checked="${user.sex==0}" value="0" title="男">
-                    <input type="radio" name="gender" th:checked="${user.sex==1}" value="1" title="女">
-                    <input type="radio" name="gender" th:checked="${user.sex==-1}" value="-1" title="保密">
-                  </div>
+              </div>
+              <div class="layui-form-item">
+                <label for="L_username" class="layui-form-label">性别</label>
+                <div class="layui-input-inline" style="width: 260px">
+                  <input type="radio" class="sex" name="gender" th:checked="${user.sex==0}" value="0" title="男">
+                  <input type="radio" class="sex" name="gender" th:checked="${user.sex==1}" value="1" title="女">
+                  <input type="radio" class="sex" name="gender" th:checked="${user.sex==-1}" value="-1" title="保密">
                 </div>
-                <div class="layui-form-item layui-form-text">
-                  <label for="L_sign" class="layui-form-label">签名</label>
-                  <div class="layui-input-block">
+              </div>
+              <div class="layui-form-item layui-form-text">
+                <label for="L_sign" class="layui-form-label">签名</label>
+                <div class="layui-input-block">
                                 <textarea
+
                                     placeholder="随便写些什么刷下存在感" id="L_sign" name="sign" autocomplete="off"
                                     class="layui-textarea" style="height: 80px;"
+                                    th:text="${user.remark}"
                                 ></textarea>
-                  </div>
+
+                  ALTER TABLE `tpm`.`maintain_record`
+                  ADD COLUMN `check_time` datetime NULL COMMENT '审核时间' ;
                 </div>
-                <div class="layui-form-item">
-                  <button
-                      class="layui-btn" key="set-mine" lay-filter="*" lay-submit alert="true"
-                      reload="true"
-                  >确认修改
-                  </button>
-                </div>
-              </form>
+              </div>
+              <button
+                  class="layui-btn" onclick="updateUser()"
+              >确认修改
+              </button>
             </div>
 
             <div class="layui-form layui-form-pane layui-tab-item">
@@ -185,6 +185,46 @@
                     }
                 });
             });
+        }
+
+        function updateUser() {
+            var email = $("#L_email").val();
+            var username = $("#L_username").val();
+            var loginUserName = $("#L_loginUserName").val();
+            var remark = $("#L_sign").val();
+            var sexs = $(".sex");
+            var sex;
+            for (var i = 0; i < sexs.length; i++) {
+                if (sexs[i].checked) {
+                    console.log(sexs[i])
+                    sex = sexs[i].getAttribute("value");
+                }
+
+            }
+            var data = {
+                "email": email,
+                "nickName": username,
+                "loginUserName": loginUserName,
+                "remark": remark,
+                "sex": sex
+            }
+            layer.confirm('你确定要修改吗？', function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/admin/user/update",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function (r) {
+                        if (r.resultCode === 200) {
+                            location.reload();
+                        } else {
+                            layer.msg(r.message, {icon: 5});
+                        }
+                    }
+                });
+
+            });
+
         }
 
 

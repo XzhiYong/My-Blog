@@ -254,6 +254,8 @@ public class MyBlogController extends BaseController {
 
         setResource(request, (AdminUser) SecurityUtils.getSubject().getPrincipal());
         request.setAttribute("configurations", configService.getAllConfigs());
+        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
+        request.setAttribute("user", user);
         return "blog/" + theme + "/link";
     }
 
