@@ -27,9 +27,14 @@ layui.use(function () {
             href: '/shopping'
         }, {
             title: '我的资源',
-            id: 103,
+            id: 104,
             templet: '<span><i class="layui-icon">&#xe674;</i>&nbsp;&nbsp;&nbsp;我的资源</span>',
             href: '/shopping?type=2'
+        }, {
+            title: '退出登录',
+            id: 105,
+            templet: '<span><i class="layui-icon">&#x1007;</i>&nbsp;&nbsp;&nbsp;退出登录</span>',
+            href: '/admin/logout'
         }]
     });
 
