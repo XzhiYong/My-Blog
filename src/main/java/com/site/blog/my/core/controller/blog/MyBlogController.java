@@ -1,5 +1,7 @@
 package com.site.blog.my.core.controller.blog;
 
+import cn.hutool.core.map.MapUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.site.blog.my.core.controller.BaseController;
 import com.site.blog.my.core.controller.vo.BlogDetailVO;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 public class MyBlogController extends BaseController {
@@ -53,7 +56,7 @@ public class MyBlogController extends BaseController {
         request.setAttribute("configurations", configService.getAllConfigs());
 
         getSign(request, user);
-        
+        setResource(request, user);
         return "blog/" + theme + "/index";
     }
 
@@ -109,6 +112,7 @@ public class MyBlogController extends BaseController {
         AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
         request.setAttribute("user", user);
         request.setAttribute("isUser", user != null);
+        setResource(request, user);
         return "blog/" + theme + "/detail";
     }
 
@@ -221,7 +225,6 @@ public class MyBlogController extends BaseController {
         request.setAttribute("hotTags", tagService.getBlogTagCountForIndex());
         request.setAttribute("configurations", configService.getAllConfigs());
         getSign(request, null);
-
         return "blog/" + theme + "/list";
     }
 
@@ -248,6 +251,7 @@ public class MyBlogController extends BaseController {
             }
         }
 
+        setResource(request, (AdminUser) SecurityUtils.getSubject().getPrincipal());
         request.setAttribute("configurations", configService.getAllConfigs());
         return "blog/" + theme + "/link";
     }
@@ -286,6 +290,8 @@ public class MyBlogController extends BaseController {
         request.setAttribute("pageName", "详情页");
         request.setAttribute("configurations", configService.getAllConfigs());
         getSign(request, null);
+        setResource(request, user);
+
         return "blog/" + theme + "/home";
     }
 
@@ -304,7 +310,40 @@ public class MyBlogController extends BaseController {
         request.setAttribute("user", adminUserService.getUserDetailById(user.getAdminUserId()));
         request.setAttribute("pageName", "账号设置");
         request.setAttribute("configurations", configService.getAllConfigs());
+        setResource(request, user);
         return "blog/" + theme + "/set";
+    }
+
+
+    /**
+     * 个人主页
+     *
+     * @return
+     */
+    @GetMapping({"/shopping"})
+    public String shopping(HttpServletRequest request, @RequestParam(required = false) Integer type) {
+        type = type == null ? 1 : 2;
+        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
+        if (user == null) {
+            return "/admin/login";
+        }
+        request.setAttribute("user", adminUserService.getUserDetailById(user.getAdminUserId()));
+        request.setAttribute("pageName", "积分商城");
+        request.setAttribute("configurations", configService.getAllConfigs());
+        Map<String, Object> params = MapUtil.newHashMap(1);
+        params.put("userId", user.getAdminUserId());
+        List<UserResource> userResources = userResourceService.listVo(params);
+
+        List<Integer> collect = userResources.stream().map(UserResource::getResourceId).collect(Collectors.toList());
+        List<SysResource> resources = sysResourceService.list(new LambdaQueryWrapper<SysResource>().notIn(SysResource::getId, collect));
+        List<SysResource> resourceList = resources.stream().filter(item -> !collect.contains(item.getId())).collect(Collectors.toList());
+        request.setAttribute("list", resourceList);
+
+        request.setAttribute("userResources", userResources);
+        request.setAttribute("type", type);
+
+        setResource(request, user);
+        return "blog/" + theme + "/shopping";
     }
 
 

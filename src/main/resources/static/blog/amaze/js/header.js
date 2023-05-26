@@ -20,6 +20,16 @@ layui.use(function () {
             id: 102,
             templet: '<span><i class="layui-icon">&#xe620;</i>&nbsp;&nbsp;&nbsp;个人设置</span>',
             href: '/set'
+        }, {
+            title: '积分商城',
+            id: 103,
+            templet: '<span><i class="layui-icon">&#xe65e;</i>&nbsp;&nbsp;&nbsp;积分商城</span>',
+            href: '/shopping'
+        }, {
+            title: '我的资源',
+            id: 103,
+            templet: '<span><i class="layui-icon">&#xe674;</i>&nbsp;&nbsp;&nbsp;我的资源</span>',
+            href: '/shopping?type=2'
         }]
     });
 

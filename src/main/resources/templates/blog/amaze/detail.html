@@ -345,15 +345,16 @@
     <script th:src="@{/blog/plugins/highlight/highlight.pack.js}"></script>
     <script th:src="@{/blog/plugins/comment/valid.js}"></script>
     <script th:src="@{/blog/plugins/comment/comment.js}"></script>
-
-    <script th:src="@{/blog/plugins/search/background.js}"></script>
-    <script th:src="@{/blog/plugins/search/click.js}"></script>
     <script th:src="@{/blog/plugins/atwho/jquery.atwho.js}"></script>
     <script th:src="@{/blog/plugins/atwho/jquery.caret.js}"></script>
     <script th:src="@{/blog/plugins/emoji/jquery.emoji.js}"></script>
     <script th:src="@{/blog/plugins/emoji/jquery.mCustomScrollbar.min.js}"></script>
     <!-- sweetalert -->
     <script th:src="@{/admin/plugins/sweetalert/sweetalert.min.js}"></script>
+
+    <script th:src="@{'/blog/plugins/individuation/'+${check}+'.js'}"></script>
+    <script th:src="@{'/blog/plugins/individuation/'+${slide}+'.js'}"></script>
+    <script th:src="@{'/blog/plugins/individuation/'+${background}+'.js'}"></script>
     <script>
         var messageWall_range;  // 定义最后光标对象
 

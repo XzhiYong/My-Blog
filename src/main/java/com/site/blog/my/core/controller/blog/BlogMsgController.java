@@ -34,6 +34,7 @@ public class BlogMsgController extends BaseController {
         HashMap<String, Object> params = MapUtil.newHashMap(1);
         params.put("userId", user.getAdminUserId());
         request.setAttribute("msgList", blogMsgService.msgList(params));
+        setResource(request, user);
         BlogMsg blogMsg = new BlogMsg();
         blogMsg.setState(1);
         blogMsgService.update(blogMsg, new LambdaQueryWrapper<BlogMsg>().eq(BlogMsg::getUId, user.getAdminUserId()));

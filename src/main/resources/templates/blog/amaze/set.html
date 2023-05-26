@@ -154,10 +154,10 @@
     <div style="margin-bottom: 10%"></div>
 
     <footer th:replace="blog/amaze/footer::footer-fragment" class="layer-footer"></footer>
-
-    <script th:src="@{/blog/plugins/search/click.js}"></script>
-    <script th:src="@{/blog/plugins/search/background.js}"></script>
     <script th:src="@{/blog/amaze/js/header.js}"></script>
+    <script th:src="@{'/blog/plugins/individuation/'+${check}+'.js'}"></script>
+    <script th:src="@{'/blog/plugins/individuation/'+${slide}+'.js'}"></script>
+    <script th:src="@{'/blog/plugins/individuation/'+${background}+'.js'}"></script>
     <script>
         //上传图片
         if ($('.upload-img')[0]) {

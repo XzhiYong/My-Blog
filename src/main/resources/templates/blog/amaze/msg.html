@@ -115,9 +115,11 @@
     <footer th:replace="blog/amaze/footer::footer-fragment"></footer>
 
     <script th:src="@{/blog/amaze/js/header.js}"></script>
-    <script th:src="@{/blog/plugins/search/click.js}"></script>
-    <script th:src="@{/blog/plugins/search/background.js}"></script>
     <script th:src="@{/blog/plugins/comment/websocket.js}"></script>
+    <script th:src="@{'/blog/plugins/individuation/'+${check}+'.js'}"></script>
+    <script th:src="@{'/blog/plugins/individuation/'+${slide}+'.js'}"></script>
+    <script th:src="@{'/blog/plugins/individuation/'+${background}+'.js'}"></script>
+
     <script>
         //删除全部
         $('#LAY_delallmsg').on('click', function () {

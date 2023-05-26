@@ -2,11 +2,9 @@ package com.site.blog.my.core.controller;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.site.blog.my.core.entity.AdminUser;
-import com.site.blog.my.core.entity.Sign;
-import com.site.blog.my.core.entity.SignLog;
-import com.site.blog.my.core.entity.SignVo;
+import com.site.blog.my.core.entity.*;
 import com.site.blog.my.core.mapper.RolePermissionMapper;
 import com.site.blog.my.core.mapper.SysUserRoleMapper;
 import com.site.blog.my.core.service.*;
@@ -18,6 +16,8 @@ import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author 夏志勇
@@ -79,6 +79,12 @@ public class BaseController {
     @Resource
     protected SignService signService;
 
+    @Resource
+    protected SysResourceService sysResourceService;
+
+    @Resource
+    protected UserResourceService userResourceService;
+
     protected void getSign(HttpServletRequest request, AdminUser user) {
         if (user == null) {
             user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
@@ -119,6 +125,30 @@ public class BaseController {
             request.setAttribute("sign", signVo);
 
         }
+    }
+
+    protected boolean setResource(HttpServletRequest request, AdminUser adminUser) {
+        if (adminUser == null) {
+            return false;
+        }
+        Map<String, Object> params = MapUtil.newHashMap(2);
+        params.put("userId", adminUser.getAdminUserId());
+        params.put("status", 1);
+        List<UserResource> userResources = userResourceService.listVo(params);
+
+        for (UserResource userResource : userResources) {
+            //点击效果
+            if (userResource.getSysResource().getType() == 1) {
+                request.setAttribute("check", userResource.getSysResource().getFileId());
+            } else if (userResource.getSysResource().getType() == 2) {
+                request.setAttribute("slide", userResource.getSysResource().getFileId());
+            } else if (userResource.getSysResource().getType() == 3) {
+                request.setAttribute("background", userResource.getSysResource().getFileId());
+            }
+
+        }
+
+        return true;
     }
 
 
