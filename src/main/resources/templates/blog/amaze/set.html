@@ -81,8 +81,6 @@
                                     th:text="${user.remark}"
                                 ></textarea>
 
-                  ALTER TABLE `tpm`.`maintain_record`
-                  ADD COLUMN `check_time` datetime NULL COMMENT '审核时间' ;
                 </div>
               </div>
               <button
@@ -106,7 +104,6 @@
             </div>
 
             <div class="layui-form layui-form-pane layui-tab-item">
-              <form action="/user/repass" method="post">
                 <div class="layui-form-item">
                   <label for="L_nowpass" class="layui-form-label">当前密码</label>
                   <div class="layui-input-inline">
@@ -137,15 +134,14 @@
                 </div>
                 <div class="layui-form-item">
                   <button
+                      onclick="updatePassword()"
                       class="layui-btn" key="set-mine" lay-filter="*" lay-submit alert="true"
-                      reload="true"
                   >确认修改
                   </button>
                   <span style="padding-left:20px;">
-                                        <a href="/forgetPass">忘记密码？</a>
+                                        <a th:href="@{/admin/user/password}">忘记密码？</a>
                                 </span>
                 </div>
-              </form>
             </div>
           </div>
         </div>
@@ -225,6 +221,23 @@
 
             });
 
+        }
+
+        function updatePassword() {
+           var repass= $('#L_repass').val();
+           var pass= $('#L_pass').val();
+           var nowPass= $('#L_nowpass').val();
+            $.ajax({
+                type: "POST",
+                url: "/admin/user/repass?repass="+repass+"&pass="+pass+"&nowPass="+nowPass,
+                success: function (r) {
+                    if (r.resultCode === 200) {
+                        location.reload();
+                    } else {
+                        layer.msg(r.message, {icon: 5});
+                    }
+                }
+            });
         }
 
 

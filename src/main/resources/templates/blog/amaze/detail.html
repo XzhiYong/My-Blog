@@ -257,8 +257,8 @@
                               <span th:if="${user}">
                                       <a
                                           href="javascript:void(0);" onclick="deletecomment(this)"
-                                          th:attr="data-commentid=${comment.cid}"
-                                          th:if="${user.adminUserId}==${comment.uid}"
+                                          th:attr="data-commentid=${reply.cid}"
+                                          th:if="${user.adminUserId}==${reply.uid}"
                                       ><span
                                           class="summary-text small"
                                       >删除</span></a>

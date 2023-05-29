@@ -9,6 +9,7 @@ import com.site.blog.my.core.service.RoleService;
 import com.site.blog.my.core.util.MD5Util;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -91,6 +92,27 @@ public class AdminUserController extends BaseController {
     public Result getById(@PathVariable String id) {
         return ResultGenerator.genSuccessResult(adminUserService.getById(id));
 
+    }
+
+    @ResponseBody
+    @PostMapping("/repass")
+    public Result repass(@RequestParam String nowPass, @RequestParam String pass, @RequestParam String repass) {
+        if (StringUtils.isAnyBlank(nowPass, pass, repass)) {
+            return ResultGenerator.genFailResult("密码不能为空");
+        }
+        if (!StringUtils.equals(pass, repass)) {
+            return ResultGenerator.genFailResult("两次输入的密码不一致");
+        }
+        AdminUser principal = (AdminUser) SecurityUtils.getSubject().getPrincipal();
+        AdminUser user = adminUserService.getById(principal.getAdminUserId());
+        String md5Pass = MD5Util.MD5Encode(nowPass, "UTF-8");
+        if (!StringUtils.equals(md5Pass, user.getLoginPassword())) {
+            return ResultGenerator.genFailResult("输入的密码不正确");
+        }
+        //重新分配盐
+        principal.setLoginPassword(MD5Util.MD5Encode(pass, "UTF-8"));
+        adminUserService.updateById(principal);
+        return ResultGenerator.genSuccessResult();
     }
 
     public static void main(String[] args) {

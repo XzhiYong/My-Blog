@@ -72,6 +72,42 @@ function signinHelp() {
     });
 }
 
+function signinLog() {
+    var data;
+
+    layui.layer.open({  // 打开弹出框
+        type: 1,  // 这个很关键！1为页面层
+        title: '签到记录',
+        shadeClose: true,  //开启遮罩关闭
+        // shade: 0.8,
+        area: ['30%', '60%'],
+        maxmin: true,
+        content: '<div class="layui-container" style="width: 98%"><table id="transfer" lay-filter="transfer" class=""></table></div>',
+        // 弹出层表格定义
+        success: function () {
+            layui.table.render({
+                elem: '#transfer'  // 弹出层表格id
+                , url: "/sign/log"// 后端请求URL地址
+                // ,method: 'post'
+                , page: true
+                // 以下为transfer表格的定义
+                , cols: [[
+                    {field: 'createTime', title: '打卡时间', width: 200,templet : "<div>{{layui.util.toDateString(d.createTime, 'yyyy年MM月dd日 HH:mm:ss')}}</div>"}
+                    , {field: 'point', title: '奖励积分'}
+
+                ]]
+                , response: {
+                    statusName: 'resultCode' //规定数据状态的字段名称，默认：code
+                    , statusCode: 200 //规定成功的状态码，默认：0
+                    , msgName: 'message' //规定状态信息的字段名称，默认：msg
+                    , countName: 'total' //规定数据总数的字段名称，默认：count
+                    , dataName: 'data' //规定数据列表的字段名称，默认：data
+                }
+            })
+        }
+    });
+}
+
 function signIn() {
     $.ajax({
         type: "POST",
