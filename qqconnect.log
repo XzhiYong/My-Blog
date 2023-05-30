@@ -101,3 +101,8 @@
 2    DEBUG [2023-05-30 17:50:50]  TemplateLoader.findTemplateSource("admin/login_zh_CN.ftlh"): Not found
 4    DEBUG [2023-05-30 17:50:50]  TemplateLoader.findTemplateSource("admin/login_zh.ftlh"): Not found
 4    DEBUG [2023-05-30 17:50:50]  TemplateLoader.findTemplateSource("admin/login.ftlh"): Not found
+0    DEBUG [2023-05-30 17:52:28]  Couldn't find template in cache for "blog/amaze/index.ftlh"("zh_CN", UTF-8, parsed); will try to load it.
+4    DEBUG [2023-05-30 17:52:28]  TemplateLoader.findTemplateSource("blog/amaze/index_zh_CN.ftlh"): Not found
+4    DEBUG [2023-05-30 17:52:28]  TemplateLoader.findTemplateSource("blog/amaze/index_zh.ftlh"): Not found
+6    DEBUG [2023-05-30 17:52:28]  TemplateLoader.findTemplateSource("blog/amaze/index.ftlh"): Not found
+14   DEBUG [2023-05-30 17:52:28]  "blog/amaze/index.ftlh"("zh_CN", UTF-8, parsed) cached copy not yet stale; using cached.
