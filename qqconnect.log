@@ -93,3 +93,7 @@
 2    DEBUG [2023-05-30 17:07:50]  TemplateLoader.findTemplateSource("admin/login_zh_CN.ftlh"): Not found
 4    DEBUG [2023-05-30 17:07:50]  TemplateLoader.findTemplateSource("admin/login_zh.ftlh"): Not found
 4    DEBUG [2023-05-30 17:07:50]  TemplateLoader.findTemplateSource("admin/login.ftlh"): Not found
+0    DEBUG [2023-05-30 17:08:48]  Couldn't find template in cache for "admin/login.ftlh"("zh_CN", UTF-8, parsed); will try to load it.
+3    DEBUG [2023-05-30 17:08:48]  TemplateLoader.findTemplateSource("admin/login_zh_CN.ftlh"): Not found
+4    DEBUG [2023-05-30 17:08:48]  TemplateLoader.findTemplateSource("admin/login_zh.ftlh"): Not found
+4    DEBUG [2023-05-30 17:08:48]  TemplateLoader.findTemplateSource("admin/login.ftlh"): Not found
