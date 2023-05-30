@@ -15,6 +15,5 @@ import java.io.Serializable;
  */
 public interface SysResourceMapper extends BaseMapper<SysResource> {
 
-    @Override
-    SysResource selectById(Serializable id);
+    SysResource selectById(Integer id);
 }

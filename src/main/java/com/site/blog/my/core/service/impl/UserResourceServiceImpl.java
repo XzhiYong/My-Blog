@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.SysResource;
 import com.site.blog.my.core.entity.UserResource;
+import com.site.blog.my.core.entity.UserResourceLog;
 import com.site.blog.my.core.mapper.UserResourceMapper;
 import com.site.blog.my.core.service.AdminUserService;
 import com.site.blog.my.core.service.SysResourceService;
+import com.site.blog.my.core.service.UserResourceLogService;
 import com.site.blog.my.core.service.UserResourceService;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
@@ -36,6 +38,9 @@ public class UserResourceServiceImpl extends ServiceImpl<UserResourceMapper, Use
 
     @Autowired
     private SysResourceService sysResourceService;
+
+    @Autowired
+    private UserResourceLogService userResourceLogService;
 
     @Override
     public List<UserResource> listVo(Map<String, Object> params) {
@@ -98,6 +103,12 @@ public class UserResourceServiceImpl extends ServiceImpl<UserResourceMapper, Use
         save(userResource);
 
         adminUser.setPoint(point - sysResource.getPoint());
+        //生成兑换记录
+        UserResourceLog userResourceLog = new UserResourceLog();
+        userResourceLog.setResourceId(id);
+        userResourceLog.setUserId(adminUser.getAdminUserId());
+        userResourceLog.setPoint(sysResource.getPoint());
+        userResourceLogService.save(userResourceLog);
         return ResultGenerator.genSuccessResult(adminUserService.updateById(adminUser));
     }
 }

@@ -13,17 +13,17 @@ public class SignUtil {
     //计算奖励
     public static Integer calculatedReward(int day) {
         if (day <= 5) {
-            return 5;
+            return 50;
         } else if (day <= 10) {
-            return 10;
+            return 100;
         } else if (day <= 15) {
-            return 15;
+            return 150;
         } else if (day <= 20) {
-            return 20;
+            return 200;
         } else if (day <= 30) {
-            return 25;
+            return 250;
         } else {
-            return 30;
+            return 300;
         }
 
     }

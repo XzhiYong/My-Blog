@@ -85,6 +85,9 @@ public class BaseController {
     @Resource
     protected UserResourceService userResourceService;
 
+    @Resource
+    protected UserResourceLogService userResourceLogService;
+
     protected void getSign(HttpServletRequest request, AdminUser user) {
         if (user == null) {
             user = (AdminUser) SecurityUtils.getSubject().getPrincipal();

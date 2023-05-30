@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.site.blog.my.core.mapper.UserResourceLogMapper">
+
+    <select id="getList" resultMap="getListMap" parameterType="map">
+
+        select *
+        from tb_user_resource_log
+        where user_id = #{param.userId}
+
+    </select>
+
+    <resultMap id="getListMap" type="com.site.blog.my.core.entity.UserResourceLog">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="resource_id" property="resourceId"/>
+        
+        <association property="user" column="user_id" autoMapping="true"
+                     javaType="com.site.blog.my.core.entity.AdminUser"
+                     select="com.site.blog.my.core.mapper.AdminUserMapper.selectByPrimaryKey"/>
+        
+        <association property="sysResource" column="resource_id" autoMapping="true"
+                     javaType="com.site.blog.my.core.entity.SysResource"
+                     select="com.site.blog.my.core.mapper.SysResourceMapper.selectById"/>
+
+    </resultMap>
+</mapper>

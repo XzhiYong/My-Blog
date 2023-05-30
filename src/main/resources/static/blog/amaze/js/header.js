@@ -73,7 +73,6 @@ function signinHelp() {
 }
 
 function signinLog() {
-    var data;
 
     layui.layer.open({  // 打开弹出框
         type: 1,  // 这个很关键！1为页面层
