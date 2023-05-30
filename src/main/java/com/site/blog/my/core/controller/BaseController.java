@@ -7,8 +7,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.site.blog.my.core.entity.*;
 import com.site.blog.my.core.mapper.RolePermissionMapper;
 import com.site.blog.my.core.mapper.SysUserRoleMapper;
+import com.site.blog.my.core.oauth2.properties.OAuth2Properties;
 import com.site.blog.my.core.service.*;
 import com.site.blog.my.core.util.QiniuUtils;
+import com.site.blog.my.core.util.RedisUtil;
 import com.site.blog.my.core.util.SendSmsUtil;
 import com.site.blog.my.core.util.SignUtil;
 import org.apache.shiro.SecurityUtils;
@@ -87,6 +89,15 @@ public class BaseController {
 
     @Resource
     protected UserResourceLogService userResourceLogService;
+
+    @Resource
+    protected UserSocialService userSocialService;
+
+    @Resource
+    protected OAuth2Properties oAuth2Properties;
+
+    @Resource
+    protected RedisUtil redisUtil;
 
     protected void getSign(HttpServletRequest request, AdminUser user) {
         if (user == null) {

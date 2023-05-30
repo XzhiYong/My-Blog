@@ -13,6 +13,8 @@
     <link rel="stylesheet" th:href="@{/admin/dist/css/ionicons.min.css}">
     <!-- Theme style -->
     <link rel="stylesheet" th:href="@{/admin/dist/css/adminlte.min.css}">
+
+    <link rel="stylesheet" th:href="@{/admin/plugins/layui/css/layui.css}">
     <style>
         canvas {
             display: block;
@@ -29,7 +31,7 @@
         }
     </style>
   </head>
-  <body class="hold-transition login-page">
+  <body class="hold-transition login-page" style="font-size:14px;color: #999">
     <div id="particles">
     </div>
     <div class="login-box">
@@ -84,21 +86,16 @@
                   </span>
               </div>
 
+              <div class="layui-form-item fly-form-app" style="margin-top: 20px">
+                <span>或者使用社交账号登入</span>
 
-              <div class="col-4" style="height: 25px">
-
-              </div>
-              <div class="col-9">
-                <span>
-                  使用第三方账号登录
-              </span>&nbsp;&nbsp;
-                <img
-                    src="http://qny.xiazy.xyz/blog/tencent-qq.svg"
-                    style="width: 35px;height:35px;"
-                    onclick="toLogin()"
+                <a
+                    th:href="@{/app/qq}" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})"
+                    class="iconfont icon-qq" title="QQ登入"
                 >
+                  <i class="layui-icon">&#xe676;</i>
+                </a>
               </div>
-            </div>
           </form>
 
         </div>
@@ -113,10 +110,13 @@
     <script th:src="@{/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
     <script th:src="@{/admin/dist/js/plugins/particles.js}"></script>
     <script th:src="@{/admin/dist/js/plugins/login-bg-particles.js}"></script>
-    <script type="text/javascript"  charset="utf-8"
-            src="http://connect.qq.com/qc_jssdk.js"
-            data-appid="102048085"
-            data-redirecturi="http://192.168.3.182:5689/"
+    <script th:src="@{/admin/plugins/layui/layui.js}"></script>
+
+    <script
+        type="text/javascript" charset="utf-8"
+        src="http://connect.qq.com/qc_jssdk.js"
+        data-appid="102048085"
+        data-redirecturi="http://192.168.3.182:5689/"
     ></script>
     <script>
         function toLogin() {

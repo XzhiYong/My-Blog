@@ -29,6 +29,13 @@
     </properties>
 
     <dependencies>
+        <!-- QQ登录依赖包 -->
+        <dependency>
+            <groupId>net.gplatform</groupId>
+            <artifactId>Sdk4J</artifactId>
+            <version>2.0</version>
+        </dependency>
+
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-generator</artifactId>

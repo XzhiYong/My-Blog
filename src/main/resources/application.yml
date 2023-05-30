@@ -17,8 +17,18 @@ qiniu:
   url: http://qny.xiazy.xyz
   accessKey: gex8TrRK3pHvpUW2QBftP3WwDPQ6hFtAKDw-KVKO
   accessSecretKey: g0VJR_z6jxVy5aka_rzg6fJZD9bNixS4zECLSvV0
-  
+
 tengxunyun:
   sms:
     accessKey: JTaNI+PzbuR3GpN1+qRkEoqswh3rXLUpA3AF/BsH4MZK1D26BS/Bqg==
     accessSecretKey: +ROMGnqGnCipwEz8AoEnUEmTgEgYZTZfgJ+ZirkapxwP1Mbzx04AOw==
+
+eblog:
+  oauth2:
+    qq:
+      social-name: QQ
+      social-type: qq_id
+      client-id: 102048355
+      client-secret: Ut42mIafeQyJQK0R
+      grant-type: authorization_code
+      redirect-uri: https://graph.qq.com/oauth2.0/qq/success

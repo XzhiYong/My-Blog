@@ -76,10 +76,11 @@ public class ShiroConfig {
         filterMap.put("/static/**", "anon");
         filterMap.put("/admin/dist/**", "anon");
         filterMap.put("/templates/**", "anon");
+        filterMap.put("/app/qq", "anon");
         filterMap.put("/admin/plugins/**", "anon");
         filterMap.put("/sign/in", "anon");
-        filterMap.put("/*", "anon");
         filterMap.put("/**", "auth");
+        filterMap.put("/*", "anon");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
 
         return shiroFilter;
