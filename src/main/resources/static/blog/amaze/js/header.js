@@ -55,12 +55,12 @@ function signinHelp() {
             , '<tr><th>连续签到天数</th><th>每天可获飞吻</th></tr>'
             , '</thead>'
             , '<tbody>'
-            , '<tr><td>0-5</td><td>5</td></tr>'
-            , '<tr><td>5-10</td><td>10</td></tr>'
-            , '<tr><td>10-15</td><td>15</td></tr>'
-            , '<tr><td>15-20</td><td>20</td></tr>'
-            , '<tr><td>20-30</td><td>25</td></tr>'
-            , '<tr><td>≥30</td><td>30</td></tr>'
+            , '<tr><td>0-5</td><td>50</td></tr>'
+            , '<tr><td>5-10</td><td>100</td></tr>'
+            , '<tr><td>10-15</td><td>150</td></tr>'
+            , '<tr><td>15-20</td><td>200</td></tr>'
+            , '<tr><td>20-30</td><td>250</td></tr>'
+            , '<tr><td>≥30</td><td>300</td></tr>'
             , '</tbody>'
             , '</table>'
             , '<ul>'
@@ -91,7 +91,12 @@ function signinLog() {
                 , page: true
                 // 以下为transfer表格的定义
                 , cols: [[
-                    {field: 'createTime', title: '打卡时间', width: 200,templet : "<div>{{layui.util.toDateString(d.createTime, 'yyyy年MM月dd日 HH:mm:ss')}}</div>"}
+                    {
+                        field: 'createTime',
+                        title: '打卡时间',
+                        width: 200,
+                        templet: "<div>{{layui.util.toDateString(d.createTime, 'yyyy年MM月dd日 HH:mm:ss')}}</div>"
+                    }
                     , {field: 'point', title: '奖励积分'}
 
                 ]]

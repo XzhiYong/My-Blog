@@ -17,6 +17,7 @@
                               class="link avatar avatar-image"
                           >
                         </a>
+
                       </div>
                       <div class="author-lockup blog-flex1">
                         <a
@@ -46,7 +47,10 @@
                   <a itemtype="url" th:href="@{'/blog/' + ${blog.blogId}}">
                     <th:block th:text="${blog.blogTitle}"></th:block>
                   </a>
+                  <span class="layui-badge layui-bg-red" th:text="${blog.tag}"></span>
+
                 </h1>
+
                 <div class="post-content-preview article-body">
                   <a th:href="@{'/blog/' + ${blog.blogId}}">
                     <img th:src="@{${blog.blogCoverImage}}" alt="">
@@ -55,6 +59,7 @@
                 <div class="clearfix topic-footer">
                   <span class="pull-left time mobile_time">2018-01</span>
                 </div>
+              </div>
             </article>
           </th:block>
         </th:block>
@@ -125,7 +130,6 @@
     </main>
 
   </div>
-  
-  
+
 
 </html>

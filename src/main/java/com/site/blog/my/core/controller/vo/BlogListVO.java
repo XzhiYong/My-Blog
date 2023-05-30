@@ -25,6 +25,8 @@ public class BlogListVO implements Serializable {
 
     private AdminUser adminUser;
 
+    private String tag;
+
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date createTime;
 

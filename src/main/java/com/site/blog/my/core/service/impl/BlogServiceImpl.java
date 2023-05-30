@@ -1,5 +1,6 @@
 package com.site.blog.my.core.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.site.blog.my.core.controller.vo.BlogDetailVO;
@@ -227,6 +228,11 @@ public class BlogServiceImpl implements BlogService {
             params.put("userId", userId);//过滤发布状态下的数据
         }
         List<Blog> blogList = blogMapper.findBlogList(params);
+        if (CollUtil.isNotEmpty(blogList)) {
+            //最新
+            Blog blog = blogList.get(0);
+            blog.setTag("最新");
+        }
         List<BlogListVO> blogListVOS = getBlogListVOsByBlogs(blogList);
         int total = blogMapper.getTotalBlogs(params);
         PageResult pageResult = new PageResult(blogListVOS, total, params.getLimit(), params.getPage());

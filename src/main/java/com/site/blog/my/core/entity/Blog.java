@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
+
 @Data
 public class Blog {
     private Long blogId;
@@ -38,6 +39,9 @@ public class Blog {
     private AdminUser adminUser;
 
     private Integer adminUserId;
+
+    private String tag;
+
 
     public Long getBlogId() {
         return blogId;
