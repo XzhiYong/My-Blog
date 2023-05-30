@@ -1,5 +1,7 @@
 server:
   port: 9898
+eblog:
+  host: http://www.xiazy.xyz
 spring:
   servlet:
     multipart:
@@ -19,7 +21,7 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
-    
+
 logging:
   level:
     com:

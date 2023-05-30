@@ -31,4 +31,4 @@ eblog:
       client-id: 102048355
       client-secret: Ut42mIafeQyJQK0R
       grant-type: authorization_code
-      redirect-uri: https://graph.qq.com/oauth2.0/qq/success
+      redirect-uri: ${eblog.host}/oauth2.0/qq/success
