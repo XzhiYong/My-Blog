@@ -58,8 +58,7 @@ public class LinkServiceImpl implements LinkService {
         List<BlogLink> links = blogLinkMapper.findLinkList(null);
         if (!CollectionUtils.isEmpty(links)) {
             //根据type进行分组
-            Map<Byte, List<BlogLink>> linksMap = links.stream().collect(Collectors.groupingBy(BlogLink::getLinkType));
-            return linksMap;
+            return links.stream().collect(Collectors.groupingBy(BlogLink::getLinkType));
         }
         return null;
     }

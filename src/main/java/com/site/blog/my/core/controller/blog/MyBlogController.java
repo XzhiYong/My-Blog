@@ -328,7 +328,7 @@ public class MyBlogController extends BaseController {
         type = type == null ? 1 : 2;
         AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
         if (user == null) {
-            return "/admin/login";
+            return "admin/login";
         }
         request.setAttribute("user", adminUserService.getUserDetailById(user.getAdminUserId()));
         request.setAttribute("pageName", "积分商城");

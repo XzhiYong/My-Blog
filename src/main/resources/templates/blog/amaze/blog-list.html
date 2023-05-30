@@ -47,7 +47,10 @@
                   <a itemtype="url" th:href="@{'/blog/' + ${blog.blogId}}">
                     <th:block th:text="${blog.blogTitle}"></th:block>
                   </a>
-                  <span class="layui-badge layui-bg-red" th:text="${blog.tag}"></span>
+                  <span th:if="${blog.tag}">
+                   <span class="layui-badge layui-bg-red" th:text="${blog.tag}"></span>
+
+                  </span>
 
                 </h1>
 

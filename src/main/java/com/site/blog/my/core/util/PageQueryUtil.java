@@ -2,7 +2,7 @@ package com.site.blog.my.core.util;
 
 import cn.hutool.core.map.MapUtil;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,7 +13,7 @@ import java.util.Map;
  * @email 2449207463@qq.com
  * @link http://13blog.site
  */
-public class PageQueryUtil extends LinkedHashMap<String, Object> {
+public class PageQueryUtil extends HashMap<String, Object> {
     //当前页码
     private int page;
     //每页条数

@@ -25,8 +25,7 @@ public class TagServiceImpl implements TagService {
     public PageResult getBlogTagPage(PageQueryUtil pageUtil) {
         List<BlogTag> tags = blogTagMapper.findTagList(pageUtil);
         int total = blogTagMapper.getTotalTags(pageUtil);
-        PageResult pageResult = new PageResult(tags, total, pageUtil.getLimit(), pageUtil.getPage());
-        return pageResult;
+        return new PageResult(tags, total, pageUtil.getLimit(), pageUtil.getPage());
     }
 
     @Override

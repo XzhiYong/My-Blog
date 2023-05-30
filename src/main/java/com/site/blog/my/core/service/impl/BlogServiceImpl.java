@@ -41,7 +41,6 @@ public class BlogServiceImpl implements BlogService {
     private final BlogTagRelationMapper blogTagRelationMapper;
 
     private final QiniuUtils qiniuUtils;
-
     @Lazy
     private final BlogCommentService blogCommentService;
 
@@ -235,8 +234,7 @@ public class BlogServiceImpl implements BlogService {
         }
         List<BlogListVO> blogListVOS = getBlogListVOsByBlogs(blogList);
         int total = blogMapper.getTotalBlogs(params);
-        PageResult pageResult = new PageResult(blogListVOS, total, params.getLimit(), params.getPage());
-        return pageResult;
+        return new PageResult(blogListVOS, total, params.getLimit(), params.getPage());
     }
 
     @Override
@@ -268,16 +266,14 @@ public class BlogServiceImpl implements BlogService {
     public PageResult getBlogsPageByTag(Integer tagId, int page) {
         BlogTag tag = tagMapper.selectByPrimaryKey(tagId);
         if (tag != null && page > 0) {
-            Map<String, Object> param = new HashMap();
-            param.put("page", page);
-            param.put("limit", 9);
-            param.put("tagId", tag.getTagId());
-            PageQueryUtil pageUtil = new PageQueryUtil(param);
+            PageQueryUtil pageUtil = new PageQueryUtil(new HashMap<>());
+            pageUtil.put("page", page);
+            pageUtil.put("limit", 9);
+            pageUtil.put("tagId", tag.getTagId());
             List<Blog> blogList = blogMapper.getBlogsPageByTagId(pageUtil);
             List<BlogListVO> blogListVOS = getBlogListVOsByBlogs(blogList);
             int total = blogMapper.getTotalBlogsByTagId(pageUtil);
-            PageResult pageResult = new PageResult(blogListVOS, total, pageUtil.getLimit(), pageUtil.getPage());
-            return pageResult;
+            return new PageResult(blogListVOS, total, pageUtil.getLimit(), pageUtil.getPage());
         }
         return null;
     }
@@ -300,8 +296,7 @@ public class BlogServiceImpl implements BlogService {
                 List<Blog> blogList = blogMapper.findBlogList(pageUtil);
                 List<BlogListVO> blogListVOS = getBlogListVOsByBlogs(blogList);
                 int total = blogMapper.getTotalBlogs(pageUtil);
-                PageResult pageResult = new PageResult(blogListVOS, total, pageUtil.getLimit(), pageUtil.getPage());
-                return pageResult;
+                return new PageResult(blogListVOS, total, pageUtil.getLimit(), pageUtil.getPage());
             }
         }
         return null;
@@ -309,18 +304,16 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public PageResult getBlogsPageBySearch(String keyword, int page) {
-        if (page > 0 && PatternUtil.validKeyword(keyword)) {
-            Map param = new HashMap();
-            param.put("page", page);
-            param.put("limit", 9);
-            param.put("keyword", keyword);
-            param.put("blogStatus", 2);//过滤发布状态下的数据
-            PageQueryUtil pageUtil = new PageQueryUtil(param);
+        if (PatternUtil.validKeyword(keyword)) {
+            PageQueryUtil pageUtil = new PageQueryUtil(new HashMap<>());
+            pageUtil.put("page", page);
+            pageUtil.put("limit", 9);
+            pageUtil.put("keyword", keyword);
+            pageUtil.put("blogStatus", 2);//过滤发布状态下的数据
             List<Blog> blogList = blogMapper.findBlogList(pageUtil);
             List<BlogListVO> blogListVOS = getBlogListVOsByBlogs(blogList);
             int total = blogMapper.getTotalBlogs(pageUtil);
-            PageResult pageResult = new PageResult(blogListVOS, total, pageUtil.getLimit(), pageUtil.getPage());
-            return pageResult;
+            return new PageResult(blogListVOS, total, pageUtil.getLimit(), pageUtil.getPage());
         }
         return null;
     }
@@ -329,11 +322,7 @@ public class BlogServiceImpl implements BlogService {
     public BlogDetailVO getBlogDetailBySubUrl(String subUrl) {
         Blog blog = blogMapper.selectBySubUrl(subUrl);
         //不为空且状态为已发布
-        BlogDetailVO blogDetailVO = getBlogDetailVO(blog);
-        if (blogDetailVO != null) {
-            return blogDetailVO;
-        }
-        return null;
+        return getBlogDetailVO(blog);
     }
 
     @Override
