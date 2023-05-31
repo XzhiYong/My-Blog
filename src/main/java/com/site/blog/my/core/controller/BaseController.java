@@ -158,6 +158,8 @@ public class BaseController {
                 request.setAttribute("slide", userResource.getSysResource().getFileId());
             } else if (userResource.getSysResource().getType() == 3) {
                 request.setAttribute("background", userResource.getSysResource().getFileId());
+            } else if (userResource.getSysResource().getType() == 4) {
+                request.setAttribute("cartoonCharacter", userResource.getSysResource().getFileId());
             }
 
         }

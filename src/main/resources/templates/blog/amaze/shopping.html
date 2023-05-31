@@ -29,7 +29,7 @@
             th:each="item:${list}"
         >
           <div class="grid-demo grid-demo-bg1">
-            <img th:src="${item.img}">
+            <img th:src="${item.img} " style="height: 150px">
             <hr>
             <b> 名称：</b>
             <span th:text="${item.name}">鼠标拖动效果</span>&nbsp;&nbsp;
@@ -100,7 +100,7 @@
             th:each="item:${userResources}"
         >
           <div class="grid-demo grid-demo-bg1">
-            <img th:src="${item.sysResource.img}">
+            <img th:src="${item.sysResource.img} " style="height: 150px">
             <hr>
             <b> 名称：</b>
             <span th:text="${item.sysResource.name}">鼠标拖动效果</span>&nbsp;&nbsp;
