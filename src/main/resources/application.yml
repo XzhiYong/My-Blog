@@ -25,6 +25,13 @@ tengxunyun:
 
 eblog:
   oauth2:
+    weibo:
+      social-name: 微博
+      social-type: weibo_id
+      client-id: 1967037305
+      client-secret: aeb612c736c30b2bcedf08765e3c060f
+      grant-type: authorization_code
+      redirect-uri: ${eblog.host}/oauth2.0/weibo/success
     qq:
       social-name: QQ
       social-type: qq_id

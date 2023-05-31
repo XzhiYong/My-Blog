@@ -7,6 +7,7 @@ import com.site.blog.my.core.config.Constants;
 import com.site.blog.my.core.controller.BaseController;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.oauth2.handler.impl.OAuth2QQHandlerImpl;
+import com.site.blog.my.core.oauth2.handler.impl.OAuth2WeiboHandlerImpl;
 import com.site.blog.my.core.oauth2.utils.OAuth2Utils;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
@@ -42,6 +43,34 @@ public class OAuth2Controller extends BaseController {
         }
 
         return userSocialService.doUnBind(type, profileId.getAdminUserId());
+    }    /* ========================== 微博登录 ========================== */
+
+    @GetMapping("/app/weibo")
+    public String toWeiboLogin() {
+        return "redirect:" + Constants.WEIBO_OAUTH2;
+    }
+
+    @GetMapping("/app/binding/weibo")
+    public String bindingWeibo(@RequestParam String redirect) {
+        Integer id = ShiroUtil.getProfileId();
+        if (id == null) {
+            return "admin/login";
+        }
+        String uuid = UUID.fastUUID().toString();
+        redisUtil.set(Constants.WEIBO_BIND_CODE + id, uuid);
+        redirect += "@" + SecureUtil.md5(uuid);
+        String format = StrUtil.format(Constants.WEIBO_OAUTH2_URL_BIND_TEM, oAuth2Properties.getWeibo().getClientId(), redirect, Constants.WEIBO_REDIRECT_URI);
+        return "redirect:" + format;
+    }
+
+    @GetMapping("/oauth2.0/weibo/fail")
+    public String weiBoFail() {
+        return "redirect:/login";
+    }
+
+    @GetMapping("/oauth2.0/weibo/success")
+    public String weiBo(@RequestParam String code, @RequestParam(required = false) String state) {
+        return OAuth2Utils.socialLoginSuccess(new OAuth2WeiboHandlerImpl(code, state, userSocialService, redisUtil));
     }
 
     /* ========================== QQ登录 ========================== */
@@ -55,7 +84,7 @@ public class OAuth2Controller extends BaseController {
     public String bindingQq(@RequestParam String redirect) {
         Integer id = ShiroUtil.getProfileId();
         if (id == null) {
-            return "redirect:/login";
+            return "admin/login";
         }
         String uuid = UUID.fastUUID().toString();
         redisUtil.set(Constants.QQ_BIND_CODE + id, uuid);

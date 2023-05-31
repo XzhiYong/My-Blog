@@ -77,6 +77,8 @@ public class ShiroConfig {
         filterMap.put("/admin/dist/**", "anon");
         filterMap.put("/templates/**", "anon");
         filterMap.put("/app/qq", "anon");
+        filterMap.put("/app/weibo", "anon");
+        filterMap.put("/oauth2.0/weibo/success", "anon");
         filterMap.put("/admin/plugins/**", "anon");
         filterMap.put("/sign/in", "anon");
 

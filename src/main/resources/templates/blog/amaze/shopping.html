@@ -13,7 +13,7 @@
     <div th:replace="blog/amaze/header::nav-fragment"></div>
     <div th:replace="blog/amaze/header::header-fragment"></div>
     <span th:if="${type}==1">
-          <div style="width: 90%;margin:auto">
+          <div style="width: 90%;margin-left: 15%">
       <h3>
         <span>当前积分： <i class="layui-icon">&#xe65e;</i> &nbsp;<span th:text="${user.point}"></span></span>
           &nbsp;
@@ -24,12 +24,15 @@
       </h3>
       <div class="layui-row layui-col-space30">
         <div
-            class="layui-col-md2"
-            style="border: 1px #696969 solid;margin-right: 15px;margin-top: 10px"
+            class="layui-col-md3"
+            style="border: 2px #696969 solid;margin-right: 15px;margin-top: 10px;box-shadow: 10px 10px 3px rgba(0,0,0,0.9);border-radius: 30px;"
             th:each="item:${list}"
         >
           <div class="grid-demo grid-demo-bg1">
-            <img th:src="${item.img} " style="height: 150px">
+            <div style="height: 70%;border: 1px #696969 solid">
+              <img th:src="${item.img} ">
+            </div>
+            <div style="height: 30%">
             <hr>
             <b> 名称：</b>
             <span th:text="${item.name}">鼠标拖动效果</span>&nbsp;&nbsp;
@@ -43,6 +46,7 @@
               <i class="layui-icon">&#xe65e;</i>
               换购
             </button>
+            </div>
           </div>
         </div>
 
@@ -92,16 +96,19 @@
 
     </span>
     <span th:if="${type}==2">
-          <div style="width: 90%;margin:auto">
+          <div style="width: 90%;margin-left: 15%">
       <div class="layui-row layui-col-space30">
         <div
             class="layui-col-md3"
-            style="border: 0 #696969 solid;margin-right: 15px;margin-top: 10px"
+            style="border: 2px #696969 solid;margin-right: 15px;margin-top: 10px;box-shadow: 10px 10px 3px rgba(0,0,0,0.9);border-radius: 30px;"
             th:each="item:${userResources}"
         >
           <div class="grid-demo grid-demo-bg1">
-            <img th:src="${item.sysResource.img} " style="height: 150px">
-            <hr>
+            <div style="height: 70%;border: 1px #999 solid">
+              <img th:src="${item.sysResource.img} " style="height: 150px">
+            </div>
+           <div style="height: 30%">
+              <hr>
             <b> 名称：</b>
             <span th:text="${item.sysResource.name}">鼠标拖动效果</span>&nbsp;&nbsp;
             <b> 获取时间：</b>
@@ -127,6 +134,7 @@
                启用
             </button>
             </span>
+           </div>
 
           </div>
         </div>

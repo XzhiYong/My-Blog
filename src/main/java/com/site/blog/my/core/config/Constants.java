@@ -3,6 +3,7 @@ package com.site.blog.my.core.config;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import com.site.blog.my.core.oauth2.entity.OAuth2QQ;
+import com.site.blog.my.core.oauth2.entity.OAuth2WeiBo;
 import com.site.blog.my.core.oauth2.properties.OAuth2Properties;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class Constants implements InitializingBean {
     public static final String WEIBO_USER_SHOW = "https://api.weibo.com/2/users/show.json";
     public static final String WEIBO_LOGOUT = "https://api.weibo.com/oauth2/revokeoauth2";
     public static final String WEIBO_OAUTH2_URL_TEM = "https://api.weibo.com/oauth2/authorize?client_id={}&response_type=code&redirect_uri={}";
-    public static final String WEIBO_OAUTH2_URL_BIND_TEM = "https://api.weibo.com/oauth2/authorize?client_id={}&state={}&response_type=code&redirect_uri={}";
+    public static final String WEIBO_OAUTH2_URL_BIND_TEM = "https://api.weibo.com/oauth2/authorize?client_id={}&response_type={}&redirect_uri={}";
 
     /** QQ */
     public static String QQ_OAUTH2;
@@ -54,6 +55,11 @@ public class Constants implements InitializingBean {
     @Override
     public void afterPropertiesSet() {
         OAuth2QQ qq = oAuth2Properties.getQq();
+        OAuth2WeiBo weibo = oAuth2Properties.getWeibo();
+
+        //微博请求地址初始化
+        WEIBO_REDIRECT_URI = URLUtil.encode(weibo.getRedirectUri());
+        WEIBO_OAUTH2 = StrUtil.format(WEIBO_OAUTH2_URL_TEM, weibo.getClientId(), WEIBO_REDIRECT_URI);
         //QQ请求地址初始化
         QQ_REDIRECT_URI = URLUtil.encode(qq.getRedirectUri());
         QQ_OAUTH2 = StrUtil.format(QQ_OAUTH2_URL_TEM, qq.getClientId(), "login", QQ_REDIRECT_URI);
