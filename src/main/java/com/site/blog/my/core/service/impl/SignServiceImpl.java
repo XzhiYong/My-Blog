@@ -1,12 +1,12 @@
 package com.site.blog.my.core.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -56,56 +56,54 @@ public class SignServiceImpl extends ServiceImpl<SignMapper, Sign> implements Si
 
         }
 
-        Sign sign = this.getOne(
-            new QueryWrapper<Sign>()
-                .eq("user_id", user.getAdminUserId())
-        );
-
         String clientIp = ServletUtil.getClientIP(request);
         String address = IpRegionUtil.searchByBaiDu(clientIp);
 
-        Sign newSign = new Sign();
-        if (sign != null) {
-            String day = DateUtil.format(sign.getCreateTime(), "yyyy-MM-dd");
-            // 获取的签到日期不能是当天的
-            if (DateTime.now().toString("yyyy-MM-dd").equals(day)) {
-                return ResultGenerator.genFailResult("今天已经签到过了!明天再来吧");
-            }
-
-
-            DateTime date = DateTime.of(day, "yyyy-MM-dd");
-            long betweenDay = DateUtil.betweenDay(DateTime.now(), date, true);
-            if (betweenDay > 1) {
-                newSign.setDays(1);
-            } else {
-                newSign.setDays(sign.getDays() + 1);
-            }
-
-            newSign.setId(sign.getId());
-        } else {
-            newSign.setDays(1);
-            newSign.setUserId(user.getAdminUserId());
+        DateTime now = DateTime.now();
+        //先判断今天有没有签到
+        List<SignLog> signLogs = signLogService.list(new LambdaQueryWrapper<SignLog>()
+            .ge(SignLog::getCreateTime, DateUtil.formatDateTime(DateUtil.beginOfDay((now))))
+            .le(SignLog::getCreateTime, DateUtil.formatDateTime(DateUtil.endOfDay((now))))
+            .eq(SignLog::getUserId, user.getAdminUserId())
+        );
+        if (CollUtil.isNotEmpty(signLogs)) {
+            ResultGenerator.genFailResult("今天已经签过到了，明天再来吧!");
         }
+        //在判断昨天有没有签到
+        List<SignLog> signLogList = signLogService.list(new LambdaQueryWrapper<SignLog>()
+            .ge(SignLog::getCreateTime, DateUtil.formatDateTime(DateUtil.beginOfDay(DateUtil.offsetDay(now, -1))))
+            .le(SignLog::getCreateTime, DateUtil.formatDateTime(DateUtil.endOfDay(DateUtil.offsetDay(now, -1))))
+            .eq(SignLog::getUserId, user.getAdminUserId())
+        );
+        Sign sign = this.getOne(new LambdaQueryWrapper<Sign>().eq(Sign::getUserId, user.getAdminUserId()));
+        //代表昨天签到
+        if (CollUtil.isNotEmpty(signLogList)) {
+            sign.setDays(sign.getDays() + 1);
+        } else {
+            if (sign == null) {
+                sign = new Sign();
+            }
 
-        JSONObject info = new JSONObject();
-        info.set("ip", clientIp);
-        info.set("ipAddress", address);
-        newSign.setInfo(info.toString());
-
-        saveOrUpdate(newSign);
+            JSONObject info = new JSONObject();
+            info.set("ip", clientIp);
+            info.set("ipAddress", address);
+            sign.setInfo(info.toString());
+            sign.setUserId(user.getAdminUserId());
+            sign.setDays(1);
+        }
+        saveOrUpdate(sign);
 
         SignLog signLog = new SignLog();
-        signLog.setSignId(newSign.getId());
+        signLog.setSignId(sign.getId());
         signLog.setUserId(user.getAdminUserId());
         signLog.setIp(clientIp);
         signLog.setIpAddress(address);
         // 从SignRule中获取要加的积分
-        Integer point = SignUtil.calculatedReward(newSign.getDays());
+        Integer point = SignUtil.calculatedReward(sign.getDays());
         signLog.setPoint(point);
         signLogService.save(signLog);
 
         AdminUser adminUserServiceById = adminUserService.getById(user.getAdminUserId());
-
         AdminUser adminUser = new AdminUser();
         adminUser.setAdminUserId(user.getAdminUserId());
         adminUser.setPoint((adminUserServiceById.getPoint() == null ? 0 : adminUserServiceById.getPoint()) + point);
