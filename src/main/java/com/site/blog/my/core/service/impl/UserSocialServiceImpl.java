@@ -25,6 +25,7 @@ import com.site.blog.my.core.mapper.UserSocialMapper;
 import com.site.blog.my.core.oauth2.properties.OAuth2Properties;
 import com.site.blog.my.core.service.AdminUserService;
 import com.site.blog.my.core.service.BlogMsgService;
+import com.site.blog.my.core.service.RoleService;
 import com.site.blog.my.core.service.UserSocialService;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
@@ -37,9 +38,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.site.blog.my.core.config.Constants.AUTO_LOGIN_TAG;
 
@@ -67,6 +66,9 @@ public class UserSocialServiceImpl extends ServiceImpl<UserSocialMapper, UserSoc
 
     @Autowired
     private BlogMsgService blogMsgService;
+
+    @Autowired
+    private RoleService roleService;
 
     @Override
     public UserSocial getBySocialUidAndSocialName(String socialUid, String socialType) {
@@ -120,6 +122,14 @@ public class UserSocialServiceImpl extends ServiceImpl<UserSocialMapper, UserSoc
         user.setIp("0.0.0.0");
         //执行保存用户
         boolean saveUserCount = adminUserService.save(user);
+
+        //注册新用户 给予普通用户权限
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", user.getAdminUserId());
+        List<String> roles = new ArrayList<>();
+        roles.add("2");
+        params.put("roleIds", roles);
+        roleService.saveUserRole(params);
         //保存用户与社交账户绑定信息
         userSocial.setUserId(user.getAdminUserId());
         int saveUserSocialCount = baseMapper.insert(userSocial);
