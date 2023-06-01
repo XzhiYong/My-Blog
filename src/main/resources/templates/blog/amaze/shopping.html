@@ -29,7 +29,7 @@
             th:each="item:${list}"
         >
           <div class="grid-demo grid-demo-bg1">
-            <div style="height: 70%;border: 1px #696969 solid">
+            <div style="height: 300px;border: 1px #696969 solid">
               <img th:src="${item.img} ">
             </div>
             <div style="height: 30%">
@@ -38,6 +38,12 @@
             <span th:text="${item.name}">鼠标拖动效果</span>&nbsp;&nbsp;
             <b> 所需积分：</b>
             <span th:text="${item.point}" style="color: #9d1e15"></span>
+             <span th:if="${item.tag}">
+               &nbsp;
+               &nbsp;
+              <span class="layui-badge layui-bg-red" th:text="${item.tag}"></span>
+
+           </span>
             <button
                 onclick="redemption(this)"
                 th:data-id="${item.id}"

@@ -19,10 +19,12 @@ import com.site.blog.my.core.config.Constants;
 import com.site.blog.my.core.controller.vo.QqUserInfoVo;
 import com.site.blog.my.core.controller.vo.WeiBoUserInfoVo;
 import com.site.blog.my.core.entity.AdminUser;
+import com.site.blog.my.core.entity.BlogMsg;
 import com.site.blog.my.core.entity.UserSocial;
 import com.site.blog.my.core.mapper.UserSocialMapper;
 import com.site.blog.my.core.oauth2.properties.OAuth2Properties;
 import com.site.blog.my.core.service.AdminUserService;
+import com.site.blog.my.core.service.BlogMsgService;
 import com.site.blog.my.core.service.UserSocialService;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
@@ -62,6 +64,9 @@ public class UserSocialServiceImpl extends ServiceImpl<UserSocialMapper, UserSoc
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private BlogMsgService blogMsgService;
 
     @Override
     public UserSocial getBySocialUidAndSocialName(String socialUid, String socialType) {
@@ -121,6 +126,12 @@ public class UserSocialServiceImpl extends ServiceImpl<UserSocialMapper, UserSoc
 
         if (saveUserCount && saveUserSocialCount > 0) {
             //向用户发送系统消息
+            BlogMsg blogMsg = new BlogMsg();
+            blogMsg.setType(0);
+            blogMsg.setMsg("欢迎加入xiaBlog社区！您的默认账号为：" + user.getLoginUserName() + "，初始密码为：" + pass + "，请尽快修改");
+            blogMsg.setState(0);
+            blogMsg.setUId(user.getAdminUserId());
+            blogMsgService.save(blogMsg);
 
         }
         return new AuthToken(user.getLoginUserName());
@@ -227,6 +238,7 @@ public class UserSocialServiceImpl extends ServiceImpl<UserSocialMapper, UserSoc
                     user.setNickName(username);
                     user.setHeadPortrait(StrUtil.blankToDefault(infoVo.getFigureUrlQq2(), infoVo.getFigureUrlQq1()));
                     user.setSex("男".equals(infoVo.getGender()) ? Constants.GENDER_MAN : Constants.GENDER_WOMAN);
+                    user.setLoginUserName(RandomUtil.randomNumbers(8));
                 } else {
                     log.error("查询用户信息失败 -> {} \n请求参数：-> {}", response, userSocial);
                     throw new RuntimeException("QQ登录获取用户信息失败");

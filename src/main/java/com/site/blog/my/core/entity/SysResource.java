@@ -66,5 +66,11 @@ public class SysResource implements Serializable {
     @TableField("update_time")
     private Date updateTime;
 
+    /**
+     * 修改时间
+     */
+    @TableField(exist = false)
+    private String tag;
+
 
 }

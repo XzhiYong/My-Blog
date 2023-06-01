@@ -337,9 +337,19 @@ public class MyBlogController extends BaseController {
         params.put("userId", user.getAdminUserId());
         List<UserResource> userResources = userResourceService.listVo(params);
 
+
         List<Integer> collect = userResources.stream().map(UserResource::getResourceId).collect(Collectors.toList());
-        List<SysResource> resources = sysResourceService.list(new LambdaQueryWrapper<SysResource>().notIn(CollUtil.isNotEmpty(collect), SysResource::getId, collect));
+        
+        List<SysResource> resources = sysResourceService.list(new LambdaQueryWrapper<SysResource>()
+            .notIn(CollUtil.isNotEmpty(collect), SysResource::getId, collect)
+            .orderByDesc(SysResource::getCreateTime));
+
         List<SysResource> resourceList = resources.stream().filter(item -> !collect.contains(item.getId())).collect(Collectors.toList());
+        if (CollUtil.isNotEmpty(resourceList)) {
+            //最新
+            SysResource sysResource = resourceList.get(0);
+            sysResource.setTag("最新上架");
+        }
         request.setAttribute("list", resourceList);
 
         request.setAttribute("userResources", userResources);

@@ -56,7 +56,7 @@ public class UserResource implements Serializable {
     /**
      * 创建时间
      */
-    @TableField(value = "create_time",fill = FieldFill.INSERT)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private Date createTime;
 
     /**
@@ -64,6 +64,12 @@ public class UserResource implements Serializable {
      */
     @TableField("status")
     private Boolean status;
+
+    /**
+     * 创建时间
+     */
+    @TableField(exist = false)
+    private String tag;
 
 
 }

@@ -30,6 +30,7 @@ $(function () {
             },
             {label: 'ip', name: 'ip', index: 'ip', width: 70, align: "center"},
             {label: '登录次数', name: 'loginCount', index: 'loginCount', width: 50, align: "center"},
+            {label: '积分', name: 'point', index: 'point', width: 50, align: "center"},
             {label: '上次登录时间', name: 'lastLoginTime', index: 'lastLoginTime', width: 120, align: "center"},
             {
                 label: '操作',
