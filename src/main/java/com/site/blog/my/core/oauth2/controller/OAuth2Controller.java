@@ -54,7 +54,7 @@ public class OAuth2Controller extends BaseController {
     public String bindingWeibo(@RequestParam String redirect) {
         Integer id = ShiroUtil.getProfileId();
         if (id == null) {
-            return "admin/login";
+            return "redirect:/login";
         }
         String uuid = UUID.fastUUID().toString();
         redisUtil.set(Constants.WEIBO_BIND_CODE + id, uuid);

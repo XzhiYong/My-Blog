@@ -7,11 +7,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.site.blog.my.core.auth.AuthToken;
-import com.site.blog.my.core.mapper.AdminUserMapper;
+import com.site.blog.my.core.config.Constants;
 import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.SysRole;
+import com.site.blog.my.core.mapper.AdminUserMapper;
 import com.site.blog.my.core.service.AdminUserService;
 import com.site.blog.my.core.service.RoleService;
+import com.site.blog.my.core.service.UserSocialService;
 import com.site.blog.my.core.util.IpRegionUtil;
 import com.site.blog.my.core.util.MD5Util;
 import com.site.blog.my.core.util.Result;
@@ -37,6 +39,8 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
     private RoleService roleService;
     @Resource
     private RedisTemplate redisTemplate;
+    @Resource
+    private UserSocialService userSocialService;
 
     @Override
     public AdminUser login(String userName, String password) {
@@ -60,6 +64,8 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
         if (StrUtil.isNotBlank(user.getIp())) {
             user.setLocation(IpRegionUtil.searchByBaiDu(user.getIp()));
         }
+        user.setIsBangDingWeiBo(userSocialService.getByUserId(loginUserId.toString(), Constants.WEIBO_ID));
+        user.setIsBangDingQQ(userSocialService.getByUserId(loginUserId.toString(), Constants.QQ_ID));
         return user;
     }
 

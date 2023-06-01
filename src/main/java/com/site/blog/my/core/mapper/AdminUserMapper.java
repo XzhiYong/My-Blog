@@ -7,8 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AdminUserMapper extends BaseMapper<AdminUser> {
-    int insert(AdminUser record);
-
     int insertSelective(AdminUser record);
 
     /**

@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.site.blog.my.core.auth.AuthToken;
 import com.site.blog.my.core.config.Constants;
 import com.site.blog.my.core.controller.vo.QqUserInfoVo;
 import com.site.blog.my.core.controller.vo.WeiBoUserInfoVo;
@@ -29,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,6 +54,7 @@ import static com.site.blog.my.core.config.Constants.AUTO_LOGIN_TAG;
 public class UserSocialServiceImpl extends ServiceImpl<UserSocialMapper, UserSocial> implements UserSocialService {
 
     @Resource
+    @Lazy
     private AdminUserService adminUserService;
 
     @Autowired
@@ -70,8 +73,17 @@ public class UserSocialServiceImpl extends ServiceImpl<UserSocialMapper, UserSoc
     }
 
     @Override
+    public Boolean getByUserId(String userId, String socialName) {
+        return baseMapper.selectOne(
+            new QueryWrapper<UserSocial>()
+                .eq("user_id", userId)
+                .eq("social_type", socialName)
+        ) != null;
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
-    public UsernamePasswordToken socialLogin(UserSocial userSocial) {
+    public AuthToken socialLogin(UserSocial userSocial) {
         UserSocial social = this.getBySocialUidAndSocialName(userSocial.getSocialUid(), userSocial.getSocialType());
         if (social != null) {
             //更新第三方用户验证令牌
@@ -81,8 +93,8 @@ public class UserSocialServiceImpl extends ServiceImpl<UserSocialMapper, UserSoc
             baseMapper.updateById(social);
             AdminUser user = adminUserService.getUserDetailById(social.getUserId());
             //如果username带了isEncode，那么登录判断时就不需要加密密码比较
-            String username = user.getLoginUserName() + AUTO_LOGIN_TAG;
-            return new UsernamePasswordToken(username, user.getLoginPassword());
+            String username = user.getLoginUserName();
+            return new AuthToken(username);
         }
 
         //新增一个用户
@@ -96,11 +108,11 @@ public class UserSocialServiceImpl extends ServiceImpl<UserSocialMapper, UserSoc
         String password = SecureUtil.md5(pass);
         user.setLoginPassword(password);
         user.setEmail("请尽快绑定邮箱");
-        user.setLocked(1);
+        user.setLocked(0);
         user.setCreateTime(now);
         user.setPoint(0);
-        user.setMobile(null);
-        user.setBirthday(null);
+        user.setLastLoginTime(now);
+        user.setIp("0.0.0.0");
         //执行保存用户
         boolean saveUserCount = adminUserService.save(user);
         //保存用户与社交账户绑定信息
@@ -111,7 +123,7 @@ public class UserSocialServiceImpl extends ServiceImpl<UserSocialMapper, UserSoc
             //向用户发送系统消息
 
         }
-        return new UsernamePasswordToken(user.getLoginUserName(), pass);
+        return new AuthToken(user.getLoginUserName());
     }
 
     @Override
@@ -127,8 +139,9 @@ public class UserSocialServiceImpl extends ServiceImpl<UserSocialMapper, UserSoc
         baseMapper.insert(userSocial);
         SecurityUtils.getSubject().logout();
         //如果username带了isEncode，那么登录判断时就不需要加密密码比较
-        String username = user.getLoginUserName() + AUTO_LOGIN_TAG;
-        SecurityUtils.getSubject().login(new UsernamePasswordToken(username, user.getLoginPassword()));
+        String username = user.getLoginUserName();
+
+        SecurityUtils.getSubject().login(new AuthToken(username));
     }
 
     @Override
@@ -185,8 +198,9 @@ public class UserSocialServiceImpl extends ServiceImpl<UserSocialMapper, UserSoc
                 if (response.isOk()) {
                     WeiBoUserInfoVo infoVo = objectMapper.readValue(response.body(), WeiBoUserInfoVo.class);
                     String username = this.checkUsername(userSocial, infoVo.getScreenName());
-                    user.setLoginUserName(username);
+                    user.setNickName(username);
                     user.setHeadPortrait(infoVo.getAvatarHd());
+                    user.setLoginUserName(infoVo.getId().toString());
                     if ("m".equals(infoVo.getGender())) {
                         user.setSex(Constants.GENDER_MAN);
                     } else if ("f".equals(infoVo.getGender())) {

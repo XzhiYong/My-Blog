@@ -1,8 +1,12 @@
 package com.site.blog.my.core.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.experimental.Accessors;
+
+import java.util.Date;
 
 /**
  * <p>
@@ -14,7 +18,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-@TableName("m_user_social")
+@TableName("tb_user_social")
 public class UserSocial {
 
     private static final long serialVersionUID = 1L;
@@ -55,7 +59,16 @@ public class UserSocial {
      * Access Token过期时间
      */
     private Long expiresIn;
+    
 
+    //1.绑定 
     private Integer status;
+
+    @TableField(fill = FieldFill.INSERT)
+    private Date createTime;
+    
+    @TableField(fill = FieldFill.UPDATE)
+    private Date updateTime;
+
 
 }

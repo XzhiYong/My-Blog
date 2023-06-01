@@ -4,7 +4,9 @@ import cn.hutool.crypto.SecureUtil;
 import cn.hutool.http.HttpException;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
+import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.site.blog.my.core.auth.AuthToken;
 import com.site.blog.my.core.entity.SocialUserVo;
 import com.site.blog.my.core.entity.UserSocial;
 import com.site.blog.my.core.oauth2.entity.OAuth2Bean;
@@ -15,7 +17,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,13 +65,15 @@ public abstract class OAuth2AbstractHandler implements OAuth2Handler {
         //拿到微博的回调，换取Access_Token
         HttpResponse response;
         try {
-            response = HttpRequest.get(accessTokenUrl).form(this.getRequestParams()).execute();
+            response = HttpRequest.post(accessTokenUrl).form(this.getRequestParams()).execute();
         } catch (HttpException e) {
             log.error("远程调用 " + accessTokenUrl + " 失败", e);
             throw new RuntimeException("远程调用 " + accessTokenUrl + " 失败！");
         }
         if (!response.isOk()) {
-            throw new RuntimeException("换取Access_Token失败！");
+            String body = response.body();
+            JSONObject jsonObject = JSONUtil.parseObj(body);
+            throw new RuntimeException("换取Access_Token失败，错误原因+" + jsonObject);
         }
 
         //把微博的回调Json转为微博社交Vo
@@ -85,12 +89,13 @@ public abstract class OAuth2AbstractHandler implements OAuth2Handler {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public String toLoginOrBind(UserSocial userSocial) {
         if (this.isLogin()) {
-            UsernamePasswordToken token = userSocialService.socialLogin(userSocial);
+            AuthToken token = userSocialService.socialLogin(userSocial);
             //执行登录
             SecurityUtils.getSubject().login(token);
-            return "redirect:/";
+            return "redirect:/index";
         } else {
             Integer id = ShiroUtil.getProfileId();
             if (id == null) {

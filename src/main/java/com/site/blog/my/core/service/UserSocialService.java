@@ -1,9 +1,9 @@
 package com.site.blog.my.core.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.site.blog.my.core.auth.AuthToken;
 import com.site.blog.my.core.entity.UserSocial;
 import com.site.blog.my.core.util.Result;
-import org.apache.shiro.authc.UsernamePasswordToken;
 
 /**
  * <p>
@@ -17,7 +17,9 @@ public interface UserSocialService extends IService<UserSocial> {
 
     UserSocial getBySocialUidAndSocialName(String socialUid, String socialName);
 
-    UsernamePasswordToken socialLogin(UserSocial userSocial);
+    Boolean getByUserId(String userId, String socialName);
+
+    AuthToken socialLogin(UserSocial userSocial);
 
     void socialBind(UserSocial userSocial, Integer userId);
 

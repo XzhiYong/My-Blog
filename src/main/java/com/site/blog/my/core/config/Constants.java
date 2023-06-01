@@ -26,6 +26,8 @@ public class Constants implements InitializingBean {
     public static final Integer GENDER_MAN = 1;
     public static final Integer GENDER_GIRL = 2;
     public static final Integer GENDER_WOMAN = -1;
+    public static final String WEIBO_ID = "weibo_id";
+    public static final String QQ_ID = "qq_id";
 
     /** 微博 */
     public static String WEIBO_OAUTH2;
@@ -34,8 +36,8 @@ public class Constants implements InitializingBean {
     public static final String WEIBO_ACCESS_TOKEN = "https://api.weibo.com/oauth2/access_token";
     public static final String WEIBO_USER_SHOW = "https://api.weibo.com/2/users/show.json";
     public static final String WEIBO_LOGOUT = "https://api.weibo.com/oauth2/revokeoauth2";
-    public static final String WEIBO_OAUTH2_URL_TEM = "https://api.weibo.com/oauth2/authorize?client_id={}&response_type=code&redirect_uri={}";
-    public static final String WEIBO_OAUTH2_URL_BIND_TEM = "https://api.weibo.com/oauth2/authorize?client_id={}&response_type={}&redirect_uri={}";
+    public static final String WEIBO_OAUTH2_URL_TEM = "https://api.weibo.com/oauth2/authorize?client_id={}&redirect_uri={}";
+    public static final String WEIBO_OAUTH2_URL_BIND_TEM = "https://api.weibo.com/oauth2/authorize?client_id={}&state={}&redirect_uri={}";
 
     /** QQ */
     public static String QQ_OAUTH2;

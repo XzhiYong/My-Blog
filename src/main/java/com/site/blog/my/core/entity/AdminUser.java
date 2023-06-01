@@ -72,6 +72,14 @@ public class AdminUser {
     @TableField(exist = false)
     private String verificationCode;
 
+
+    @TableField(exist = false)
+    private Boolean isBangDingWeiBo;
+
+
+    @TableField(exist = false)
+    private Boolean isBangDingQQ;
+
     @TableField(exist = false)
     private List<SysRole> sysRole;
 
