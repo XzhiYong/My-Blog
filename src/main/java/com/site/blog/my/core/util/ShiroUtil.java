@@ -17,7 +17,6 @@ public class ShiroUtil {
      */
     public static AdminUser getProfile() {
         Object principal = SecurityUtils.getSubject().getPrincipal();
-        Assert.notNull(principal, "登录状态失效，请重新登陆");
         return (AdminUser) principal;
     }
 

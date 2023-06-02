@@ -394,6 +394,22 @@ public class MyBlogController extends BaseController {
         return "blog/" + theme + "/dataBank";
     }
 
+    /**
+     * 资料库
+     *
+     * @return
+     */
+    @GetMapping({"/music"})
+    public String music(HttpServletRequest request) {
+        AdminUser profile = ShiroUtil.getProfile();
+        request.setAttribute("configurations", configService.getAllConfigs());
+        request.setAttribute("pageName", "资料库");
+        request.setAttribute("user", profile == null ? new AdminUser() : profile);
+        setResource(request, profile);
+
+        return "blog/" + theme + "/music";
+    }
+
 
     /**
      * 关于页面 以及其他配置了subUrl的文章页

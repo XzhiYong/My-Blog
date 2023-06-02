@@ -82,6 +82,8 @@ public class ShiroConfig {
         filterMap.put("/oauth2.0/qq/success", "anon");
         filterMap.put("/admin/plugins/**", "anon");
         filterMap.put("/sign/in", "anon");
+        filterMap.put("/dataBank", "anon");
+        filterMap.put("/message", "anon");
 
         filterMap.put("/*", "anon");
         filterMap.put("/**", "auth");

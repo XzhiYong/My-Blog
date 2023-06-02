@@ -34,6 +34,7 @@
             <li lay-id="avatar">头像</li>
             <li lay-id="pass">密码</li>
             <li lay-id="bind">帐号绑定</li>
+            <li lay-id="init">网易云歌单同步</li>
           </ul>
           <div class="layui-tab-content" style="padding: 20px 0;">
             <div class="layui-form layui-form-pane layui-tab-item layui-show">
@@ -194,6 +195,55 @@
                 </li>
               </ul>
             </div>
+            <div class="layui-form layui-form-pane layui-tab-item">
+              <a
+                  href="https://blog.csdn.net/qq_45124915/article/details/114846528"
+                  style="font-size: 14px"
+              >点击获取下面三种参数获取说明
+              </a>
+              <br>
+              <br>
+              <br>
+
+              <div class="layui-form-item">
+                <label for="L_email" class="layui-form-label">music_u</label>
+                <div class="layui-input-inline">
+                  <input
+                      type="text" id="music_u" name="music_u" 
+                      autocomplete="off" class="layui-input"
+                  >
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label for="csrf" class="layui-form-label">csrf</label>
+                <div class="layui-input-inline">
+                  <input
+                      type="text" id="csrf" name="csrf" required
+                      autocomplete="off" class="layui-input"
+                  >
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label for="L_userKey" class="layui-form-label">userKey</label>
+                <div class="layui-input-inline">
+                  <input
+                      type="text" id="L_userKey" name="L_userKey"
+                      autocomplete="off"
+                      class="layui-input"
+                  >
+                </div>
+              </div>
+              <button
+                  class="layui-btn"
+                  key="set-mine"
+                  lay-filter="*"
+                  lay-submit
+                  alert="true"
+                  onclick="synchronizationMusic()"
+              >
+                同步网易云歌单
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -267,6 +317,27 @@
                     url: "/admin/user/update",
                     contentType: "application/json",
                     data: JSON.stringify(data),
+                    success: function (r) {
+                        if (r.resultCode === 200) {
+                            location.reload();
+                        } else {
+                            layer.msg(r.message, {icon: 5});
+                        }
+                    }
+                });
+
+            });
+
+        }
+
+        function synchronizationMusic() {
+            var csrf = $("#csrf").val();
+            var music = $("#music_u").val();
+
+            layer.confirm('你确定要同步吗？', function () {
+                $.ajax({
+                    type: "GET",
+                    url: "/user-music?csrf=" + csrf + "&music=" + music,
                     success: function (r) {
                         if (r.resultCode === 200) {
                             location.reload();

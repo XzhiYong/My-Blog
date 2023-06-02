@@ -102,6 +102,9 @@ public class BaseController {
     @Resource
     protected UserCommentService userCommentService;
 
+    @Resource
+    protected UserMusicService userMusicService;
+
     protected void getSign(HttpServletRequest request, AdminUser user) {
         if (user == null) {
             user = (AdminUser) SecurityUtils.getSubject().getPrincipal();

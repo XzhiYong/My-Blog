@@ -50,6 +50,11 @@ public class Constants implements InitializingBean {
 
 
     public final static String FILE_UPLOAD_DIC = "/opt/deploy/upload/";//上传文件的默认url前缀，根据部署设置自行修改
+    public static final String MUSIC_URL = "http://music.163.com/song/media/outer/url?id={}.mp3";
+    public static final String DETAIL_ID = "2965698531";
+
+    public static final String MUSIC_USER_KEY = "__csrf={};MUSIC_U={}";
+
 
     /**
      * 当私有成员被赋值后，此方法自动被调用，从而初始化常量
