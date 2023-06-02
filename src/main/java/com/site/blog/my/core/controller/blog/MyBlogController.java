@@ -8,6 +8,7 @@ import com.site.blog.my.core.controller.BaseController;
 import com.site.blog.my.core.controller.vo.BlogDetailVO;
 import com.site.blog.my.core.entity.*;
 import com.site.blog.my.core.util.PageResult;
+import com.site.blog.my.core.util.ShiroUtil;
 import org.apache.shiro.SecurityUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
@@ -300,7 +301,7 @@ public class MyBlogController extends BaseController {
 
 
     /**
-     * 个人主页
+     * 个人设置
      *
      * @return
      */
@@ -319,7 +320,7 @@ public class MyBlogController extends BaseController {
 
 
     /**
-     * 个人主页
+     * 积分商城
      *
      * @return
      */
@@ -339,7 +340,7 @@ public class MyBlogController extends BaseController {
 
 
         List<Integer> collect = userResources.stream().map(UserResource::getResourceId).collect(Collectors.toList());
-        
+
         List<SysResource> resources = sysResourceService.list(new LambdaQueryWrapper<SysResource>()
             .notIn(CollUtil.isNotEmpty(collect), SysResource::getId, collect)
             .orderByDesc(SysResource::getCreateTime));
@@ -357,6 +358,40 @@ public class MyBlogController extends BaseController {
 
         setResource(request, user);
         return "blog/" + theme + "/shopping";
+    }
+
+    /**
+     * 留言板
+     *
+     * @return
+     */
+    @GetMapping({"/message"})
+    public String message(HttpServletRequest request, @RequestParam(required = false, defaultValue = "1") Integer commentPage) {
+        PageInfo<UserComment> commentIPage = userCommentService.commentPage(commentPage);
+        request.setAttribute("page", commentIPage);
+        List<UserComment> comments = commentIPage.getList();
+        request.setAttribute("comments", comments);
+        request.setAttribute("configurations", configService.getAllConfigs());
+        request.setAttribute("pageName", "留言板");
+        setResource(request, ShiroUtil.getProfile());
+        return "blog/" + theme + "/message";
+    }
+
+    /**
+     * 资料库
+     *
+     * @return
+     */
+    @GetMapping({"/dataBank"})
+    public String dataBank(HttpServletRequest request) {
+        AdminUser profile = ShiroUtil.getProfile();
+
+        request.setAttribute("configurations", configService.getAllConfigs());
+        request.setAttribute("pageName", "资料库");
+        request.setAttribute("user", profile == null ? new AdminUser() : profile);
+        setResource(request, profile);
+
+        return "blog/" + theme + "/dataBank";
     }
 
 

@@ -60,19 +60,40 @@
         <div class="navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
             <li>
-              <a th:href="@{/index}">主页</a>
+
+              <a th:href="@{/index}">
+                <i class="layui-icon">&#xe68e;</i>&nbsp;主页
+              </a>
             </li>
             <li>
-              <a th:href="@{/link}">友链</a>
+              <a th:href="@{/link}">
+                <i class="layui-icon">&#xe64c;</i>&nbsp;友链
+              </a>
             </li>
             <li>
-              <a th:href="@{/shopping}">积分商城</a>
+              <a th:href="@{/message}">
+                <i class="layui-icon">&#xe62a;</i>&nbsp;留言板
+              </a>
             </li>
             <li>
-              <a href="https://github.com/XzhiYong">GitHub</a>
+              <a th:href="@{/dataBank}">
+                <i class="layui-icon">&#xe621;</i>&nbsp;资料库
+              </a>
             </li>
             <li>
-              <a th:href="@{/admin/login}">发布自己的博客</a>
+              <a th:href="@{/shopping}">
+                <i class="layui-icon">&#xe65e;</i>&nbsp;积分商城
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/XzhiYong">
+                <i class="layui-icon">&#xe6a7;</i>&nbsp;GitHub
+              </a>
+            </li>
+            <li>
+              <a th:href="@{/admin/login}">
+                <i class="layui-icon">&#xe609;</i>&nbsp;发布
+              </a>
             </li>
             <li th:if="${user}">
               <div class="layui-btn-container" style="margin-top: 10px">
@@ -93,8 +114,9 @@
               </div>
             </li>
             <li th:if="!${user}">
+              
               <a th:href="@{/admin/login}">
-                点击登录
+                <i class="layui-icon">&#xe653;</i>&nbsp;登录
               </a>
             </li>
 
@@ -125,9 +147,18 @@
                   "hHeadPos": 0.5,
                   "vHeadPos": 0.618
               },
+              "dialog": {
+                  "enable": true,
+                  "script": {
+                      'tap body': '哎呀！别碰我！',
+                      'tap face': '人家是在认真写博客哦--前端妹子',
+                  }
+              },
+
               "display": {"position": "right", "width": 100, "height": 150, "hOffset": 0, "vOffset": 0},
               "mobile": {"show": true, "scale": 0.5},
-              "react": {"opacityDefault": 0.7, "opacityOnHover": 0.2}
+              "react": {"opacityDefault": 0.7, "opacityOnHover": 0.2},
+
           });
 
       </script>

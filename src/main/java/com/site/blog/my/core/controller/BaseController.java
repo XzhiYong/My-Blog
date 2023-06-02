@@ -99,6 +99,9 @@ public class BaseController {
     @Resource
     protected RedisUtil redisUtil;
 
+    @Resource
+    protected UserCommentService userCommentService;
+
     protected void getSign(HttpServletRequest request, AdminUser user) {
         if (user == null) {
             user = (AdminUser) SecurityUtils.getSubject().getPrincipal();

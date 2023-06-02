@@ -33,7 +33,7 @@ layui.use(function () {
         }, {
             title: '退出登录',
             id: 105,
-            templet: '<span><i class="layui-icon">&#x1007;</i>&nbsp;&nbsp;&nbsp;退出登录</span>',
+            templet: '<span><i class="layui-icon">&#xe682;</i>&nbsp;&nbsp;&nbsp;退出登录</span>',
             href: '/admin/logout'
         }]
     });

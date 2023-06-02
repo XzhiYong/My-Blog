@@ -13,7 +13,7 @@
       <link rel="stylesheet" th:href="@{/admin/plugins/bootstrap/css/bootstrap.css}"/>
       <link rel="stylesheet" th:href="@{/admin/dist/css/font-awesome.min.css}">
       <link rel="stylesheet" th:href="@{/admin/dist/css/font-awesome.min.css}">
-
+      <script th:src="@{/blog/plugins/jquery/jquery.min.js}"></script>
       <script th:src="@{/blog/amaze/js/header.js}"></script>
       <link rel="stylesheet" th:href="@{/admin/plugins/layui/css/layui.css}">
       <style>
@@ -42,10 +42,6 @@
 
           div[contenteditable]:focus {
               content: none;
-          }
-
-          .msg-list {
-              margin-top: 20px;
           }
 
           .play-line {
@@ -88,9 +84,6 @@
               cursor: pointer;
           }
 
-          .msg-list {
-              margin-top: 20px;
-          }
 
           .play-item .text {
               color: #999999;
@@ -98,9 +91,6 @@
               margin-left: 4px;
           }
 
-          .hljs {
-              background: none;
-          }
 
           pre code {
               white-space: pre;
@@ -116,57 +106,37 @@
       </style>
     </head>
     <body>
+
       <div th:replace="blog/amaze/header::nav-fragment"></div>
-      <header
-          th:fragment="header-fragment" class="intro-header"
-          th:style="'background-image:url(' + @{/blog/amaze/images/header.jpg} + ');'"
-      >
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-              <div class="post-heading">
-                <h1 th:text="${blogDetailVO.blogTitle}"></h1>
-                <span class="meta">
-                        <th:block th:text="${#dates.format(blogDetailVO.createTime, 'yyyy-MM-dd')}"></th:block> &nbsp;
-                            <div class="comments-view" style="display: inline-block">
-                                <a href="#comments" class="article-comments"><th:block
-                                    th:text="${blogDetailVO.commentCount}"
-                                ></th:block>条评论</a> &nbsp;
-                                <th:block th:text="${blogDetailVO.blogViews}"></th:block>浏览
-                            </div>
-                            </span>
-                <div class="tags post-tags">
-                  <th:block th:each="tag : ${blogDetailVO.blogTags}">
-                    <a class="tag" rel="tag" th:href="@{/tag(tagName=${tag})}">
-                      <th:block th:text="${tag}"></th:block>
-                    </a>&nbsp;
-                  </th:block>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <div th:replace="blog/amaze/header::header-fragment"></div>
+
       <div class="container">
-        <div class="am-g am-g-fixed blog-fixed">
-          <div class="am-u-lg-12 am-u-sm-12">
-            <article class="am-article blog-article-p article-trigger">
-              <div id="post-content" class="am-article-bd article-body">
-                <th:block th:utext="${blogDetailVO.blogContent}"/>
-                <aside class="blog-rights clearfix">
-                  <p>本站文章除注明转载/出处外，皆为作者原创，欢迎转载，但未经作者同意必须保留此段声明，且在文章页面明显位置给出原文链接，否则保留追究法律责任的权利。</p>
-                </aside>
-              </div>
-            </article>
-            <hr>
-          </div>
-        </div>
         <div class="container-lg mt-lg-5 ">
           <div class="card border p-2 ">
             <div class="card-header text-info  border-bottom border-info" style="background-color: white;">
               留言
             </div>
             <!--            留言发送输入框-->
+
+            <div class="push-msg-wrap">
+              <input type="hidden" name="parentCommentId" value="-1" id="parentCommentId">
+              <input type="hidden" name="replyCommentId" value="-1" id="replyCommentId">
+              <div
+                  id="content_in_messageWall"
+                  class="container-fluid m-0 mt-3 p-0 h-100"
+                  contenteditable="true"
+                  placeholder="有什么想和作者哥哥说的悄悄话嘛？"
+              ></div>
+              <div class="play-line">
+                <div style="display: flex;">
+                  <div class="emoji-item" onclick="messageWall_keepOldRange()">
+                    <img th:src="@{/blog/img/emoji-icon.png}">
+                    <span class="text" id="emoji_in_messageWall">添加表情</span>
+                  </div>
+                </div>
+                <button class="push-btn" onclick="messageWall_sendMessage()">发表</button>
+              </div>
+            </div>
             <div class="card-body">
               <!--留言列表-->
               <div class=" container-lg mt-lg-5 border p-lg-2" style="border-top: #17a2b8 solid 2px !important;">
@@ -201,15 +171,7 @@
                                  class="summary-text small"
                              >回复ta</span>
                           </a>
-                          <span th:if="${user}">
-                                      <a
-                                          href="javascript:void(0);" onclick="deletecomment(this)"
-                                          th:attr="data-commentid=${comment.cid}"
-                                          th:if="${user.adminUserId}==${comment.uid}"
-                                      ><span
-                                          class="summary-text small"
-                                      >删除</span></a>
-                                </span>
+            
                         </a>
                       </div>
 
@@ -254,16 +216,6 @@
                                   class="summary-text small"
                               >回复ta</span>
                               </a>
-                              <span th:if="${user}">
-                                      <a
-                                          href="javascript:void(0);" onclick="deletecomment(this)"
-                                          th:attr="data-commentid=${reply.cid}"
-                                          th:if="${user.adminUserId}==${reply.uid}"
-                                      ><span
-                                          class="summary-text small"
-                                      >删除</span></a>
-                                </span>
-
                             </div>
                           </div>
                           <div class="messageText ml-2 container m-2" th:utext="${reply.content}">
@@ -314,25 +266,6 @@
                   </ul>
                 </nav>
               </div>
-              <div class="push-msg-wrap">
-                <input type="hidden" name="parentCommentId" value="-1" id="parentCommentId">
-                <input type="hidden" name="replyCommentId" value="-1" id="replyCommentId">
-                <div
-                    id="content_in_messageWall"
-                    class="container-fluid m-0 mt-3 p-0 h-100"
-                    contenteditable="true"
-                    placeholder="把精彩分享处理，还能@其他人哦"
-                ></div>
-                <div class="play-line">
-                  <div style="display: flex;">
-                    <div class="emoji-item" onclick="messageWall_keepOldRange()">
-                      <img th:src="@{/blog/img/emoji-icon.png}">
-                      <span class="text" id="emoji_in_messageWall">添加表情</span>
-                    </div>
-                  </div>
-                  <button class="push-btn" onclick="messageWall_sendMessage(1)">发表</button>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -341,7 +274,7 @@
       <footer th:replace="blog/amaze/footer::footer-fragment"></footer>
 
     </body>
-    <script th:src="@{/blog/plugins/jquery/jquery.min.js}"></script>
+
     <script th:src="@{/blog/plugins/highlight/highlight.pack.js}"></script>
     <script th:src="@{/blog/plugins/comment/valid.js}"></script>
     <script th:src="@{/blog/plugins/comment/comment.js}"></script>
@@ -349,14 +282,12 @@
     <script th:src="@{/blog/plugins/atwho/jquery.caret.js}"></script>
     <script th:src="@{/blog/plugins/emoji/jquery.emoji.js}"></script>
     <script th:src="@{/blog/plugins/emoji/jquery.mCustomScrollbar.min.js}"></script>
-
     <!-- sweetalert -->
     <script th:src="@{/admin/plugins/sweetalert/sweetalert.min.js}"></script>
 
     <script th:src="@{'/blog/plugins/individuation/'+${check}+'.js'}"></script>
     <script th:src="@{'/blog/plugins/individuation/'+${slide}+'.js'}"></script>
     <script th:src="@{'/blog/plugins/individuation/'+${background}+'.js'}"></script>
-
     <script>
         var messageWall_range;  // 定义最后光标对象
 
@@ -364,8 +295,6 @@
             var commentId = $(obj).data('commentid');
             var parentCommentId = $(obj).data('parentcommentid');
             var nickName = $(obj).data('nickname');
-            console.log(commentId, parentCommentId)
-            // alert(commentId)
             $("#parentCommentId").val(parentCommentId);
             $("#replyCommentId").val(commentId);
             $("#content_in_messageWall").attr("placeholder", "@" + nickName).focus();
@@ -457,11 +386,6 @@
                     icon: "error"
                 })
             }
-
-            $.ajax({
-                type: "GET",
-                url: "comment/commentlist?blogId=" + [[${blogDetailVO.blogId}]] + "/page=" + page
-            });
         }
 
         function messageWall_initEmoji() {
@@ -507,12 +431,11 @@
                     'parentCommentId': parentCommentId,
                     'replyCommentId': replyCommentId,
                     'remind': remind,
-                    'blogId': [[${blogDetailVO.blogId}]],
-                    'type': 1
+                    'type': 0
                 };
                 $.ajax({
                     type: "POST",
-                    url: "comment/postcomment",
+                    url: "/blog/comment/postcomment",
                     contentType: "application/json",
                     data: JSON.stringify(data),
                     success: function (r) {
@@ -520,8 +443,8 @@
                             swal("评论成功", {
                                 icon: "success",
                             }).then((result) => {
-                                location.reload();
                                 clear();
+                                location.reload();
                             })
                         } else {
                             if (r.message === '未登录') {
