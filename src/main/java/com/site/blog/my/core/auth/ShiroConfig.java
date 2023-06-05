@@ -84,6 +84,7 @@ public class ShiroConfig {
         filterMap.put("/sign/in", "anon");
         filterMap.put("/dataBank", "anon");
         filterMap.put("/message", "anon");
+        filterMap.put("/sys-data-bank", "anon");
 
         filterMap.put("/*", "anon");
         filterMap.put("/**", "auth");

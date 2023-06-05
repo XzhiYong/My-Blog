@@ -30,7 +30,7 @@ public class CodeGenerator {
 
     public static void generator() {
         // 表名，多个英文逗号分割
-        String tableNames = "tb_user_music";
+        String tableNames = "tb_sys_data_bank";
 
         String projectPath = System.getProperty("user.dir");
         // 如果是父工程下的模块在此处填入模块名

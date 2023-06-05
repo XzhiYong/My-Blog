@@ -105,6 +105,9 @@ public class BaseController {
     @Resource
     protected UserMusicService userMusicService;
 
+    @Resource
+    protected SysDataBankService sysDataBankService;
+
     protected void getSign(HttpServletRequest request, AdminUser user) {
         if (user == null) {
             user = (AdminUser) SecurityUtils.getSubject().getPrincipal();

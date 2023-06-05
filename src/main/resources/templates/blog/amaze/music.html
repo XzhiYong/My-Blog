@@ -30,20 +30,7 @@
                     <i class="zplayer-list-btn z-icon z-icon-reorder"></i>
                   </div>
                   <ol style="max-height:50px;" class="zplayer-list">
-                    <li index="2">那个女孩&nbsp; - &nbsp;戴羽彤</li>
-                    <li index="3">你的答案&nbsp; - &nbsp;阿冗</li>
-                    <li index="4">只要平凡&nbsp; - &nbsp;张杰/张碧晨</li>
-                    <li index="5">我从崖边跌落&nbsp; - &nbsp;谢春花</li>
-                    <li index="6">十点半的地铁&nbsp; - &nbsp;李健</li>
-                    <li index="7">天亮以前说再见&nbsp; - &nbsp;曲肖冰</li>
-                    <li index="8">起风了&nbsp; - &nbsp;买辣椒也用券</li>
-                    <li index="9">遥远的你&nbsp; - &nbsp;不靠谱组合</li>
-                    <li index="10">尘土&nbsp; - &nbsp;安朕宇</li>
-                    <li index="11">夜来故事多&nbsp; - &nbsp;RAiNBOW计划</li>
-                    <li index="12">夜空中最亮的星&nbsp; - &nbsp;逃跑计划</li>
-                    <li index="13">理想不大&nbsp; - &nbsp;RAiNBOW计划</li>
-                    <li index="14">世间美好与你环环相扣&nbsp; - &nbsp;柏松</li>
-                    <li index="15">云烟成雨&nbsp; - &nbsp;房东的猫</li>
+
                   </ol>
                   <div class="zplayer-controller">
                     <div class="zplayer-bar-wrap">
@@ -101,103 +88,25 @@
     <script th:src="@{'/blog/plugins/individuation/'+${slide}+'.js'}"></script>
     <script th:src="@{'/blog/plugins/individuation/'+${background}+'.js'}"></script>
     <script>
-        var zp2 = new zplayer({
-            element: document.getElementById("player2"),
-            lrcStart: 1,/*是否开启歌词功能 ，默认false（为true时musics集合中需要传入lrc字段。）*/
-            musics: [
+        $.ajax({
+            type: "GET",
+            url: "/user-music/list",
+            success: function (r) {
+                if (r == null) {
+                    layer.msg("你还未同步音乐!", {icon: 5});
+                } else {
+                    var zp2 = new zplayer({
+                        element: document.getElementById("player2"),
+                        lrcStart: 1,/*是否开启歌词功能 ，默认false（为true时musics集合中需要传入lrc字段。）*/
+                        autoPlay: true,/*是否开启自动播放,默认false*/
+                        musics: r
+                    })
+                    zp2.init();
+                }
 
-                {
-                    title: "你是人间四月天",
-                    author: "邵帅",
-                    url: "http://music.163.com/song/media/outer/url?id=2041198788.mp3",
-                    pic: "http://p2.music.126.net/kQJQD58WkmQneTneOYe22A==/109951164252455813.jpg?param=300y300",
-                },
-                {
-                    title: "那个女孩",
-                    author: "戴羽彤",
-                    url: "http://music.163.com/song/media/outer/url?id=1399524350.mp3",
-                    pic: "http://p1.music.126.net/OH5LHh9jdBc4XH9aJjFnuw==/109951164452739240.jpg?param=300y300",
+            }
+        });
 
-                },
-                {
-                    title: "你的答案",
-                    author: "阿冗",
-                    url: "http://music.163.com/song/media/outer/url?id=1400256289.mp3",
-                    pic: "http://p1.music.126.net/OlX-4S4L0Hdkyy_DQ27zag==/109951164459621658.jpg?param=300y300",
-                },
-                {
-                    title: "只要平凡",
-                    author: "张杰/张碧晨",
-                    url: "http://music.163.com/song/media/outer/url?id=574919767.mp3",
-                    pic: "http://p1.music.126.net/CjGoliP3xOB0gcCUaeTTBg==/109951163375727336.jpg?param=300x300",
-                }, {
-                    title: "我从崖边跌落",
-                    author: "谢春花",
-                    url: "http://music.163.com/song/media/outer/url?id=415086030.mp3",
-                    pic: "http://p2.music.126.net/Eg4cy0_HIF2nrX2gMCsWkQ==/17967119509636556.jpg?param=300y300",
-
-                }, {
-                    title: "十点半的地铁",
-                    author: "李健",
-                    url: "http://music.163.com/song/media/outer/url?id=466333788.mp3",
-                    pic: "http://p2.music.126.net/64oU_90n8lR7pEJ_dExIPw==/109951163903238311.jpg?param=300y300",
-
-                }, {
-                    title: "天亮以前说再见",
-                    author: "曲肖冰",
-                    url: "http://music.163.com/song/media/outer/url?id=1336789644.mp3",
-                    pic: "http://p2.music.126.net/_P71psYXWlTrEWEuyyN7QA==/109951163770392080.jpg?param=300y300",
-
-                }, {
-                    title: "起风了",
-                    author: "买辣椒也用券",
-                    url: "http://music.163.com/song/media/outer/url?id=1330348068.mp3",
-                    pic: "http://p1.music.126.net/diGAyEmpymX8G7JcnElncQ==/109951163699673355.jpg?param=300y300",
-
-                }, {
-                    title: "遥远的你",
-                    author: "不靠谱组合",
-                    url: "http://music.163.com/song/media/outer/url?id=1333192765.mp3",
-                    pic: "http://p1.music.126.net/j_MOk-u1iEtYWHs-QId41Q==/109951163703802494.jpg?param=300y300",
-                }, {
-                    title: "尘土",
-                    author: "安朕宇",
-                    url: "http://music.163.com/song/media/outer/url?id=865021614.mp3",
-                    pic: "http://p1.music.126.net/ssXglUifx_l0Ncv6dORQWQ==/109951163402130495.jpg?param=300y300",
-
-                }, {
-                    title: "夜来故事多",
-                    author: "RAiNBOW计划",
-                    url: "http://music.163.com/song/media/outer/url?id=35625826.mp3",
-                    pic: "http://p1.music.126.net/W_srVOtG_DKS1-txPLqNQQ==/3273246117001205.jpg?param=300y300",
-
-                }, {
-                    title: "夜空中最亮的星",
-                    author: "逃跑计划",
-                    url: "http://music.163.com/song/media/outer/url?id=25706282.mp3",
-                    pic: "http://p1.music.126.net/d541jx7SqoDzVkenhmtg6g==/19193074974743620.jpg?param=300y300",
-
-                }, {
-                    title: "理想不大",
-                    author: "RAiNBOW计划",
-                    url: "http://music.163.com/song/media/outer/url?id=465921645.mp3",
-                    pic: "http://p1.music.126.net/yRgTfVXGbey72ou_49CtVA==/18931391207076094.jpg?param=300y300",
-
-                }, {
-                    title: "世间美好与你环环相扣",
-                    author: "柏松",
-                    url: "http://music.163.com/song/media/outer/url?id=1363948882.mp3",
-                    pic: "http://p2.music.126.net/DK1_4sP_339o5rowMdPXdw==/109951164071024476.jpg?param=300x300",
-
-                }, {
-                    title: "云烟成雨",
-                    author: "房东的猫",
-                    url: "http://music.163.com/song/media/outer/url?id=513360721.mp3",
-                    pic: "http://p1.music.126.net/DSTg1dR7yKsyGq4IK3NL8A==/109951163046050093.jpg?param=300x300",
-                    lrc: "[00:00] 作曲 : 少年佩\n[00:01] 作词 : 墨鱼丝\n[00:11]制作人：黎偌天\n[00:12]编曲：黎偌天\n[00:13]监制：李纤橙\n[00:14]\n[00:18]你的晚安 是下意识的恻隐\n[00:24]我留至夜深 治疗失眠梦呓\n[00:30]那封手写信 留在行李箱底\n[00:36]来不及 赋予它旅途的意义\n[00:43]若一切 都已云烟成雨\n[00:49]我能否 变成淤泥\n[00:52]再一次 沾染你\n[00:55]若生命 如过场电影\n[01:01]Oh让我再一次 甜梦里惊醒\n[01:13]我多想再见你\n[01:15]哪怕匆匆一眼就别离\n[01:19]路灯下昏黄的剪影\n[01:22]越走越漫长的林径\n[01:25]我多想再见你\n[01:28]至少玩笑话还能说起\n[01:32]街巷初次落叶的秋分\n[01:35]渐行渐远去的我们\n[01:53]若一切 都已云烟成雨\n[01:59]我能否 变成淤泥\n[02:01]再一次 沾染你\n[02:05]若生命 如过场电影\n[02:10]Oh让我再一次 甜梦里惊醒\n[02:19]我多想再见你\n[02:21]哪怕匆匆一眼就别离\n[02:26]路灯下昏黄的剪影\n[02:28]越走越漫长的林径\n[02:32]我多想再见你\n[02:34]至少玩笑话还能说起\n[02:38]街巷初次落叶的秋分\n[02:41]渐行渐远去的我们\n[02:49]站台 汽笛响起\n[02:52]想念是你的声音\n[02:55]我们提着过去 走入人群\n[03:02]寻找着一个位置 安放自己\n[03:13]我多想再见你\n[03:15]哪怕匆匆一眼就别离\n[03:19]路灯下昏黄的剪影\n[03:22]越走越漫长的林径\n[03:25]我多想再见你\n[03:28]至少玩笑话还能说起\n[03:31]街巷初次落叶的秋分\n[03:35]渐行渐远去的我们\n[03:41]\n[03:43]主唱：红鼻子小黑\n[03:44]制作人：黎偌天\n[03:46]监制：李纤橙\n"
-                }]
-        })
-        zp2.init();
 
         $('.menu.toggle').click(function () {
             $('.m-item').toggleClass('m-mobile-hide');

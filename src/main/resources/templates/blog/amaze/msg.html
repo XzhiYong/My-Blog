@@ -43,7 +43,7 @@
                 <blockquote class="layui-elem-quote">
                   
                   <span th:if="${msg.type==0}">
-                    系统消息:<i th:text="${msg.msg}"></i>
+                    系统消息:<i th:utext="${msg.msg}"></i>
                   </span>
 
                   <span th:if="${msg.type==1}">
@@ -62,7 +62,7 @@
                       </a>
                          &nbsp;  回复了您的评论&nbsp; 
                       <a th:href="@{/blog/detail(blogId=${msg.blog.blogId})}" target="_blank">
-                         <cite th:text="${msg.msg}"></cite>
+                         <cite th:utext="${msg.msg}"></cite>
                        </a>
                        &nbsp;  所属文章：
                           <a target="_blank" th:href="@{/blog/detail(blogId=${msg.blog.blogId})}">

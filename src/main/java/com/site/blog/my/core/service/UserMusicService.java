@@ -14,5 +14,5 @@ import com.site.blog.my.core.util.Result;
  */
 public interface UserMusicService extends IService<UserMusic> {
 
-    Result synchronizationMusic(String csrf, String music);
+    Result synchronizationMusic(String csrf, String music,String userKey);
 }

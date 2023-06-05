@@ -30,12 +30,12 @@ public class UserMusicServiceImpl extends ServiceImpl<UserMusicMapper, UserMusic
 
 
     @Override
-    public Result synchronizationMusic(String csrf, String music) {
+    public Result synchronizationMusic(String csrf, String music,String userKey) {
         AdminUser profile = ShiroUtil.getProfile();
         JSONObject jsonObject = null;
         for (int i = 0; i < 100; i++) {
             try {
-                jsonObject = MusicUtil.GET_Date(Constants.DETAIL_ID, StrUtil.format(Constants.MUSIC_USER_KEY, csrf, music));
+                jsonObject = MusicUtil.GET_Date(userKey, StrUtil.format(Constants.MUSIC_USER_KEY, csrf, music));
                 if (jsonObject != null) {
                     break;
                 }

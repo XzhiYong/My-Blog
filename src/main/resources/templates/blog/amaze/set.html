@@ -209,7 +209,7 @@
                 <label for="L_email" class="layui-form-label">music_u</label>
                 <div class="layui-input-inline">
                   <input
-                      type="text" id="music_u" name="music_u" 
+                      type="text" id="music_u" name="music_u"
                       autocomplete="off" class="layui-input"
                   >
                 </div>
@@ -229,7 +229,7 @@
                   <input
                       type="text" id="L_userKey" name="L_userKey"
                       autocomplete="off"
-                      class="layui-input"
+                      class="layui-input" required
                   >
                 </div>
               </div>
@@ -333,14 +333,15 @@
         function synchronizationMusic() {
             var csrf = $("#csrf").val();
             var music = $("#music_u").val();
+            var userKey = $("#L_userKey").val();
 
             layer.confirm('你确定要同步吗？', function () {
                 $.ajax({
                     type: "GET",
-                    url: "/user-music?csrf=" + csrf + "&music=" + music,
+                    url: "/user-music?csrf=" + csrf + "&music=" + music + "&userKey=" + userKey,
                     success: function (r) {
                         if (r.resultCode === 200) {
-                            location.reload();
+                            layer.msg("同步成功", {icon: 1});
                         } else {
                             layer.msg(r.message, {icon: 5});
                         }

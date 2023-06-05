@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.site.blog.my.core.controller.BaseController;
 import com.site.blog.my.core.controller.vo.BlogDetailVO;
+import com.site.blog.my.core.controller.vo.SysDataBankVo;
 import com.site.blog.my.core.entity.*;
 import com.site.blog.my.core.util.PageResult;
 import com.site.blog.my.core.util.ShiroUtil;
@@ -373,7 +374,10 @@ public class MyBlogController extends BaseController {
         request.setAttribute("comments", comments);
         request.setAttribute("configurations", configService.getAllConfigs());
         request.setAttribute("pageName", "留言板");
-        setResource(request, ShiroUtil.getProfile());
+
+        AdminUser profile = ShiroUtil.getProfile();
+        request.setAttribute("user", profile);
+        setResource(request, profile);
         return "blog/" + theme + "/message";
     }
 
@@ -388,8 +392,21 @@ public class MyBlogController extends BaseController {
 
         request.setAttribute("configurations", configService.getAllConfigs());
         request.setAttribute("pageName", "资料库");
-        request.setAttribute("user", profile == null ? new AdminUser() : profile);
+        request.setAttribute("user", profile);
         setResource(request, profile);
+
+        List<SysDataBank> sysDataBanks = sysDataBankService.list();
+        Map<String, List<SysDataBank>> collect = sysDataBanks.stream().collect(Collectors.groupingBy(SysDataBank::getClassify));
+        SysDataBankVo sysDataBankVo = new SysDataBankVo();
+        sysDataBankVo.setStudyList(collect.get("学习资源"));
+        sysDataBankVo.setImgList(collect.get("图片资源"));
+        sysDataBankVo.setOfficeList(collect.get("办公资源"));
+        sysDataBankVo.setToolList(collect.get("工具资源"));
+        sysDataBankVo.setSearchList(collect.get("搜索资源"));
+        sysDataBankVo.setRecreationList(collect.get("娱乐资源"));
+        sysDataBankVo.setDesignList(collect.get("设计资源"));
+        request.setAttribute("sysDataBankVo", sysDataBankVo);
+
 
         return "blog/" + theme + "/dataBank";
     }
@@ -402,11 +419,14 @@ public class MyBlogController extends BaseController {
     @GetMapping({"/music"})
     public String music(HttpServletRequest request) {
         AdminUser profile = ShiroUtil.getProfile();
+        if(profile==null){
+            return "/admin/login";
+        }
         request.setAttribute("configurations", configService.getAllConfigs());
         request.setAttribute("pageName", "资料库");
-        request.setAttribute("user", profile == null ? new AdminUser() : profile);
-        setResource(request, profile);
+        request.setAttribute("user", profile);
 
+        setResource(request, profile);
         return "blog/" + theme + "/music";
     }
 
