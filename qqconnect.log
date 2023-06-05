@@ -140,3 +140,28 @@
 8660452 DEBUG [2023-06-05 13:53:31]  TemplateLoader.findTemplateSource("error/error_5xx_zh.ftlh"): Not found
 8660452 DEBUG [2023-06-05 13:53:31]  TemplateLoader.findTemplateSource("error/error_5xx.ftlh"): Not found
 8660452 DEBUG [2023-06-05 13:53:31]  "error/error_5xx.ftlh"("zh_CN", UTF-8, parsed) no source found.
+0    DEBUG [2023-06-05 13:54:52]  Couldn't find template in cache for "blog/amaze/music.ftlh"("zh_CN", UTF-8, parsed); will try to load it.
+3    DEBUG [2023-06-05 13:54:52]  TemplateLoader.findTemplateSource("blog/amaze/music_zh_CN.ftlh"): Not found
+4    DEBUG [2023-06-05 13:54:52]  TemplateLoader.findTemplateSource("blog/amaze/music_zh.ftlh"): Not found
+4    DEBUG [2023-06-05 13:54:52]  TemplateLoader.findTemplateSource("blog/amaze/music.ftlh"): Not found
+731  DEBUG [2023-06-05 13:54:53]  "blog/amaze/music.ftlh"("zh_CN", UTF-8, parsed) cached copy not yet stale; using cached.
+752  DEBUG [2023-06-05 13:54:53]  Couldn't find template in cache for "admin/login.ftlh"("zh_CN", UTF-8, parsed); will try to load it.
+752  DEBUG [2023-06-05 13:54:53]  TemplateLoader.findTemplateSource("admin/login_zh_CN.ftlh"): Not found
+752  DEBUG [2023-06-05 13:54:53]  TemplateLoader.findTemplateSource("admin/login_zh.ftlh"): Not found
+753  DEBUG [2023-06-05 13:54:53]  TemplateLoader.findTemplateSource("admin/login.ftlh"): Not found
+29272 DEBUG [2023-06-05 13:55:21]  TemplateLoader.findTemplateSource("admin/login_zh_CN.ftlh"): Not found
+29272 DEBUG [2023-06-05 13:55:21]  TemplateLoader.findTemplateSource("admin/login_zh.ftlh"): Not found
+29272 DEBUG [2023-06-05 13:55:21]  TemplateLoader.findTemplateSource("admin/login.ftlh"): Not found
+29272 DEBUG [2023-06-05 13:55:21]  "admin/login.ftlh"("zh_CN", UTF-8, parsed) no source found.
+93861 DEBUG [2023-06-05 13:56:26]  TemplateLoader.findTemplateSource("admin/login_zh_CN.ftlh"): Not found
+93861 DEBUG [2023-06-05 13:56:26]  TemplateLoader.findTemplateSource("admin/login_zh.ftlh"): Not found
+93861 DEBUG [2023-06-05 13:56:26]  TemplateLoader.findTemplateSource("admin/login.ftlh"): Not found
+93861 DEBUG [2023-06-05 13:56:26]  "admin/login.ftlh"("zh_CN", UTF-8, parsed) no source found.
+103869 DEBUG [2023-06-05 13:56:36]  Couldn't find template in cache for "blog/amaze/index.ftlh"("zh_CN", UTF-8, parsed); will try to load it.
+103869 DEBUG [2023-06-05 13:56:36]  TemplateLoader.findTemplateSource("blog/amaze/index_zh_CN.ftlh"): Not found
+103869 DEBUG [2023-06-05 13:56:36]  TemplateLoader.findTemplateSource("blog/amaze/index_zh.ftlh"): Not found
+103870 DEBUG [2023-06-05 13:56:36]  TemplateLoader.findTemplateSource("blog/amaze/index.ftlh"): Not found
+106386 DEBUG [2023-06-05 13:56:38]  TemplateLoader.findTemplateSource("blog/amaze/music_zh_CN.ftlh"): Not found
+106387 DEBUG [2023-06-05 13:56:38]  TemplateLoader.findTemplateSource("blog/amaze/music_zh.ftlh"): Not found
+106387 DEBUG [2023-06-05 13:56:38]  TemplateLoader.findTemplateSource("blog/amaze/music.ftlh"): Not found
+106387 DEBUG [2023-06-05 13:56:38]  "blog/amaze/music.ftlh"("zh_CN", UTF-8, parsed) no source found.
