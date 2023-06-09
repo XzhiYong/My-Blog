@@ -6,6 +6,9 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
+import org.jetbrains.annotations.Nullable;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author 夏志勇

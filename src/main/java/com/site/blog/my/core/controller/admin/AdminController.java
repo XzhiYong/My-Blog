@@ -7,6 +7,7 @@ import com.site.blog.my.core.entity.AdminUser;
 import com.site.blog.my.core.entity.SysRole;
 import com.site.blog.my.core.util.Result;
 import com.site.blog.my.core.util.ResultGenerator;
+import com.site.blog.my.core.util.ShiroUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -45,17 +46,17 @@ public class AdminController extends BaseController {
     }
 
     @GetMapping({"/note"})
-    public String note(HttpServletRequest request) {
-
+    public String note() {
         return "admin/note";
     }
 
     @GetMapping({"", "/", "/index", "/index.html"})
     public String index(HttpServletRequest request) {
-        AdminUser user = (AdminUser) SecurityUtils.getSubject().getPrincipal();
+        AdminUser user = ShiroUtil.getProfile();
         if (user == null) {
             return "admin/login";
         }
+        request.setAttribute("user", user);
         request.setAttribute("path", "index");
         request.setAttribute("categoryCount", categoryService.getTotalCategories());
         request.setAttribute("blogCount", blogService.getTotalBlogs());
@@ -63,7 +64,6 @@ public class AdminController extends BaseController {
         request.setAttribute("tagCount", tagService.getTotalTags());
         List<SysRole> userIdByRole = roleService.getUserIdByRole(user.getAdminUserId());
         request.setAttribute("role", userIdByRole);
-        request.setAttribute("user", user);
         return "admin/index";
     }
 

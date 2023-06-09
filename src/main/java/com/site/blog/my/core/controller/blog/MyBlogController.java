@@ -5,7 +5,7 @@ import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.site.blog.my.core.controller.BaseController;
-import com.site.blog.my.core.controller.vo.BlogDetailVO;
+import com.site.blog.my.core.controller.vo.BlogDetailVo;
 import com.site.blog.my.core.controller.vo.SysDataBankVo;
 import com.site.blog.my.core.entity.*;
 import com.site.blog.my.core.util.PageResult;
@@ -102,7 +102,7 @@ public class MyBlogController extends BaseController {
         if (commentPage == null) {
             commentPage = 1;
         }
-        BlogDetailVO blogDetailVO = blogService.getBlogDetail(blogId);
+        BlogDetailVo blogDetailVO = blogService.getBlogDetail(blogId);
         if (blogDetailVO != null) {
             request.setAttribute("blogDetailVO", blogDetailVO);
         }
@@ -418,15 +418,9 @@ public class MyBlogController extends BaseController {
      */
     @GetMapping({"/music"})
     public String music(HttpServletRequest request) {
-        AdminUser profile = ShiroUtil.getProfile();
-        if(profile==null){
-            return "/admin/login";
-        }
+   
         request.setAttribute("configurations", configService.getAllConfigs());
         request.setAttribute("pageName", "资料库");
-        request.setAttribute("user", profile);
-
-        setResource(request, profile);
         return "blog/" + theme + "/music";
     }
 
@@ -438,7 +432,7 @@ public class MyBlogController extends BaseController {
      */
     @GetMapping({"/{subUrl}"})
     public String detail(HttpServletRequest request, @PathVariable("subUrl") String subUrl) {
-        BlogDetailVO blogDetailVO = blogService.getBlogDetailBySubUrl(subUrl);
+        BlogDetailVo blogDetailVO = blogService.getBlogDetailBySubUrl(subUrl);
         if (blogDetailVO != null) {
             request.setAttribute("blogDetailVO", blogDetailVO);
             request.setAttribute("pageName", subUrl);
@@ -448,5 +442,6 @@ public class MyBlogController extends BaseController {
             return "error/error_400";
         }
     }
+
 
 }

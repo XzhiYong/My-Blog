@@ -2,7 +2,7 @@ package com.site.blog.my.core.controller.vo;
 
 import java.io.Serializable;
 
-public class SimpleBlogListVO implements Serializable {
+public class SimpleBlogListVo implements Serializable {
 
     private Long blogId;
 

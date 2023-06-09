@@ -3,9 +3,9 @@ package com.site.blog.my.core.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.site.blog.my.core.controller.vo.BlogDetailVO;
-import com.site.blog.my.core.controller.vo.BlogListVO;
-import com.site.blog.my.core.controller.vo.SimpleBlogListVO;
+import com.site.blog.my.core.controller.vo.BlogDetailVo;
+import com.site.blog.my.core.controller.vo.BlogListVo;
+import com.site.blog.my.core.controller.vo.SimpleBlogListVo;
 import com.site.blog.my.core.mapper.BlogCategoryMapper;
 import com.site.blog.my.core.mapper.BlogMapper;
 import com.site.blog.my.core.mapper.BlogTagMapper;
@@ -232,9 +232,9 @@ public class BlogServiceImpl implements BlogService {
             Blog blog = blogList.get(0);
             blog.setTag("最新");
         }
-        List<BlogListVO> blogListVOS = getBlogListVOsByBlogs(blogList);
+        List<BlogListVo> blogListVos = getBlogListVOsByBlogs(blogList);
         int total = blogMapper.getTotalBlogs(params);
-        return new PageResult(blogListVOS, total, params.getLimit(), params.getPage());
+        return new PageResult(blogListVos, total, params.getLimit(), params.getPage());
     }
 
     @Override
@@ -244,21 +244,21 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public List<SimpleBlogListVO> getBlogListForIndexPage(int type) {
-        List<SimpleBlogListVO> simpleBlogListVOS = new ArrayList<>();
+    public List<SimpleBlogListVo> getBlogListForIndexPage(int type) {
+        List<SimpleBlogListVo> simpleBlogListVos = new ArrayList<>();
         List<Blog> blogs = blogMapper.findBlogListByType(type, 9);
         if (!CollectionUtils.isEmpty(blogs)) {
             for (Blog blog : blogs) {
-                SimpleBlogListVO simpleBlogListVO = new SimpleBlogListVO();
+                SimpleBlogListVo simpleBlogListVO = new SimpleBlogListVo();
                 BeanUtils.copyProperties(blog, simpleBlogListVO);
-                simpleBlogListVOS.add(simpleBlogListVO);
+                simpleBlogListVos.add(simpleBlogListVO);
             }
         }
-        return simpleBlogListVOS;
+        return simpleBlogListVos;
     }
 
     @Override
-    public BlogDetailVO getBlogDetail(Long id) {
+    public BlogDetailVo getBlogDetail(Long id) {
         return getBlogDetailVO(blogMapper.selectByPrimaryKey(id));
     }
 
@@ -271,9 +271,9 @@ public class BlogServiceImpl implements BlogService {
             pageUtil.put("limit", 9);
             pageUtil.put("tagId", tag.getTagId());
             List<Blog> blogList = blogMapper.getBlogsPageByTagId(pageUtil);
-            List<BlogListVO> blogListVOS = getBlogListVOsByBlogs(blogList);
+            List<BlogListVo> blogListVos = getBlogListVOsByBlogs(blogList);
             int total = blogMapper.getTotalBlogsByTagId(pageUtil);
-            return new PageResult(blogListVOS, total, pageUtil.getLimit(), pageUtil.getPage());
+            return new PageResult(blogListVos, total, pageUtil.getLimit(), pageUtil.getPage());
         }
         return null;
     }
@@ -294,9 +294,9 @@ public class BlogServiceImpl implements BlogService {
                 param.put("blogStatus", 2);//过滤发布状态下的数据
                 PageQueryUtil pageUtil = new PageQueryUtil(param);
                 List<Blog> blogList = blogMapper.findBlogList(pageUtil);
-                List<BlogListVO> blogListVOS = getBlogListVOsByBlogs(blogList);
+                List<BlogListVo> blogListVos = getBlogListVOsByBlogs(blogList);
                 int total = blogMapper.getTotalBlogs(pageUtil);
-                return new PageResult(blogListVOS, total, pageUtil.getLimit(), pageUtil.getPage());
+                return new PageResult(blogListVos, total, pageUtil.getLimit(), pageUtil.getPage());
             }
         }
         return null;
@@ -311,15 +311,15 @@ public class BlogServiceImpl implements BlogService {
             pageUtil.put("keyword", keyword);
             pageUtil.put("blogStatus", 2);//过滤发布状态下的数据
             List<Blog> blogList = blogMapper.findBlogList(pageUtil);
-            List<BlogListVO> blogListVOS = getBlogListVOsByBlogs(blogList);
+            List<BlogListVo> blogListVos = getBlogListVOsByBlogs(blogList);
             int total = blogMapper.getTotalBlogs(pageUtil);
-            return new PageResult(blogListVOS, total, pageUtil.getLimit(), pageUtil.getPage());
+            return new PageResult(blogListVos, total, pageUtil.getLimit(), pageUtil.getPage());
         }
         return null;
     }
 
     @Override
-    public BlogDetailVO getBlogDetailBySubUrl(String subUrl) {
+    public BlogDetailVo getBlogDetailBySubUrl(String subUrl) {
         Blog blog = blogMapper.selectBySubUrl(subUrl);
         //不为空且状态为已发布
         return getBlogDetailVO(blog);
@@ -346,12 +346,12 @@ public class BlogServiceImpl implements BlogService {
      * @param blog
      * @return
      */
-    private BlogDetailVO getBlogDetailVO(Blog blog) {
+    private BlogDetailVo getBlogDetailVO(Blog blog) {
         if (blog != null) {
             //增加浏览量
             blog.setBlogViews(blog.getBlogViews() + 1);
             blogMapper.updateByPrimaryKey(blog);
-            BlogDetailVO blogDetailVO = new BlogDetailVO();
+            BlogDetailVo blogDetailVO = new BlogDetailVo();
             BeanUtils.copyProperties(blog, blogDetailVO);
             blogDetailVO.setBlogContent(MarkDownUtil.mdToHtml(blogDetailVO.getBlogContent()));
             BlogCategory blogCategory = categoryMapper.selectByPrimaryKey(blog.getBlogCategoryId());
@@ -375,8 +375,8 @@ public class BlogServiceImpl implements BlogService {
         return null;
     }
 
-    private List<BlogListVO> getBlogListVOsByBlogs(List<Blog> blogList) {
-        List<BlogListVO> blogListVOS = new ArrayList<>();
+    private List<BlogListVo> getBlogListVOsByBlogs(List<Blog> blogList) {
+        List<BlogListVo> blogListVos = new ArrayList<>();
         if (!CollectionUtils.isEmpty(blogList)) {
             List<Integer> categoryIds = blogList.stream().map(Blog::getBlogCategoryId).collect(Collectors.toList());
             Map<Integer, String> blogCategoryMap = new HashMap<>();
@@ -387,7 +387,7 @@ public class BlogServiceImpl implements BlogService {
                 }
             }
             for (Blog blog : blogList) {
-                BlogListVO blogListVO = new BlogListVO();
+                BlogListVo blogListVO = new BlogListVo();
                 BeanUtils.copyProperties(blog, blogListVO);
                 if (blogCategoryMap.containsKey(blog.getBlogCategoryId())) {
                     blogListVO.setBlogCategoryIcon(blogCategoryMap.get(blog.getBlogCategoryId()));
@@ -396,10 +396,10 @@ public class BlogServiceImpl implements BlogService {
                     blogListVO.setBlogCategoryName("默认分类");
                     blogListVO.setBlogCategoryIcon("/admin/dist/img/category/00.png");
                 }
-                blogListVOS.add(blogListVO);
+                blogListVos.add(blogListVO);
             }
         }
-        return blogListVOS;
+        return blogListVos;
     }
 
 }

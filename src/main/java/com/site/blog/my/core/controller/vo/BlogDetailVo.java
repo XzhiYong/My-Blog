@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.Date;
 import java.util.List;
 @Data
-public class BlogDetailVO {
+public class BlogDetailVo {
     private Long blogId;
 
     private String blogTitle;

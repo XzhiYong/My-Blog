@@ -32,7 +32,7 @@
         select
         <include refid="Base_Column_List"/>
         from tb_blog_category
-        where category_id = #{categoryId,jdbcType=INTEGER} AND is_deleted = 0
+        where category_id = #{categoryId} AND is_deleted = 0
     </select>
     <select id="selectByCategoryIds" resultMap="BaseResultMap">
         select
@@ -49,11 +49,11 @@
         select
         <include refid="Base_Column_List"/>
         from tb_blog_category
-        where category_name = #{categoryName,jdbcType=VARCHAR} AND is_deleted = 0
+        where category_name = #{categoryName} AND is_deleted = 0
     </select>
     <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     UPDATE tb_blog_category SET  is_deleted = 1
-    where category_id = #{categoryId,jdbcType=INTEGER} AND is_deleted = 0
+    where category_id = #{categoryId} AND is_deleted = 0
     </update>
     <update id="deleteBatch">
         update tb_blog_category
@@ -66,8 +66,8 @@
     insert into tb_blog_category (category_id, category_name, category_icon, 
       category_rank, is_deleted, create_time
       )
-    values (#{categoryId,jdbcType=INTEGER}, #{categoryName,jdbcType=VARCHAR}, #{categoryIcon,jdbcType=VARCHAR}, 
-      #{categoryRank,jdbcType=INTEGER}, #{isDeleted,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}
+    values (#{categoryId}, #{categoryName}, #{categoryIcon}, 
+      #{categoryRank}, #{isDeleted}, #{createTime}
       )
   </insert>
     <insert id="insertSelective" parameterType="com.site.blog.my.core.entity.BlogCategory">
@@ -94,22 +94,22 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="categoryId != null">
-                #{categoryId,jdbcType=INTEGER},
+                #{categoryId},
             </if>
             <if test="categoryName != null">
-                #{categoryName,jdbcType=VARCHAR},
+                #{categoryName},
             </if>
             <if test="categoryIcon != null">
-                #{categoryIcon,jdbcType=VARCHAR},
+                #{categoryIcon},
             </if>
             <if test="categoryRank != null">
-                #{categoryRank,jdbcType=INTEGER},
+                #{categoryRank},
             </if>
             <if test="isDeleted != null">
-                #{isDeleted,jdbcType=TINYINT},
+                #{isDeleted},
             </if>
             <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
+                #{createTime},
             </if>
         </trim>
     </insert>
@@ -117,30 +117,30 @@
         update tb_blog_category
         <set>
             <if test="categoryName != null">
-                category_name = #{categoryName,jdbcType=VARCHAR},
+                category_name = #{categoryName},
             </if>
             <if test="categoryIcon != null">
-                category_icon = #{categoryIcon,jdbcType=VARCHAR},
+                category_icon = #{categoryIcon},
             </if>
             <if test="categoryRank != null">
-                category_rank = #{categoryRank,jdbcType=INTEGER},
+                category_rank = #{categoryRank},
             </if>
             <if test="isDeleted != null">
-                is_deleted = #{isDeleted,jdbcType=TINYINT},
+                is_deleted = #{isDeleted},
             </if>
             <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
+                create_time = #{createTime},
             </if>
         </set>
-        where category_id = #{categoryId,jdbcType=INTEGER}
+        where category_id = #{categoryId}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.site.blog.my.core.entity.BlogCategory">
     update tb_blog_category
-    set category_name = #{categoryName,jdbcType=VARCHAR},
-      category_icon = #{categoryIcon,jdbcType=VARCHAR},
-      category_rank = #{categoryRank,jdbcType=INTEGER},
-      is_deleted = #{isDeleted,jdbcType=TINYINT},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
-    where category_id = #{categoryId,jdbcType=INTEGER}
+    set category_name = #{categoryName},
+      category_icon = #{categoryIcon},
+      category_rank = #{categoryRank},
+      is_deleted = #{isDeleted},
+      create_time = #{createTime}
+    where category_id = #{categoryId}
     </update>
 </mapper>

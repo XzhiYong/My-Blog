@@ -1,7 +1,7 @@
 package com.site.blog.my.core.service;
 
-import com.site.blog.my.core.controller.vo.BlogDetailVO;
-import com.site.blog.my.core.controller.vo.SimpleBlogListVO;
+import com.site.blog.my.core.controller.vo.BlogDetailVo;
+import com.site.blog.my.core.controller.vo.SimpleBlogListVo;
 import com.site.blog.my.core.entity.Blog;
 import com.site.blog.my.core.util.PageQueryUtil;
 import com.site.blog.my.core.util.PageResult;
@@ -60,7 +60,7 @@ public interface BlogService {
      * @param type
      * @return
      */
-    List<SimpleBlogListVO> getBlogListForIndexPage(int type);
+    List<SimpleBlogListVo> getBlogListForIndexPage(int type);
 
     /**
      * 文章详情
@@ -68,7 +68,7 @@ public interface BlogService {
      * @param blogId
      * @return
      */
-    BlogDetailVO getBlogDetail(Long blogId);
+    BlogDetailVo getBlogDetail(Long blogId);
 
     /**
      * 根据标签获取文章列表
@@ -97,7 +97,7 @@ public interface BlogService {
      */
     PageResult getBlogsPageBySearch(String keyword, int page);
 
-    BlogDetailVO getBlogDetailBySubUrl(String subUrl);
+    BlogDetailVo getBlogDetailBySubUrl(String subUrl);
 
     String uploadFile(MultipartFile file);
 
